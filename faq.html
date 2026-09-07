@@ -19,6 +19,7 @@
       <a href="security.html">Security</a>
       <a href="faq.html">FAQ (EN)</a>
       <a href="faq-zh.html">常见问题 (中文)</a>
+      <a href="feedback.html">Feedback 反馈</a>
     </nav>
   </div>
 </header>
@@ -133,6 +134,93 @@
        从免费 Lite 起步后升级无需迁移：同一安装包，激活后即解锁更多功能。</p>
   </details>
 
+
+  <details id="channels">
+    <summary>What support &amp; feedback channels are available? ｜ 支持与反馈渠道</summary>
+    <p>Right now: this FAQ (self-serve) and the
+       <a href="feedback.html">Feedback page</a> — feedback lands in a public
+       pool (GitHub Issues), is triaged every 3 days and planned every 7 days;
+       leave a contact method and you get a receipt when your item is handled.
+       For purchase or refund questions, reply to your Paddle order email.
+       Automated Telegram/Discord helpers will be announced on the home page
+       when they go live. ｜ 当前渠道：本 FAQ（自助）与
+       <a href="feedback.html">反馈页</a>——反馈进入公共反馈池（GitHub Issues），
+       每 3 天分拣、每 7 天排期；留下联系方式，处理后会收到回执。购买/退款问题请
+       回复 Paddle 订单邮件。Telegram/Discord 机器人上线后会在首页公告。</p>
+  </details>
+
+  <details id="license-work">
+    <summary>How does the license actually work? (machines, offline grace, refunds)</summary>
+    <p>Your plan limits how many machines run VigilDesk at once (Starter: 1,
+       Pro: up to 5). Paste your key into the activation step; move machines by
+       unbinding the old one first. Activation and renewal check the license
+       server over HTTPS; if the server is unreachable, guarding continues for
+       a <strong>72-hour offline grace period</strong>, then pauses until the
+       next successful check. If you receive a refund, the license is revoked
+       and the machine is blocked from starting a new trial or key — this is
+       the anti-abuse rule behind the 14-day refund window.</p>
+  </details>
+
+  <details id="telemetry">
+    <summary>What does telemetry collect? Is it on by default?</summary>
+    <p>Watchdog Lite (free) has <strong>no telemetry at all</strong>. In paid
+       editions, crash/diagnostic reporting is <strong>off by default</strong>
+       and only sends when you enable it in <em>Settings → Diagnostics</em>.
+       It sends app version, OS and event type only — never order details,
+       trading data, or your license key. Raw logs are kept at most 90 days.
+       See the <a href="security.html">Security page</a> and
+       <a href="legal.html#privacy">Privacy Policy</a>.</p>
+  </details>
+
+  <details id="prop-firm">
+    <summary>Does VigilDesk work on prop-firm accounts?</summary>
+    <p>VigilDesk's <strong>Prop-Firm mode</strong> enforces a daily-loss cap
+       and a global-drawdown kill-switch so a single bad day can't blow an
+       evaluation account. You remain responsible for following your prop
+       firm's own rules — many firms restrict third-party tools or automation,
+       so check their terms first. VigilDesk does not guarantee passing any
+       challenge and never promises profits.</p>
+  </details>
+
+  <details id="vps-unattended">
+    <summary>Can I run it unattended on a VPS?</summary>
+    <p>Yes. The 72-hour offline grace period exists for unattended VPS use:
+       activation/renewal happens over outbound HTTPS only, no inbound ports
+       needed. Point inference at your own OpenAI-compatible endpoint
+       (local or remote) and open firewall egress for VigilDesk on the VPS
+       provider's security group.</p>
+  </details>
+
+  <details id="refund-how">
+    <summary>How do I request a refund? Where is my order number?</summary>
+    <p>Your Paddle receipt email contains the order number. To request a full
+       refund within 14 days of purchase, reply to that email (or use the
+       channels on this page) with the order number — refunds are handled by
+       Paddle as merchant of record and returned via the original payment
+       method, normally within 5 business days. After 14 days you can still
+       cancel any time; the plan stays active until the end of the paid period
+       and will not auto-renew.</p>
+  </details>
+
+  <details id="data-sales">
+    <summary>Do you sell my data? Will I get marketing email?</summary>
+    <p>No data selling, ever. Payment data is processed by Paddle (merchant of
+       record) under its own terms. Marketing email is sent only to people who
+       explicitly opted in, and every message has a one-click unsubscribe. You
+       can request access, export or deletion of your personal data via the
+       channels on this page — see the
+       <a href="legal.html#privacy">Privacy Policy</a>.</p>
+  </details>
+
+  <details id="requirements">
+    <summary>What are the system requirements?</summary>
+    <p>Windows 10/11 64-bit and a working MetaTrader 5 terminal
+       (<code>terminal64.exe</code>). An internet connection is needed for
+       activation and renewal (72-hour offline grace otherwise). Exact disk,
+       RAM and model requirements are shown in the installer and the first-run
+       wizard for your chosen AI backend.</p>
+  </details>
+
   <div class="disclaimer">
     <strong>Risk disclaimer.</strong> VigilDesk does not promise any profit and
     is not investment advice. Margin trading carries a high level of risk; you
@@ -149,6 +237,7 @@
     <a href="tutorial.html">Tutorial</a>
     <a href="security.html">Security</a>
     <a href="faq-zh.html">常见问题</a>
+    <a href="feedback.html">Feedback</a>
   </div>
 </footer>
 </body>
