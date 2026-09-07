@@ -16,6 +16,7 @@
       <a href="index.html">首页</a>
       <a href="faq.html">FAQ (EN)</a>
       <a href="faq-zh.html">常见问题 (中文)</a>
+      <a href="feedback.html">反馈 Feedback</a>
     </nav>
   </div>
 </header>
@@ -85,6 +86,70 @@
        它不构成投资建议，不生成自有信号，也不承诺任何收益。交易存在重大亏损风险。</p>
   </details>
 
+
+  <details id="channels">
+    <summary>有哪些支持与反馈渠道？</summary>
+    <p>当前渠道：本 FAQ（自助）与<a href="feedback.html">反馈页</a>——反馈进入
+       公共反馈池（GitHub Issues），每 3 天自动分拣、每 7 天排期；留下联系方式，
+       处理后会收到回执。购买/退款问题请回复 Paddle 订单邮件。Telegram/Discord
+       机器人上线后会在首页公告。</p>
+  </details>
+
+  <details id="license-work">
+    <summary>许可证具体怎么运作？（台数 / 离线宽限 / 退款回收）</summary>
+    <p>套餐限制同时运行的机器数（Starter：1 台；Pro：最多 5 台）。激活步骤粘贴
+       密钥即可；换机请先解绑旧机器。激活/续期经 HTTPS 联系授权服务器；服务器不可
+       达时，风控守护继续运行<strong> 72 小时离线宽限期</strong>，之后暂停至下次
+       联网校验成功。获得退款后许可证即被吊销，且该机器将被禁止再次开启试用或绑定
+       新密钥——这是 14 天退款政策背后的反滥用规则。</p>
+  </details>
+
+  <details id="telemetry">
+    <summary>遥测会上报什么？默认开启吗？</summary>
+    <p>Watchdog Lite（免费版）<strong>完全无遥测</strong>。付费版仅崩溃/诊断上报，
+       <strong>默认关闭</strong>，需在「设置 → 诊断」中手动开启。只上报应用版本、
+       操作系统与事件类型——绝不包含订单、交易数据或许可证密钥。原始日志最多保留
+       90 天。详见<a href="security.html">安全与合规页</a>与
+       <a href="legal.html#privacy">隐私政策</a>。</p>
+  </details>
+
+  <details id="prop-firm">
+    <summary>VigilDesk 可以用在 Prop-Firm 账户上吗？</summary>
+    <p>VigilDesk 的 <strong>Prop-Firm 模式</strong>强制单日亏损上限与全局回撤
+       kill-switch，避免一个坏日子毁掉考核账户。但您仍需自行遵守所用机构的规则——
+       不少机构限制第三方工具或自动化，请先阅读其条款。VigilDesk 不保证通过任何
+       考核，也从不承诺收益。</p>
+  </details>
+
+  <details id="vps-unattended">
+    <summary>可以在 VPS 上无人值守运行吗？</summary>
+    <p>可以。72 小时离线宽限正是为无人值守的 VPS 场景设计：激活/续期只走 HTTPS
+       出站，无需开放任何入站端口。推理端点可指向您自己的 OpenAI 兼容服务
+       （本地或远程），并在 VPS 安全组放行 VigilDesk 出站。</p>
+  </details>
+
+  <details id="refund-how">
+    <summary>如何申请退款？订单号在哪里？</summary>
+    <p>Paddle 收据邮件中含订单号。购买后 14 天内申请全额退款：回复该邮件
+       （或使用本页渠道）并附订单号即可。退款由记录商户 Paddle 处理，按原路退回，
+       一般 5 个工作日内完成。14 天后仍可随时取消订阅——已付周期内功能保持可用，
+       到期后不会自动续费。</p>
+  </details>
+
+  <details id="data-sales">
+    <summary>你们会卖我的数据吗？会收到营销邮件吗？</summary>
+    <p>绝不售卖数据。支付数据由 Paddle（记录商户）按其自身条款处理。营销邮件仅
+       发送给明确勾选订阅的用户，每封都带一键退订。您可通过本页渠道请求查询、
+       导出或删除个人数据——详见<a href="legal.html#privacy">隐私政策</a>。</p>
+  </details>
+
+  <details id="requirements">
+    <summary>系统要求是什么？</summary>
+    <p>Windows 10/11 64 位与可用的 MetaTrader 5 终端（<code>terminal64.exe</code>）。
+       激活与续期需要联网（其余情况有 72 小时离线宽限）。磁盘、内存与模型的具体
+       要求在安装包与首次运行向导中按所选 AI 后端显示。</p>
+  </details>
+
   <div class="disclaimer">
     <strong>风险免责声明。</strong>VigilDesk 不承诺任何收益，不构成投资建议。
     杠杆交易风险极高，可能损失超过本金；历史表现不代表未来结果。
@@ -97,6 +162,7 @@
     <span>© 2026 VigilDesk</span>
     <a href="index.html">首页</a>
     <a href="faq.html">FAQ</a>
+    <a href="feedback.html">反馈</a>
   </div>
 </footer>
 </body>
