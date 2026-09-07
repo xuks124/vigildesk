@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feedback 反馈 — VigilDesk</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<style>
+  /* Feedback form (local styles only — still zero external resources) */
+  .feedback-intro { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin: 18px 0; }
+  form.fb { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; margin: 18px 0 10px; }
+  form.fb label { display: block; margin: 14px 0 4px; font-weight: 600; }
+  form.fb .hint { color: var(--muted); font-size: 0.82rem; font-weight: 400; }
+  form.fb input[type=text], form.fb input[type=email], form.fb select, form.fb textarea {
+    width: 100%; background: var(--bg); color: var(--fg); border: 1px solid var(--border);
+    border-radius: 6px; padding: 8px 10px; font: inherit;
+  }
+  form.fb textarea { min-height: 120px; resize: vertical; }
+  form.fb .row2 { display: flex; gap: 14px; flex-wrap: wrap; }
+  form.fb .row2 > div { flex: 1 1 220px; }
+  .btn.primary[disabled] { opacity: 0.5; cursor: not-allowed; }
+  .privacy-note { color: var(--muted); font-size: 0.85rem; margin-top: 10px; }
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <img src="assets/logo.svg" alt="VigilDesk logo">
+    <span class="brand">VigilDesk</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="tutorial.html">Tutorial</a>
+      <a href="security.html">Security</a>
+      <a href="faq.html">FAQ (EN)</a>
+      <a href="faq-zh.html">常见问题 (中文)</a>
+      <a href="feedback.html">Feedback 反馈</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1 class="page">Feedback ｜ 意见与反馈</h1>
+  <p class="muted" style="margin-bottom:20px;">
+    Found a bug? Missing a feature? Tell us — feedback goes straight into the
+    public feedback pool, is triaged every 3 days and summarised into a weekly
+    plan. If you leave a contact method, you get a reply when your item is
+    handled. ｜ 遇到 Bug？想要新功能？告诉我们——反馈直接进入公共反馈池，
+    每 3 天分类分拣、每 7 天汇总排期；留下联系方式，处理后会收到回执。
+  </p>
+
+  <div class="feedback-intro">
+    <strong>How it works ｜ 流程：</strong>
+    <ol style="margin:8px 0 4px; padding-left:20px;">
+      <li>Submit this form — it opens a pre-filled, structured issue in our
+          public feedback pool (GitHub Issues). ｜ 提交本表单——会打开一个已
+          预填好的结构化 issue 到公共反馈池（GitHub Issues）。</li>
+      <li>Every 3 days feedback is auto-classified (bug / feature / help /
+          praise / billing / other). ｜ 每 3 天自动分类（缺陷/建议/求助/好评/账单/其他）。</li>
+      <li>Every 7 days a digest plans what gets fixed or added next. ｜ 每 7 天周报排期下一轮修复与新增。</li>
+      <li>Items with a contact method get a receipt when handled. ｜ 留有联系方式的条目在处理后收到回执。</li>
+    </ol>
+    <p class="hint">You need a GitHub account to submit (the pool lives on
+    GitHub Issues). You may write in English or Chinese. ｜ 提交需要一个
+    GitHub 账号（反馈池托管在 GitHub Issues）。中英文均可。</p>
+  </div>
+
+  <form class="fb" id="feedback-form" onsubmit="return openIssue(event)">
+    <h3 style="margin-top:0;">New feedback ｜ 新反馈</h3>
+
+    <label for="f-type">Issue type ｜ 问题类型 <span class="hint">(helps us route it ｜ 便于自动分类)</span></label>
+    <select id="f-type" name="type">
+      <option value="bug">🐞 Bug — something is broken ｜ 出错了（崩溃/报错/装不上）</option>
+      <option value="feature">💡 Feature request ｜ 功能建议（希望/建议）</option>
+      <option value="help">❓ Help — I'm stuck ｜ 求助（怎么/如何）</option>
+      <option value="billing">🧾 Billing / refund ｜ 账单 / 退款问题</option>
+      <option value="praise">👍 Praise ｜ 好评 / 使用反馈</option>
+      <option value="other">📋 Other ｜ 其他</option>
+    </select>
+
+    <div class="row2">
+      <div>
+        <label for="f-title">Title ｜ 标题 <span class="hint">(one-line summary ｜ 一句话概括)</span></label>
+        <input type="text" id="f-title" name="title" maxlength="120" placeholder="e.g. Guard does not restart MT5 after crash ｜ 例如：崩溃后守护未自动拉起 MT5" required>
+      </div>
+      <div>
+        <label for="f-contact">Contact ｜ 联系方式 <span class="hint">(optional ｜ 选填 — email / Telegram / Discord username, only used to reply to you ｜ 仅用于回执)</span></label>
+        <input type="text" id="f-contact" name="contact" maxlength="160" placeholder="you@example.com / @username">
+      </div>
+    </div>
+
+    <label for="f-desc">Description ｜ 描述 <span class="hint">(be specific — what did you do, what happened, what did you expect ｜ 请具体说明：你做了什么、发生了什么、期望什么)</span></label>
+    <textarea id="f-desc" name="desc" required placeholder="Steps to reproduce ｜ 复现步骤：&#10;1. &#10;2. &#10;&#10;Expected ｜ 期望：&#10;&#10;Actual ｜ 实际：&#10;&#10;App version ｜ 版本：&#10;OS: Windows 10 / 11&#10;Broker / symbol ｜ 券商 / 品种："></textarea>
+
+    <label for="f-public">
+      <input type="checkbox" id="f-public" name="public" checked style="width:auto;">
+      I understand this feedback will be public in the pool. I will NOT paste
+      license keys, order numbers or personal secrets into it. ｜ 我了解该反馈
+      会在反馈池中公开；我不会在其中粘贴许可证密钥、订单号或任何个人敏感信息。
+    </label>
+
+    <p style="margin:18px 0 4px;">
+      <button type="submit" class="btn primary" id="fb-submit">Continue to GitHub ｜ 前往 GitHub 提交</button>
+    </p>
+    <p class="privacy-note">
+      Submitting opens <code>github.com/xuks124/vigildesk/issues/new</code>
+      with your text pre-filled — nothing is sent anywhere until you press
+      "Submit new issue" there. ｜ 提交按钮只是带着你的内容打开 GitHub 新建
+      issue 页面；在你点击 GitHub 上的 “Submit new issue” 之前，不会发送任何数据。
+    </p>
+  </form>
+
+  <details>
+    <summary>Security issue? ｜ 发现的是安全漏洞？</summary>
+    <p><strong>Do not post exploit details in a public issue.</strong> There is
+    no public security inbox yet — reply to your Paddle order confirmation
+    email with “[Security]” in the subject, or use the contact method on this
+    page's form but choose “Other” and write “security” in the title; keep
+    details minimal until we reply. ｜ <strong>请勿在公开 issue 中发布可利用细节。</strong>
+    私密上报通道正式上线前：请回复你的 Paddle 订单确认邮件并在主题注明
+    “[Security]”；或在本页表单选择“其他”并在标题注明 security，细节在收到回复前尽量精简。</p>
+  </details>
+
+  <div class="disclaimer">
+    <strong>Risk disclaimer.</strong> VigilDesk is a software tool, not
+    investment advice. It does not promise any profit or returns. Trading on
+    margin carries a high level of risk; you could lose more than your
+    deposit. Past performance does not guarantee future results.
+    （中文：VigilDesk 是软件工具，不构成投资建议，不承诺收益；杠杆交易风险极高，
+    可能损失超过本金，历史表现不代表未来结果。）
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 VigilDesk</span>
+    <a href="index.html">Home</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="tutorial.html">Tutorial</a>
+    <a href="security.html">Security</a>
+    <a href="faq.html">FAQ</a>
+    <a href="faq-zh.html">常见问题</a>
+    <a href="feedback.html">Feedback</a>
+  </div>
+</footer>
+
+<script>
+/* Builds a pre-filled GitHub issue URL. No data leaves this page until the
+   user submits on github.com — the site stays fully static / zero external. */
+(function () {
+  var REPO = "xuks124/vigildesk";
+  var ISSUE_URL = "https://github.com/" + REPO + "/issues/new";
+
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  window.openIssue = function (e) {
+    var type = document.getElementById("f-type").value;
+    var title = document.getElementById("f-title").value.trim();
+    var desc = document.getElementById("f-desc").value.trim();
+    var contact = document.getElementById("f-contact").value.trim();
+    var okPublic = document.getElementById("f-public").checked;
+
+    if (!title || !desc) { alert("Please fill in a title and a description. ｜ 请填写标题与描述。"); return false; }
+    if (!okPublic) { alert("Please confirm you will not paste secrets. ｜ 请先勾选不会粘贴敏感信息的确认项。"); return false; }
+
+    var body = "<!-- VigilDesk feedback form (structured) ｜ 结构化反馈模板 -->\n"
+      + "**issue_type:** " + esc(type) + "\n"
+      + "**lang:** " + (/([\u3400-\u9fff])/.test(desc + title) ? "zh" : "en") + "\n"
+      + "**contact:** " + (contact ? esc(contact) : "(none ｜ 未留)") + "\n"
+      + "**date:** " + new Date().toISOString().slice(0, 10) + "\n"
+      + "\n---\n\n"
+      + esc(desc) + "\n"
+      + "\n---\n"
+      + "_Submitted via the Feedback page ｜ 通过反馈页提交。许可证密钥/订单号请勿粘贴。_\n";
+
+    var url = ISSUE_URL + "?title=" + encodeURIComponent("[" + type + "] " + title)
+      + "&body=" + encodeURIComponent(body);
+    window.open(url, "_blank");
+    return false;
+  };
+})();
+</script>
+</body>
+</html>
