@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://xuks124.github.io/vigildesk/sitemap.xml
