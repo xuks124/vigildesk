@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="VigilDesk is a local risk-control workstation for MetaTrader 5: process guarding, per-trade loss caps, daily drawdown guards and an AI confirmer that reviews your own strategy's orders.">
 <title>VigilDesk — MT5 Trading Risk-Control Workstation</title>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
@@ -20,6 +21,7 @@
       <a href="faq.html">FAQ (EN)</a>
       <a href="faq-zh.html">常见问题 (中文)</a>
       <a href="feedback.html">Feedback 反馈</a>
+      <a href="legal.html">Legal</a>
     </nav>
   </div>
 </header>
@@ -38,13 +40,56 @@
     <a class="btn ghost" href="faq.html">FAQ</a>
   </section>
 
+  <h2 class="page" style="padding-top:0;">What VigilDesk does ｜ 核心功能</h2>
+  <section class="grid" id="features">
+    <div class="card">
+      <h3>Process guard</h3>
+      <p>Keeps your MT5 terminal and bot alive: crash auto-restart with a
+        restart cooldown and exponential backoff — no restart storms, no
+        dead terminals at 3&nbsp;am. ｜ 进程守护：崩溃自动拉起，冷却与指数退避
+        防止重启风暴。</p>
+    </div>
+    <div class="card">
+      <h3>Per-trade loss cap</h3>
+      <p>Set a hard cap on how much any single trade may lose before the
+        order is held. ｜ 单笔亏损上限：超出限额的订单在发出前即被拦截。</p>
+    </div>
+    <div class="card">
+      <h3>Daily drawdown guard</h3>
+      <p>A daily loss limit plus a global-drawdown kill-switch, built for
+        prop-firm rules — one bad day can't blow the account. ｜ 日内回撤
+        上限 + 全局回撤 kill-switch，适配 Prop-Firm 规则。</p>
+    </div>
+    <div class="card">
+      <h3>AI confirmer</h3>
+      <p>An AI risk gate reviews each order your own strategy produces and
+        records its reason — every pass or hold is logged for review.
+        ｜ AI 风控闸门逐单复核并留痕，可在 dashboard 复盘。</p>
+    </div>
+    <div class="card">
+      <h3>Dry-run first</h3>
+      <p>Smoke-test the whole chain in dry-run mode — orders are simulated
+        until you switch to live guarding. ｜ 先 dry-run 空跑验证链路，
+        确认无误再切实盘守护。</p>
+    </div>
+    <div class="card">
+      <h3>Your data stays local</h3>
+      <p>Logs, decision records and reports live under
+        <code>%LOCALAPPDATA%\VigilDesk</code>; inference runs against your own
+        endpoint; the free edition has no telemetry. ｜ 数据本地留存，推理走
+        自有端点，免费版完全无遥测。</p>
+    </div>
+  </section>
+
   <section class="grid" id="download">
     <div class="card">
       <h3>Download</h3>
-      <p>Windows installer with a first-run wizard: point it at
+      <p>Windows 10/11. Point VigilDesk at
         <code>terminal64.exe</code>, pick your AI model, set risk limits,
-        and smoke-test in dry-run mode.</p>
-      <a href="#download">Get VigilDesk (Windows 10/11)</a>
+        and smoke-test in dry-run mode. Installers are published through
+        GitHub Releases. ｜ 安装包经 GitHub Releases 分发，首次运行向导
+        四步完成配置。</p>
+      <a href="https://github.com/xuks124/vigildesk/releases" rel="noopener">Get VigilDesk (Windows 10/11)</a>
     </div>
     <div class="card" id="pricing">
       <h3>Pricing</h3>
@@ -94,6 +139,7 @@
     <a href="faq.html">FAQ</a>
     <a href="faq-zh.html">常见问题</a>
     <a href="feedback.html">Feedback</a>
+    <a href="legal.html">Legal</a>
   </div>
 </footer>
 </body>
