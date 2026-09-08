@@ -3,10 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="VigilDesk pricing: free Watchdog Lite forever, Starter $19/mo, Pro $39/mo, Lifetime $599 one-time. 7-day free trial, no card required.">
+<meta name="description" content="VigilDesk pricing: free Watchdog Lite forever, Starter $19/mo, Pro $39/mo, Lifetime $599 one-time. 7-day free trial — no charge during the trial; a payment method is required at checkout.">
 <title>Pricing — VigilDesk</title>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script>
+  // Paddle Billing — live environment (client-side token is public by design)
+  Paddle.Environment.set("live");
+  Paddle.Initialize({ token: "live_628b3886c1a50dc334fd998072c" });
+</script>
 </head>
 <body>
 <header class="site">
@@ -33,7 +39,8 @@
     <p class="tagline">
       Start free with Watchdog Lite. Upgrade when you want the full
       risk-control workstation. ｜ 从免费的 Watchdog Lite 开始，需要完整风控工作站时再升级。
-      7-day free trial, no card required. ｜ 7 天免费试用，无需绑卡。
+      7-day free trial — no charge during the trial; a payment method is
+      required at checkout. ｜ 7 天免费试用——试用期内不扣款，开通时需绑定支付方式。
     </p>
   </section>
 
@@ -84,20 +91,38 @@
     </tr>
   </table>
 
-  <p class="muted" style="margin:0 0 18px;">
-    Online checkout (via Paddle, our merchant of record) is being finalized.
-    Until it goes live, ask about plans and trials on the
+  <p class="muted" style="margin:0 0 12px;">
+    Secure online checkout via Paddle, our merchant of record. Subscriptions
+    renew monthly until cancelled; Lifetime is a one-time purchase.
+    Questions about plans or trials? Ask on the
     <a href="feedback.html">Feedback page</a> — we answer every item.
-    ｜ 在线支付通道（经 Paddle，记录商户）即将开放；开放前如需咨询套餐或试用，
-    请通过<a href="feedback.html">反馈页</a>留言，每条都会回复。
+    ｜ 在线支付经 Paddle（记录商户）安全结算。订阅按月自动续费，可随时取消；
+    Lifetime 为一次性买断。如需咨询套餐或试用，请通过<a href="feedback.html">反馈页</a>留言，每条都会回复。
+  </p>
+
+  <p style="margin:0 0 18px;">
+    <button class="btn primary" type="button" style="cursor:pointer;border:none;font-size:1rem;"
+      onclick="Paddle.Checkout.open({ items: [{ priceId: 'pri_01m1znn33qq6jt0fjpj09rnhj9', quantity: 1 }] })">
+      Start Starter — $19/mo · 7-day free trial ｜ 开通入门版</button>
+    <button class="btn primary" type="button" style="cursor:pointer;border:none;font-size:1rem;"
+      onclick="Paddle.Checkout.open({ items: [{ priceId: 'pri_01m1znydczjg1vr4gh6ardzmhr', quantity: 1 }] })">
+      Start Pro — $39/mo · 7-day free trial ｜ 开通 Pro</button>
+    <button class="btn ghost" type="button" style="cursor:pointer;font-size:1rem;"
+      onclick="Paddle.Checkout.open({ items: [{ priceId: 'pri_01m1zp2kac0vr76ak6npd2dq9r', quantity: 1 }] })">
+      Buy Lifetime — $599 one-time ｜ 买断版</button>
   </p>
 
   <section class="grid">
     <div class="card">
       <h3>Trial &amp; refund ｜ 试用与退款</h3>
-      <p>7-day free trial with all features, no card required. Full refund
-        within 14 days of purchase if the product doesn't work as described.
-        ｜ 7 天全功能试用无需绑卡；购买后 14 天内产品与描述不符可全额退款。</p>
+      <p>Starter and Pro include a 7-day free trial — you won't be charged
+        during the trial, but a payment method must be added at checkout, and
+        you can cancel any time before the trial ends. Lifetime is a one-time
+        purchase (no trial). Full refund within 14 days of purchase if the
+        product doesn't work as described.
+        ｜ Starter 与 Pro 含 7 天全功能试用——试用期内不扣款，但开通时需绑定
+        支付方式，试用结束前可随时取消；Lifetime 为一次性买断（无试用）。
+        购买后 14 天内产品与描述不符可全额退款。</p>
       <a href="faq.html#trial-refund">Refund policy ｜ 退款政策</a>
     </div>
     <div class="card">
