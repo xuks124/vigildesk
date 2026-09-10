@@ -10,7 +10,8 @@
 <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <script>
   // Paddle Billing — live environment (client-side token is public by design)
-  Paddle.Environment.set("live");
+  // Production is the default; do NOT call Paddle.Environment.set here
+  // (passing a non-sandbox value breaks the checkout frame URL).
   Paddle.Initialize({ token: "live_628b3886c1a50dc334fd998072c" });
 </script>
 </head>
