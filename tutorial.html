@@ -66,9 +66,9 @@
     <li>When dry-run looks right, switch to live guarding. VigilDesk reviews
         your strategy's orders with the AI confirmer before they go out.</li>
     <li>Free Watchdog Lite users: start the supervisor with
-        <code>python -m vigildesk watchdog-lite</code> — it keeps the process
+        <code>VigilDesk.exe lite   (no license, no account, no card)</code> — it keeps the process
         alive, auto-restarts after crashes, and writes basic alerts. It can
-        also guard any command: <code>python -m vigildesk watchdog-lite -- cmd ...</code></li>
+        also guard any command: <code>VigilDesk.exe lite -- "your command here"</code></li>
     <li>Leave it running unattended? Use the same supervisor approach on your
         VPS — restart cooldown and exponential backoff prevent restart storms.</li>
   </ol>
