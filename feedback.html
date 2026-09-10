@@ -44,6 +44,8 @@
 
 <main class="wrap">
   <h1 class="page">Feedback ｜ 意见与反馈</h1>
+
+  <!-- form first: the customer came here to write something -->
   <p class="muted" style="margin-bottom:20px;">
     Found a bug? Missing a feature? Tell us — feedback goes straight into the
     public feedback pool, is triaged every 3 days and summarised into a weekly
@@ -51,38 +53,6 @@
     handled. ｜ 遇到 Bug？想要新功能？告诉我们——反馈直接进入公共反馈池，
     每 3 天分类分拣、每 7 天汇总排期；留下联系方式，处理后会收到回执。
   </p>
-
-  <div class="feedback-intro" style="border-left:3px solid #16c79a;">
-    <strong>Two ways to reach us — pick either ｜ 两种方式任选：</strong>
-    <ol style="margin:8px 0 4px; padding-left:20px;">
-      <li><strong>Email (no account needed) ｜ 邮件（无需任何账号）：</strong>
-          write to <a href="mailto:760808632@qq.com?subject=VigilDesk%20feedback">760808632@qq.com</a>
-          — or fill the form below and press
-          <em>“Send by email”</em>. ｜ 直接写邮件，或填好下面的表单点
-          <em>“邮件发送”</em>。</li>
-      <li><strong>Public pool (GitHub account) ｜ 公共反馈池（需 GitHub 账号）：</strong>
-          the form can also open a pre-filled public issue so everyone can see
-          the answer. ｜ 表单也可以打开一条预填的公开 issue，让所有人都能看到答复。</li>
-    </ol>
-  </div>
-
-  <div class="feedback-intro">
-    <strong>How it works ｜ 流程：</strong>
-    <ol style="margin:8px 0 4px; padding-left:20px;">
-      <li>Submit this form — it opens a pre-filled, structured issue in our
-          public feedback pool (GitHub Issues). ｜ 提交本表单——会打开一个已
-          预填好的结构化 issue 到公共反馈池（GitHub Issues）。</li>
-      <li>Every 3 days feedback is auto-classified (bug / feature / help /
-          praise / billing / other). ｜ 每 3 天自动分类（缺陷/建议/求助/好评/账单/其他）。</li>
-      <li>Every 7 days a digest plans what gets fixed or added next. ｜ 每 7 天周报排期下一轮修复与新增。</li>
-      <li>Items with a contact method get a receipt when handled. ｜ 留有联系方式的条目在处理后收到回执。</li>
-    </ol>
-    <p class="hint">You do NOT need a GitHub account: use “Send by email”
-    below, or email <a href="mailto:760808632@qq.com">760808632@qq.com</a>
-    directly. You may write in English or Chinese. ｜ <strong>不需要 GitHub
-    账号</strong>：用下面的“邮件发送”，或直接发邮件到
-    <a href="mailto:760808632@qq.com">760808632@qq.com</a>。中英文均可。</p>
-  </div>
 
   <form class="fb" id="feedback-form" onsubmit="return sendMail(event)">
     <h3 style="margin-top:0;">New feedback ｜ 新反馈</h3>
@@ -131,6 +101,39 @@
       with your text pre-filled（需要 GitHub 账号）。
     </p>
   </form>
+
+  <div class="feedback-intro" style="border-left:3px solid #16c79a;">
+    <strong>Two ways to reach us — pick either ｜ 两种方式任选：</strong>
+    <ol style="margin:8px 0 4px; padding-left:20px;">
+      <li><strong>Email (no account needed) ｜ 邮件（无需任何账号）：</strong>
+          write to <a href="mailto:760808632@qq.com?subject=VigilDesk%20feedback">760808632@qq.com</a>
+          — or fill the form below and press
+          <em>“Send by email”</em>. ｜ 直接写邮件，或填好下面的表单点
+          <em>“邮件发送”</em>。</li>
+      <li><strong>Public pool (GitHub account) ｜ 公共反馈池（需 GitHub 账号）：</strong>
+          the form can also open a pre-filled public issue so everyone can see
+          the answer. ｜ 表单也可以打开一条预填的公开 issue，让所有人都能看到答复。</li>
+    </ol>
+  </div>
+
+  <div class="feedback-intro">
+    <strong>How it works ｜ 流程：</strong>
+    <ol style="margin:8px 0 4px; padding-left:20px;">
+      <li>Submit this form — it opens a pre-filled, structured issue in our
+          public feedback pool (GitHub Issues). ｜ 提交本表单——会打开一个已
+          预填好的结构化 issue 到公共反馈池（GitHub Issues）。</li>
+      <li>Every 3 days feedback is auto-classified (bug / feature / help /
+          praise / billing / other). ｜ 每 3 天自动分类（缺陷/建议/求助/好评/账单/其他）。</li>
+      <li>Every 7 days a digest plans what gets fixed or added next. ｜ 每 7 天周报排期下一轮修复与新增。</li>
+      <li>Items with a contact method get a receipt when handled. ｜ 留有联系方式的条目在处理后收到回执。</li>
+    </ol>
+    <p class="hint">You do NOT need a GitHub account: use “Send by email”
+    below, or email <a href="mailto:760808632@qq.com">760808632@qq.com</a>
+    directly. You may write in English or Chinese. ｜ <strong>不需要 GitHub
+    账号</strong>：用下面的“邮件发送”，或直接发邮件到
+    <a href="mailto:760808632@qq.com">760808632@qq.com</a>。中英文均可。</p>
+  </div>
+
 
   <details>
     <summary>Security issue? ｜ 发现的是安全漏洞？</summary>
