@@ -52,6 +52,20 @@
     每 3 天分类分拣、每 7 天汇总排期；留下联系方式，处理后会收到回执。
   </p>
 
+  <div class="feedback-intro" style="border-left:3px solid #16c79a;">
+    <strong>Two ways to reach us — pick either ｜ 两种方式任选：</strong>
+    <ol style="margin:8px 0 4px; padding-left:20px;">
+      <li><strong>Email (no account needed) ｜ 邮件（无需任何账号）：</strong>
+          write to <a href="mailto:760808632@qq.com?subject=VigilDesk%20feedback">760808632@qq.com</a>
+          — or fill the form below and press
+          <em>“Send by email”</em>. ｜ 直接写邮件，或填好下面的表单点
+          <em>“邮件发送”</em>。</li>
+      <li><strong>Public pool (GitHub account) ｜ 公共反馈池（需 GitHub 账号）：</strong>
+          the form can also open a pre-filled public issue so everyone can see
+          the answer. ｜ 表单也可以打开一条预填的公开 issue，让所有人都能看到答复。</li>
+    </ol>
+  </div>
+
   <div class="feedback-intro">
     <strong>How it works ｜ 流程：</strong>
     <ol style="margin:8px 0 4px; padding-left:20px;">
@@ -63,12 +77,14 @@
       <li>Every 7 days a digest plans what gets fixed or added next. ｜ 每 7 天周报排期下一轮修复与新增。</li>
       <li>Items with a contact method get a receipt when handled. ｜ 留有联系方式的条目在处理后收到回执。</li>
     </ol>
-    <p class="hint">You need a GitHub account to submit (the pool lives on
-    GitHub Issues). You may write in English or Chinese. ｜ 提交需要一个
-    GitHub 账号（反馈池托管在 GitHub Issues）。中英文均可。</p>
+    <p class="hint">You do NOT need a GitHub account: use “Send by email”
+    below, or email <a href="mailto:760808632@qq.com">760808632@qq.com</a>
+    directly. You may write in English or Chinese. ｜ <strong>不需要 GitHub
+    账号</strong>：用下面的“邮件发送”，或直接发邮件到
+    <a href="mailto:760808632@qq.com">760808632@qq.com</a>。中英文均可。</p>
   </div>
 
-  <form class="fb" id="feedback-form" onsubmit="return openIssue(event)">
+  <form class="fb" id="feedback-form" onsubmit="return sendMail(event)">
     <h3 style="margin-top:0;">New feedback ｜ 新反馈</h3>
 
     <label for="f-type">Issue type ｜ 问题类型 <span class="hint">(helps us route it ｜ 便于自动分类)</span></label>
@@ -103,13 +119,16 @@
     </label>
 
     <p style="margin:18px 0 4px;">
-      <button type="submit" class="btn primary" id="fb-submit">Continue to GitHub ｜ 前往 GitHub 提交</button>
+      <button type="submit" class="btn primary" id="fb-submit">✉️ Send by email ｜ 邮件发送（推荐）</button>
+      <button type="button" class="btn ghost" id="fb-github"
+        onclick="return openIssue(event)">Open a public issue ｜ 提交到公共反馈池</button>
     </p>
     <p class="privacy-note">
-      Submitting opens <code>github.com/xuks124/vigildesk/issues/new</code>
-      with your text pre-filled — nothing is sent anywhere until you press
-      "Submit new issue" there. ｜ 提交按钮只是带着你的内容打开 GitHub 新建
-      issue 页面；在你点击 GitHub 上的 “Submit new issue” 之前，不会发送任何数据。
+      <strong>“Send by email”</strong> opens your mail app with the text already
+      filled in — nothing is sent until you press send there. ｜
+      <strong>“邮件发送”</strong>会用你填好的内容打开邮件客户端，在你点击发送前不会有任何数据离开本机。
+      The public-pool button opens <code>github.com/xuks124/vigildesk/issues/new</code>
+      with your text pre-filled（需要 GitHub 账号）。
     </p>
   </form>
 
@@ -185,6 +204,34 @@
     window.open(url, "_blank");
     return false;
   };
+
+  /* Email path: works with no account, no GitHub, no backend. */
+  var MAIL = "760808632@qq.com";
+  window.sendMail = function (e) {
+    if (e && e.preventDefault) { e.preventDefault(); }
+    var type = document.getElementById("f-type").value;
+    var title = document.getElementById("f-title").value.trim();
+    var desc = document.getElementById("f-desc").value.trim();
+    var contact = document.getElementById("f-contact").value.trim();
+
+    if (!title || !desc) { alert("Please fill in a title and a description. ｜ 请填写标题与描述。"); return false; }
+
+    var body = "VigilDesk feedback ｜ 反馈\n"
+      + "issue_type: " + type + "\n"
+      + "contact: " + (contact || "(none ｜ 未留)") + "\n"
+      + "date: " + new Date().toISOString().slice(0, 10) + "\n"
+      + "\n---\n\n" + desc + "\n";
+    var href = "mailto:" + MAIL
+      + "?subject=" + encodeURIComponent("[VigilDesk " + type + "] " + title)
+      + "&body=" + encodeURIComponent(body);
+    window.location.href = href;
+    return false;
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var form = document.getElementById("feedback-form");
+    if (form) { form.addEventListener("submit", window.sendMail); }
+  });
 })();
 </script>
 </body>
