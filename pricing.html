@@ -3,16 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="VigilDesk pricing: free Watchdog Lite forever, Starter $19/mo, Pro $39/mo, Lifetime $599 one-time. 7-day free trial — no charge during the trial; a payment method is required at checkout.">
+<meta name="description" content="VigilDesk pricing: free Watchdog Lite forever, Starter $19/mo, Pro $39/mo, Lifetime $599 one-time. Every paid plan includes a 7-day free trial — $0.00 today.">
 <title>Pricing — VigilDesk</title>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <script>
-  // Paddle Billing — live environment (client-side token is public by design)
-  // Production is the default; do NOT call Paddle.Environment.set here
-  // (passing a non-sandbox value breaks the checkout frame URL).
+  /* Production is the default environment; never call Paddle.Environment.set(). */
   Paddle.Initialize({ token: "live_628b3886c1a50dc334fd998072c" });
+  var PRICES = {
+    starter:  "pri_01m1znn33qq6jt0fjpj09rnhj9",
+    pro:      "pri_01m1znydczjg1vr4gh6ardzmhr",
+    lifetime: "pri_01m1zp2kac0vr76ak6npd2dq9r"
+  };
+  function buy(plan) {
+    var priceId = PRICES[plan];
+    if (!priceId) { return false; }
+    Paddle.Checkout.open({ items: [{ priceId: priceId, quantity: 1 }] });
+    return false;
+  }
 </script>
 </head>
 <body>
@@ -36,20 +45,74 @@
 <main class="wrap">
   <h1 class="page">Pricing ｜ 定价</h1>
 
-  <section class="hero" style="padding:24px 0 8px;">
-    <p class="tagline">
-      Start free with Watchdog Lite (download once, run <code>VigilDesk.exe lite</code> - no license, no account). Upgrade when you want the full
-      risk-control workstation. ｜ 从免费的 Watchdog Lite 开始，需要完整风控工作站时再升级。
-      7-day free trial — no charge during the trial; a payment method is
-      required at checkout. ｜ 7 天免费试用——试用期内不扣款，开通时需绑定支付方式。
-    </p>
-  <p style="margin:14px 0 0;font-size:13px;color:#8f9cba;">If the checkout does not open (some embedded previews block it), open this page in your normal browser, or email us at <a href="mailto:760808632@qq.com">760808632@qq.com</a> and we will send a payment link.</p></section>
+  <p class="tagline" style="margin:0 0 18px;">
+    Start free with Watchdog Lite (download once, run <code>VigilDesk.exe lite</code> — no licence, no account).
+    Upgrade when you want the full risk-control workstation.
+    <strong>Every paid plan includes a 7-day free trial: you are charged $0.00 today.</strong>
+    ｜ 免费版永久可用；付费套餐含 7 天免费试用，<strong>今天扣 $0.00</strong>（结账时需绑卡）。
+  </p>
 
+  <!-- ── clickable plan cards: click anywhere on a card to start ────────── -->
+  <section class="grid" id="plans" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">
+    <div class="card">
+      <h3 style="margin-top:0;">Lite</h3>
+      <p style="font-size:1.5rem;margin:2px 0;"><strong>$0</strong><span style="font-size:.85rem;color:#8f9cba;"> forever</span></p>
+      <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">No licence, no account, no card</p>
+      <p>Watchdog Lite only: process guard, crash auto-restart with cooldown and
+        backoff, structured log alerts. ｜ 仅含进程守护：崩溃自动拉起、冷却与退避、结构化日志告警。</p>
+      <p style="margin:12px 0 0;">
+        <a class="btn ghost" href="https://xuks124.github.io/vigildesk/VigilDesk-0.1.6-win64-portable.zip" target="_blank" rel="noopener">Download free ｜ 免费下载</a>
+      </p>
+    </div>
+
+    <div class="card" style="cursor:pointer;" onclick="return buy('starter')" title="Click to start the 7-day free trial">
+      <h3 style="margin-top:0;">Starter</h3>
+      <p style="font-size:1.5rem;margin:2px 0;"><strong>$19</strong><span style="font-size:.85rem;color:#8f9cba;"> /month</span></p>
+      <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">7-day free trial · $0.00 today</p>
+      <p>1 active machine, built-in strategy, AI risk-control gate, decision logs
+        and the daily report. ｜ 单账户、内置策略、AI 风控闸门、决策日志与日报。</p>
+      <p style="margin:12px 0 0;"><span class="btn primary" style="pointer-events:none;">Start Starter — $19/mo</span></p>
+      <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">Click anywhere on this card to start ｜ 点卡片任意位置即可开通</p>
+    </div>
+
+    <div class="card" style="cursor:pointer;border-color:#e94560;" onclick="return buy('pro')" title="Click to start the 7-day free trial">
+      <h3 style="margin-top:0;">Pro <span style="font-size:.7rem;color:#e94560;">most popular</span></h3>
+      <p style="font-size:1.5rem;margin:2px 0;"><strong>$39</strong><span style="font-size:.85rem;color:#8f9cba;"> /month</span></p>
+      <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">7-day free trial · $0.00 today</p>
+      <p>Up to 5 terminals, full risk control with Prop-Firm mode, report export,
+        priority support. ｜ 最多 5 终端、风控全开（含 Prop-Firm 模式）、报表导出、优先支持。</p>
+      <p style="margin:12px 0 0;"><span class="btn primary" style="pointer-events:none;">Start Pro — $39/mo</span></p>
+      <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">Click anywhere on this card to start ｜ 点卡片任意位置即可开通</p>
+    </div>
+
+    <div class="card" style="cursor:pointer;" onclick="return buy('lifetime')" title="Click to buy once">
+      <h3 style="margin-top:0;">Lifetime</h3>
+      <p style="font-size:1.5rem;margin:2px 0;"><strong>$599</strong><span style="font-size:.85rem;color:#8f9cba;"> one-time</span></p>
+      <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">Pay once · no subscription</p>
+      <p>Everything in Pro plus all future updates. ｜ Pro 全部功能 + 后续版本更新。</p>
+      <p style="margin:12px 0 0;"><span class="btn ghost" style="pointer-events:none;">Buy Lifetime — $599</span></p>
+      <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">Click anywhere on this card to buy ｜ 点卡片任意位置即可购买</p>
+    </div>
+  </section>
+
+  <p style="margin:14px 0 22px;font-size:13px;color:#8f9cba;">
+    Payments are processed by Paddle, our merchant of record. Cancel any time before
+    the trial ends and you are not charged; Lifetime is a one-time purchase (no trial).
+    ｜ 支付由 Paddle（记录商户）处理；试用结束前可随时取消，不产生费用；Lifetime 一次性买断。
+    <br>
+    Checkout not opening? Open this page in your normal browser (some embedded
+    preview panes block it), or email
+    <a href="mailto:760808632@qq.com?subject=VigilDesk%20purchase">760808632@qq.com</a>
+    and we will send you a payment link. ｜ 结账窗口打不开？请用正常浏览器打开本页，或邮件索取付款链接。
+  </p>
+
+  <h2 class="page">Compare in detail ｜ 详细对比</h2>
   <table class="plan">
     <tr>
       <th>Plan ｜ 套餐</th>
       <th>Price ｜ 价格</th>
       <th>What you get ｜ 包含内容</th>
+      <th>Start ｜ 开通</th>
     </tr>
     <tr>
       <td><strong>Lite</strong><br><span class="muted">免费版</span></td>
@@ -61,59 +124,53 @@
         • Basic alerts (structured log + optional webhook) ｜ 基础告警（结构化日志 + 可选 webhook）<br>
         • No license, no telemetry, no AI confirmer ｜ 无授权校验、无遥测、无 AI 确认器
       </td>
+      <td>
+        <a class="btn ghost" href="https://xuks124.github.io/vigildesk/VigilDesk-0.1.6-win64-portable.zip" target="_blank" rel="noopener">Download free</a>
+      </td>
     </tr>
-    <tr>
+    <tr style="cursor:pointer;" onclick="return buy('starter')" title="Click to start the 7-day free trial">
       <td><strong>Starter</strong><br><span class="muted">入门版</span></td>
-      <td><span class="price">$19<span class="muted">/mo</span></span></td>
+      <td><span class="price">$19<span class="muted">/mo</span></span><br><span class="muted">7-day free trial</span></td>
       <td>
         • 1 active machine ｜ 单账户在线实例<br>
         • Built-in strategy ｜ 内置策略<br>
         • AI risk-control gate ｜ AI 风控闸门<br>
         • Decision logs + daily report ｜ 决策日志 + 日报
       </td>
+      <td>
+        <button class="btn primary" type="button" style="cursor:pointer;border:none;"
+          onclick="event.stopPropagation(); return buy('starter')">Start — $19/mo ｜ 开通</button>
+      </td>
     </tr>
-    <tr>
+    <tr style="cursor:pointer;" onclick="return buy('pro')" title="Click to start the 7-day free trial">
       <td><strong>Pro</strong><br><span class="muted">订阅版</span></td>
-      <td><span class="price">$39<span class="muted">/mo</span></span></td>
+      <td><span class="price">$39<span class="muted">/mo</span></span><br><span class="muted">7-day free trial</span></td>
       <td>
         • Multi-account — up to 5 terminals ｜ 多账户（最多 5 终端）<br>
-        • Full risk control + <strong>Prop-Firm mode</strong> ｜ 风控全开 + Prop-Firm 模式（日亏上限 / 全局回撤 kill-switch）<br>
+        • Full risk control + <strong>Prop-Firm mode</strong> ｜ 风控全开 + Prop-Firm 模式<br>
         • Report export ｜ 报表导出<br>
         • Priority support ｜ 优先支持
       </td>
+      <td>
+        <button class="btn primary" type="button" style="cursor:pointer;border:none;"
+          onclick="event.stopPropagation(); return buy('pro')">Start — $39/mo ｜ 开通</button>
+      </td>
     </tr>
-    <tr>
+    <tr style="cursor:pointer;" onclick="return buy('lifetime')" title="Click to buy once">
       <td><strong>Lifetime</strong><br><span class="muted">买断版（限量）</span></td>
       <td><span class="price">$599</span><br><span class="muted">one-time ｜ 一次性</span></td>
       <td>
         • Everything in Pro ｜ Pro 全部功能<br>
         • All future updates ｜ 终身更新
       </td>
+      <td>
+        <button class="btn ghost" type="button" style="cursor:pointer;"
+          onclick="event.stopPropagation(); return buy('lifetime')">Buy — $599 ｜ 买断</button>
+      </td>
     </tr>
   </table>
 
-  <p class="muted" style="margin:0 0 12px;">
-    Secure online checkout via Paddle, our merchant of record. Subscriptions
-    renew monthly until cancelled; Lifetime is a one-time purchase.
-    Questions about plans or trials? Ask on the
-    <a href="feedback.html">Feedback page</a> — we answer every item.
-    ｜ 在线支付经 Paddle（记录商户）安全结算。订阅按月自动续费，可随时取消；
-    Lifetime 为一次性买断。如需咨询套餐或试用，请通过<a href="feedback.html">反馈页</a>留言，每条都会回复。
-  </p>
-
-  <p style="margin:0 0 18px;">
-    <button class="btn primary" type="button" style="cursor:pointer;border:none;font-size:1rem;"
-      onclick="Paddle.Checkout.open({ items: [{ priceId: 'pri_01m1znn33qq6jt0fjpj09rnhj9', quantity: 1 }] })">
-      Start Starter — $19/mo · 7-day free trial ｜ 开通入门版</button>
-    <button class="btn primary" type="button" style="cursor:pointer;border:none;font-size:1rem;"
-      onclick="Paddle.Checkout.open({ items: [{ priceId: 'pri_01m1znydczjg1vr4gh6ardzmhr', quantity: 1 }] })">
-      Start Pro — $39/mo · 7-day free trial ｜ 开通 Pro</button>
-    <button class="btn ghost" type="button" style="cursor:pointer;font-size:1rem;"
-      onclick="Paddle.Checkout.open({ items: [{ priceId: 'pri_01m1zp2kac0vr76ak6npd2dq9r', quantity: 1 }] })">
-      Buy Lifetime — $599 one-time ｜ 买断版</button>
-  </p>
-
-  <section class="grid">
+  <section class="grid" style="margin-top:22px;">
     <div class="card">
       <h3>Trial &amp; refund ｜ 试用与退款</h3>
       <p>Starter and Pro include a 7-day free trial — you won't be charged
@@ -132,6 +189,14 @@
         stays active until the end of the paid period. ｜ 订阅可随时升级、
         降级或取消，已付周期内功能保持可用。</p>
       <a href="faq.html#upgrade-downgrade">Plan changes FAQ ｜ 更换套餐 FAQ</a>
+    </div>
+    <div class="card">
+      <h3>Questions? ｜ 有问题？</h3>
+      <p>Write to us from the feedback form (no GitHub account needed) or email
+        us directly — we answer every message.
+        ｜ 通过反馈表单留言（无需 GitHub 账号）或直接邮件，我们逐条回复。</p>
+      <a href="feedback.html">Send feedback ｜ 留言</a> ·
+      <a href="mailto:760808632@qq.com">760808632@qq.com</a>
     </div>
   </section>
 
