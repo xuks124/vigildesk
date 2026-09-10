@@ -3,10 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="VigilDesk is a local risk-control workstation for MetaTrader 5: process guarding, per-trade loss caps, daily drawdown guards and an AI confirmer that reviews your own strategy's orders.">
+<meta name="description" content="VigilDesk is a local risk-control workstation for MetaTrader 5: process guarding, per-trade loss caps, daily drawdown guards and an AI confirmer that reviews your own strategy's orders. Free 7-day trial.">
 <title>VigilDesk — MT5 Trading Risk-Control Workstation</title>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script>
+  /* Paddle Billing. Production is the default environment — do NOT call
+     Paddle.Environment.set() here (a non-sandbox value breaks the checkout). */
+  Paddle.Initialize({ token: "live_628b3886c1a50dc334fd998072c" });
+  var PRICES = {
+    starter:  "pri_01m1znn33qq6jt0fjpj09rnhj9",   /* $19 / month, 7-day trial */
+    pro:      "pri_01m1znydczjg1vr4gh6ardzmhr",   /* $39 / month, 7-day trial */
+    lifetime: "pri_01m1zp2kac0vr76ak6npd2dq9r"    /* $599 one-time          */
+  };
+  function buy(plan) {
+    var priceId = PRICES[plan];
+    if (!priceId) { return false; }
+    Paddle.Checkout.open({ items: [{ priceId: priceId, quantity: 1 }] });
+    return false;
+  }
+</script>
 </head>
 <body>
 <header class="site">
@@ -27,20 +44,93 @@
 </header>
 
 <main class="wrap">
+  <!-- ── hero: the download comes FIRST ─────────────────────────────────── -->
   <section class="hero">
     <h1>Your strategy. Our safety layer.</h1>
     <p class="tagline">
-      VigilDesk is a local risk-control workstation for MetaTrader 5:
-      per-trade loss caps, daily drawdown guards, and an AI confirmer that
-      reviews your own strategy's orders before they go out.
+      A local risk-control workstation for MetaTrader 5 — process guard,
+      per-trade loss caps, daily drawdown guard, and an AI that reviews your
+      own strategy's orders before they go out.
+      ｜ 本地风控工作站：进程守护 + 单笔亏损上限 + 日内回撤保护 + AI 逐单复核。
     </p>
-    <p style="margin:10px 0 0;font-size:13px;color:#8f9cba;">Mirror ｜ 备用下载：<a href="https://xuks124.github.io/vigildesk/VigilDesk-0.1.6-win64-portable.zip" target="_blank" rel="noopener">GitHub Releases</a></p><p style="margin:12px 0 0;font-size:13px;color:#8f9cba;">Windows may show "Unknown publisher" (we are not code-signed yet): click "More info" then "Run anyway", or right-click the .zip &rarr; Properties &rarr; Unblock. Compare the SHA-256 with the one we publish if you want to be certain.</p><a class="btn primary" href="https://xuks124.github.io/vigildesk/VigilDesk-0.1.6-win64-portable.zip" target="_blank" rel="noopener">Download</a>
-    <a class="btn ghost" href="pricing.html">Pricing</a>
-    <a class="btn ghost" href="tutorial.html">Tutorial</a>
-    <a class="btn ghost" href="faq.html">FAQ</a>
+
+    <p style="margin:22px 0 6px;">
+      <a class="btn primary" style="font-size:1.05rem;padding:14px 30px;"
+         href="https://xuks124.github.io/vigildesk/VigilDesk-0.1.6-win64-portable.zip"
+         target="_blank" rel="noopener">⬇ Download for Windows — free 7-day trial</a>
+      <a class="btn ghost" style="font-size:1.05rem;padding:14px 22px;"
+         href="#plans">See plans &amp; pricing</a>
+    </p>
+    <p style="margin:0;font-size:13px;color:#8f9cba;">
+      Windows 10/11 · no Python needed · unzip and double-click
+      <code>VigilDesk.exe</code> · <strong>no account, no card</strong> to start
+      ｜ 免安装、免注册、免绑卡即可开始
+    </p>
+    <p style="margin:6px 0 0;font-size:12px;color:#6f7c99;">
+      Download link not responding? Copy this address into your browser ｜
+      下载没反应？把下面地址复制到浏览器打开：<br>
+      <code>https://xuks124.github.io/vigildesk/VigilDesk-0.1.6-win64-portable.zip</code>
+    </p>
+    <p style="margin:10px 0 0;font-size:12px;color:#6f7c99;">
+      First launch may show Windows "Unknown publisher" (we are not code-signed
+      yet): click <em>More info</em> → <em>Run anyway</em>. ｜ 首次启动 Windows
+      可能提示"未知发布者"，点"更多信息 → 仍要运行"即可。
+    </p>
   </section>
 
-  <h2 class="page" style="padding-top:0;">What VigilDesk does ｜ 核心功能</h2>
+  <!-- ── plans: clickable, checkout straight from the home page ─────────── -->
+  <h2 class="page" id="plans" style="padding-top:8px;">Plans ｜ 套餐</h2>
+  <p style="margin:0 0 14px;color:#8f9cba;">
+    <strong>Free forever:</strong> Watchdog Lite keeps your MT5 terminal alive —
+    no card, no account. Paid plans add the full risk-control workstation.
+    <strong>Every paid plan starts with a 7-day free trial; you are not charged
+    today</strong> (a card is required at checkout).
+    ｜ 免费版永久可用；付费套餐均含 7 天免费试用，<strong>今天不扣费</strong>（结账时需绑卡）。
+  </p>
+
+  <section class="grid" id="plan-cards" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr));">
+    <div class="card" style="cursor:pointer;" onclick="return buy('starter')" title="Click to start the 7-day trial">
+      <h3 style="margin-top:0;">Starter</h3>
+      <p style="font-size:1.5rem;margin:2px 0 2px;"><strong>$19</strong><span style="font-size:.85rem;color:#8f9cba;"> /month</span></p>
+      <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">7-day free trial · $0.00 today</p>
+      <p>One MT5 account, the full risk-control stack, watchdog and decision log.
+        ｜ 单账户，完整风控栈 + 守护 + 决策留痕。</p>
+      <p style="margin:12px 0 0;"><span class="btn primary" style="pointer-events:none;">Start Starter — $19/mo</span></p>
+      <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">Click anywhere on this card to start ｜ 点卡片任意位置即可开通</p>
+    </div>
+
+    <div class="card" style="cursor:pointer;border-color:#e94560;" onclick="return buy('pro')" title="Click to start the 7-day trial">
+      <h3 style="margin-top:0;">Pro <span style="font-size:.7rem;color:#e94560;">most popular</span></h3>
+      <p style="font-size:1.5rem;margin:2px 0 2px;"><strong>$39</strong><span style="font-size:.85rem;color:#8f9cba;"> /month</span></p>
+      <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">7-day free trial · $0.00 today</p>
+      <p>Everything in Starter plus multiple accounts, VPS-friendly operation and
+        priority support. ｜ 含 Starter 全部功能 + 多账户 + VPS 长期运行 + 优先支持。</p>
+      <p style="margin:12px 0 0;"><span class="btn primary" style="pointer-events:none;">Start Pro — $39/mo</span></p>
+      <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">Click anywhere on this card to start ｜ 点卡片任意位置即可开通</p>
+    </div>
+
+    <div class="card" style="cursor:pointer;" onclick="return buy('lifetime')" title="Click to buy once, keep forever">
+      <h3 style="margin-top:0;">Lifetime</h3>
+      <p style="font-size:1.5rem;margin:2px 0 2px;"><strong>$599</strong><span style="font-size:.85rem;color:#8f9cba;"> one-time</span></p>
+      <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">Pay once · no subscription</p>
+      <p>Every current feature plus all future updates on the same machine.
+        ｜ 一次买断，含全部现有功能与后续更新。</p>
+      <p style="margin:12px 0 0;"><span class="btn ghost" style="pointer-events:none;">Buy Lifetime — $599</span></p>
+      <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">Click anywhere on this card to buy ｜ 点卡片任意位置即可购买</p>
+    </div>
+  </section>
+
+  <p style="margin:12px 0 0;font-size:13px;color:#8f9cba;">
+    Payments are processed by Paddle (merchant of record). Cancel any time before
+    the trial ends and you are not charged. ｜ 支付由 Paddle 处理（记录商户），试用结束前可随时取消，不产生费用。
+    Checkout not opening? Open this page in your normal browser, or email
+    <a href="mailto:760808632@qq.com?subject=VigilDesk%20purchase">760808632@qq.com</a>
+    and we will send you a payment link. ｜ 结账窗口打不开？请用正常浏览器打开本页，或邮件联系我们索取付款链接。
+    Full details: <a href="pricing.html">pricing page</a>.
+  </p>
+
+  <!-- ── features ───────────────────────────────────────────────────────── -->
+  <h2 class="page">What VigilDesk does ｜ 核心功能</h2>
   <section class="grid" id="features">
     <div class="card">
       <h3>Process guard</h3>
@@ -81,39 +171,44 @@
     </div>
   </section>
 
+  <!-- ── download details, support ──────────────────────────────────────── -->
+  <h2 class="page">Download &amp; setup ｜ 下载与安装</h2>
   <section class="grid" id="download">
     <div class="card">
       <h3>Download</h3>
       <p>Windows 10/11. Point VigilDesk at
-        <code>terminal64.exe</code>, pick your AI model, set risk limits,
-        and smoke-test in dry-run mode. Installers are published through
-        GitHub Releases. ｜ 安装包经 GitHub Releases 分发，首次运行向导
-        四步完成配置。</p>
+        <code>terminal64.exe</code>, pick your AI model, set risk limits, and
+        smoke-test in dry-run mode. ｜ 安装包为免安装版，首次运行向导四步完成配置。</p>
       <a href="https://xuks124.github.io/vigildesk/VigilDesk-0.1.6-win64-portable.zip" target="_blank" rel="noopener">Get VigilDesk 0.1.6 (Windows 10/11)</a>
+      <p style="margin:10px 0 0;font-size:12px;color:#8f9cba;">
+        Mirror ｜ 备用下载：<a href="https://github.com/xuks124/vigildesk/releases/latest/download/VigilDesk-0.1.6-win64-portable.zip" target="_blank" rel="noopener">GitHub Releases</a>
+      </p>
     </div>
-    <div class="card" id="pricing">
-      <h3>Pricing</h3>
-      <p>Start free with Watchdog Lite — free forever, no card required. Same download: unzip and run <code>VigilDesk.exe lite</code> to keep your MetaTrader terminal alive 24/7. No license, no account, no telemetry.<br>
-         Pro — full risk-control workstation, subscription.<br>
-         Lifetime — all future updates.</p>
-      <a href="pricing.html">See plans &amp; pricing</a>
+    <div class="card">
+      <h3>Free forever tier</h3>
+      <p>Watchdog Lite needs no licence and no account: unzip and run
+        <code>VigilDesk.exe lite</code> to keep your MetaTrader terminal alive
+        24/7. It adopts an already-running terminal instead of starting a second
+        one. ｜ 免费版无需授权：<code>VigilDesk.exe lite</code> 守护 MT5 常驻，
+        已开着的终端会被接管而不是重复启动。</p>
+      <a href="#plans">Upgrade to a paid plan</a>
     </div>
     <div class="card">
       <h3>Get started</h3>
-      <p>New here? Follow the tutorial: install → configure → run the bot →
-         read the logs. Then read how we handle security and compliance.</p>
+      <p>New here? Follow the tutorial: install → configure → run → read the
+        logs. Then read how we handle security and compliance.</p>
       <a href="tutorial.html">Read the tutorial</a> ·
       <a href="security.html">Security &amp; compliance</a>
     </div>
     <div class="card">
       <h3>Support &amp; feedback</h3>
       <p>Self-serve FAQ covers installation, activation, MT5 paths, models,
-        firewall and refunds. Found a bug or want a feature? Tell us — feedback
-        is triaged every 3 days and planned every week.
-        （中文：自助 FAQ 覆盖安装、激活、MT5 路径、模型、防火墙与退款；
-        遇到问题或有建议请告诉我们——反馈每 3 天分拣、每周排期。）</p>
+        firewall and refunds. Found a bug or want a feature? Write to us — the
+        feedback form works without a GitHub account.
+        （中文：自助 FAQ 覆盖安装、激活、MT5 路径、模型、防火墙与退款；反馈表单无需 GitHub 账号。）</p>
       <a href="faq.html">Browse the FAQ</a> ·
-      <a href="feedback.html">Send feedback</a>
+      <a href="feedback.html">Send feedback</a> ·
+      <a href="mailto:760808632@qq.com">760808632@qq.com</a>
     </div>
   </section>
 
