@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>常见问题 — VigilDesk</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <img src="assets/logo.svg" alt="VigilDesk logo">
+    <span class="brand">VigilDesk</span>
+    <nav>
+      <a href="index.html">首页</a>
+      <a href="faq.html">FAQ (EN)</a>
+      <a href="faq-zh.html">常见问题 (中文)</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1 class="page">常见问题</h1>
+
+  <details>
+    <summary>如何安装 VigilDesk？</summary>
+    <p>1) 从首页下载安装包并核对文件大小。2) 右键 →「以管理员身份运行」。
+       3) 按首次运行向导操作。若杀毒软件拦截安装包，请暂时加入白名单。
+       仍安装失败时，请把 <code>%LOCALAPPDATA%\VigilDesk\logs</code> 下的日志发给我们。</p>
+  </details>
+
+  <details>
+    <summary>如何激活许可证 / 解绑机器？</summary>
+    <p>在向导的激活步骤粘贴许可证密钥即可。套餐限制同时在线的机器数量。
+       换机：在客户后台解绑旧机器，然后在新机器上激活，名额立即释放。</p>
+  </details>
+
+  <details>
+    <summary>找不到 MT5 终端路径？</summary>
+    <p>VigilDesk 需要 <code>terminal64.exe</code>，常见位置：</p>
+    <ul>
+      <li><code>C:\Program Files\MetaTrader 5\terminal64.exe</code>（标准安装）</li>
+      <li>券商定制目录，如 <code>C:\Program Files\&lt;券商名&gt; MT5\</code></li>
+    </ul>
+    <p>也可以在向导里手动浏览选择；绿色版 MT5 请选择包含 <code>terminal64.exe</code> 的目录。</p>
+  </details>
+
+  <details>
+    <summary>AI 模型下载慢 / CDN 卡顿？</summary>
+    <p>内置模型体积较大。下载中断后重新打开 VigilDesk 会自动续传。
+       若 CDN 在您的地区较慢，可在「设置 → 推理」中切换镜像源，
+       或改用自己的 OpenAI 兼容本地端点（如 llama-server / ollama）。</p>
+  </details>
+
+  <details>
+    <summary>防火墙 / 连接问题</summary>
+    <p>VigilDesk 需要访问本地 AI 端点（默认端口 <code>8080</code>），
+       以及可选的授权/遥测服务器（HTTPS）。请在 Windows 防火墙和
+       VPS 服务商安全组中放行 VigilDesk 与推理服务。
+       全部流量可仅走本机回环，无需开放任何入站端口。</p>
+  </details>
+
+  <details>
+    <summary>常见报错</summary>
+    <ul>
+      <li><strong>找不到终端</strong> — 在「设置 → MT5」中修正路径。</li>
+      <li><strong>许可证过期</strong> — 请续费；离线宽限期（72 小时）结束后风控暂停。</li>
+      <li><strong>模型加载失败</strong> — 检查推理端点是否运行并可访问 <code>127.0.0.1:8080</code>。</li>
+      <li><strong>交易品种不存在（如 XAUUSDm）</strong> — 各券商品种命名不同，
+          请把 <code>trading.symbol</code> 改为券商的确切品种代码。</li>
+    </ul>
+  </details>
+
+  <details id="trial-refund">
+    <summary>试用与退款政策？</summary>
+    <p>7 天免费试用，功能完整，无需绑卡。购买后 14 天内，若产品与描述不符可全额退款——
+       直接回复订单邮件即可。订阅可随时取消，已付周期内功能保持可用。</p>
+  </details>
+
+  <details>
+    <summary>VigilDesk 承诺收益吗？</summary>
+    <p><strong>不承诺。</strong>VigilDesk 是叠加在您自己策略之上的安全层：
+       限制单笔亏损、执行日内回撤上限、由 AI 确认器复核订单。
+       它不构成投资建议，不生成自有信号，也不承诺任何收益。交易存在重大亏损风险。</p>
+  </details>
+
+  <div class="disclaimer">
+    <strong>风险免责声明。</strong>VigilDesk 不承诺任何收益，不构成投资建议。
+    杠杆交易风险极高，可能损失超过本金；历史表现不代表未来结果。
+    完整条款见 <code>legal/DISCLAIMER.txt</code>。
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 VigilDesk</span>
+    <a href="index.html">首页</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+</footer>
+</body>
+</html>

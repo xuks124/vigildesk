@@ -1,0 +1,77 @@
+/* VigilDesk docs-site — zero external resources (no CDN fonts/JS). */
+:root {
+  --bg: #0d1321;
+  --bg-soft: #1d2d44;
+  --fg: #e8e8e8;
+  --muted: #9fb3c8;
+  --accent: #e94560;
+  --accent-2: #16c79a;
+  --card: #16223b;
+  --border: #2b3a55;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.6;
+}
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+header.site {
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+header.site .wrap { display: flex; align-items: center; gap: 12px; padding: 14px 20px; }
+header.site img { height: 40px; width: 40px; }
+header.site .brand { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.5px; }
+nav { margin-left: auto; }
+nav a { color: var(--muted); text-decoration: none; margin-left: 18px; }
+nav a:hover { color: var(--fg); }
+.hero { text-align: center; padding: 64px 0 40px; }
+.hero h1 { font-size: 2.2rem; margin: 0 0 10px; }
+.hero .tagline { color: var(--muted); font-size: 1.15rem; margin-bottom: 28px; }
+.btn {
+  display: inline-block; padding: 10px 22px; margin: 0 8px 8px 0;
+  border-radius: 6px; text-decoration: none; font-weight: 600;
+}
+.btn.primary { background: var(--accent); color: #fff; }
+.btn.ghost { border: 1px solid var(--border); color: var(--fg); }
+.btn:hover { opacity: 0.9; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 24px 0 48px; }
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 18px;
+}
+.card h3 { margin-top: 0; color: var(--accent-2); }
+.card a { color: var(--accent-2); text-decoration: none; }
+main { padding-bottom: 40px; }
+h1.page { padding-top: 36px; }
+details {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px 16px; margin: 10px 0;
+}
+details summary { cursor: pointer; font-weight: 600; }
+code { background: var(--bg-soft); padding: 2px 6px; border-radius: 4px; }
+/* pricing page (local styles only, still zero external resources) */
+table.plan {
+  width: 100%; border-collapse: collapse; margin: 16px 0 32px;
+  background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+  overflow: hidden; font-size: 0.95rem;
+}
+table.plan th, table.plan td {
+  padding: 12px 14px; border-top: 1px solid var(--border);
+  text-align: left; vertical-align: top;
+}
+table.plan tr:first-child th { border-top: none; background: var(--bg-soft); color: var(--accent-2); }
+.price { font-size: 1.3rem; font-weight: 700; color: var(--accent-2); }
+.muted { color: var(--muted); font-size: 0.85rem; }
+.disclaimer {
+  border-left: 4px solid var(--accent);
+  background: var(--card);
+  padding: 12px 16px; margin: 24px 0; border-radius: 0 8px 8px 0;
+  color: var(--muted); font-size: 0.95rem;
+}
+footer.site { border-top: 1px solid var(--border); color: var(--muted); padding: 18px 0 30px; font-size: 0.85rem; }
+footer.site .wrap { display: flex; gap: 18px; flex-wrap: wrap; }
+footer.site a { color: var(--muted); }

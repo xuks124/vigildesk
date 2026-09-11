@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting Started — VigilDesk</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <img src="assets/logo.svg" alt="VigilDesk logo">
+    <span class="brand">VigilDesk</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="tutorial.html">Tutorial</a>
+      <a href="security.html">Security</a>
+      <a href="faq.html">FAQ (EN)</a>
+      <a href="faq-zh.html">常见问题 (中文)</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1 class="page">Getting Started: install → configure → run → read logs</h1>
+  <p class="muted" style="margin-bottom:28px;">
+    入门教程：安装 → 配置 → 拉起 bot → 看日志。英文为主，每节末尾附中文要点。
+  </p>
+
+  <h2 class="page" style="padding-top:0;">1. Install ｜ 安装</h2>
+  <ol>
+    <li>Download the Windows installer from the <a href="index.html#download">home page</a>
+        and verify the file size.</li>
+    <li>Right-click the installer → <em>Run as administrator</em>.</li>
+    <li>Follow the first-run wizard. If your antivirus blocks it, whitelist the
+        installer temporarily.</li>
+  </ol>
+  <p class="muted">中文要点：下载安装包 → 管理员身份运行 → 按首次运行向导操作；
+  杀软拦截时先临时加白。安装失败请收集 <code>%LOCALAPPDATA%\VigilDesk\logs</code> 日志。</p>
+
+  <h2 class="page">2. Configure ｜ 配置</h2>
+  <ol>
+    <li>Point VigilDesk at your MetaTrader 5 terminal
+        (<code>terminal64.exe</code>) — standard path is
+        <code>C:\Program Files\MetaTrader 5\</code>; broker-branded installs
+        live in their own folder.</li>
+    <li>Pick your AI backend: the bundled local model, a mirror, or your own
+        OpenAI-compatible endpoint (llama-server / ollama) on
+        <code>127.0.0.1:8080</code>.</li>
+    <li>Set your risk limits: per-trade loss cap and daily drawdown limit.</li>
+    <li>Set <code>trading.symbol</code> to your broker's exact symbol id
+        (e.g. <code>XAUUSDm</code> on Exness).</li>
+  </ol>
+  <p class="muted">中文要点：配置四件事——MT5 终端路径、AI 推理端点、风控限额
+  （单笔亏损上限 / 日内回撤上限）、券商品种代码。全部可回改：设置里随时调整。</p>
+
+  <h2 class="page">3. Run ｜ 拉起 bot</h2>
+  <ol>
+    <li>First run in <strong>dry-run mode</strong>: orders are simulated, so
+        you can smoke-test the whole chain without risking money.</li>
+    <li>When dry-run looks right, switch to live guarding. VigilDesk reviews
+        your strategy's orders with the AI confirmer before they go out.</li>
+    <li>Free Watchdog Lite users: start the supervisor with
+        <code>python -m vigildesk watchdog-lite</code> — it keeps the process
+        alive, auto-restarts after crashes, and writes basic alerts. It can
+        also guard any command: <code>python -m vigildesk watchdog-lite -- cmd ...</code></li>
+    <li>Leave it running unattended? Use the same supervisor approach on your
+        VPS — restart cooldown and exponential backoff prevent restart storms.</li>
+  </ol>
+  <p class="muted">中文要点：先 dry-run 空跑验证链路，再切实盘守护；免费版用
+  <code>watchdog-lite</code> 守护进程（崩溃自动拉起 + 基础告警），也可守护任意命令行程序。</p>
+
+  <h2 class="page">4. Read the logs ｜ 看日志</h2>
+  <ul>
+    <li>Bot and guard logs: <code>%LOCALAPPDATA%\VigilDesk\logs</code>
+        (e.g. <code>bot.log</code>, <code>watchdog.log</code>,
+        <code>watchdog_lite.log</code>).</li>
+    <li>Decision logs: every AI confirmer decision is recorded with its reason
+        — open the dashboard to review why an order passed or was held.</li>
+    <li>Alerts: JSON lines in <code>watchdog_lite.log</code>; optional webhook
+        delivers them to your own endpoint (3s timeout, failures are silent).</li>
+  </ul>
+  <p class="muted">中文要点：日志集中在 <code>%LOCALAPPDATA%\VigilDesk\logs</code>；
+  AI 每笔决策都有留痕及理由，可在 dashboard 复盘；告警为 JSON 行，可接自有 webhook。</p>
+
+  <div class="disclaimer">
+    <strong>Risk disclaimer.</strong> VigilDesk is a safety layer over your own
+    strategy — it is not investment advice and never promises returns. Test in
+    dry-run first and only risk capital you can afford to lose.
+    （中文：VigilDesk 是叠加在您自己策略之上的安全层，不构成投资建议、不承诺收益；
+    请先 dry-run 验证，并仅使用可承受损失的资金。）
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 VigilDesk</span>
+    <a href="index.html">Home</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="security.html">Security</a>
+    <a href="faq.html">FAQ</a>
+    <a href="faq-zh.html">常见问题</a>
+  </div>
+</footer>
+</body>
+</html>

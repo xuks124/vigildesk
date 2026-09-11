@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Security &amp; Compliance — VigilDesk</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <img src="assets/logo.svg" alt="VigilDesk logo">
+    <span class="brand">VigilDesk</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="tutorial.html">Tutorial</a>
+      <a href="security.html">Security</a>
+      <a href="faq.html">FAQ (EN)</a>
+      <a href="faq-zh.html">常见问题 (中文)</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1 class="page">Security &amp; Compliance ｜ 安全与合规</h1>
+  <p class="muted" style="margin-bottom:28px;">
+    安全与合规说明：数据本地、无遥测默认关、免责声明。英文为主，每节末尾附中文要点。
+  </p>
+
+  <h2 class="page" style="padding-top:0;">1. Your data stays local ｜ 数据本地</h2>
+  <ul>
+    <li>All configuration, logs, decision records and reports are stored on
+        your own machine under <code>%LOCALAPPDATA%\VigilDesk</code>. We do not
+        operate a copy of your trading data.</li>
+    <li>Order review runs against your own local or self-hosted inference
+        endpoint (default <code>127.0.0.1:8080</code>) — order details never
+        need to leave your VPS unless <em>you</em> point the endpoint
+        elsewhere.</li>
+    <li>Broker credentials belong to your MT5 terminal. VigilDesk reads
+        market and account state through the terminal on your behalf and
+        does not ask for your broker password.</li>
+  </ul>
+  <p class="muted">中文要点：配置、日志、决策记录与报表全部保存在本机
+  <code>%LOCALAPPDATA%\VigilDesk</code>，我们不存副本；订单审查走你自有的本地
+  推理端点（默认 <code>127.0.0.1:8080</code>），订单细节无需离开你的机器；
+  券商账户密码属于 MT5 终端，VigilDesk 不索取。</p>
+
+  <h2 class="page">2. Telemetry is opt-in ｜ 无遥测，默认关</h2>
+  <ul>
+    <li><strong>Watchdog Lite (free) has no telemetry at all</strong> — no
+        license check, no reporting, no phone-home. This boundary is enforced
+        in code and guarded by automated tests.</li>
+    <li>In paid editions, telemetry (crash/diagnostic reporting) is
+        <strong>off by default</strong> and only sends when you explicitly
+        enable it in <em>Settings → Diagnostics</em>.</li>
+    <li>The license check contacts the activation server over HTTPS when you
+        activate or renew, and supports a 72-hour offline grace period for
+        unattended VPS use. Nothing else is transmitted.</li>
+    <li>Optional webhook alerts go only to the endpoint you configure.</li>
+  </ul>
+  <p class="muted">中文要点：免费版 Lite 完全无遥测（代码与测试双重固化该边界）；
+   付费版遥测默认关闭、需手动开启；激活/续期通过 HTTPS 联系授权服务器，离线宽限
+   72 小时；webhook 告警只发往你自行配置的地址。</p>
+
+  <h2 class="page">3. What VigilDesk is not ｜ 免责声明</h2>
+  <ul>
+    <li>VigilDesk is a <strong>risk-control safety layer over your own
+        strategy</strong>. It is not investment advice and does not generate
+        signals of its own.</li>
+    <li>We <strong>never promise any profit or returns</strong>. Anyone
+        claiming guaranteed returns "with VigilDesk" is misrepresenting the
+        product.</li>
+    <li>Trading foreign exchange and CFDs on margin carries a high level of
+        risk and may not be suitable for all investors; you could lose more
+        than your deposit. Past performance of any strategy does not
+        guarantee future results.</li>
+    <li>Test in <strong>dry-run mode</strong> first, and only use capital you
+        can afford to risk. See the full text in
+        <code>legal/DISCLAIMER.txt</code>.</li>
+  </ul>
+  <p class="muted">中文要点：VigilDesk 是叠加在您自己策略之上的安全层，不构成投资建议、
+   不产生自有信号、绝不承诺收益；杠杆交易风险极高，可能损失超过本金，历史表现不代表
+   未来结果；请先 dry-run 验证，仅使用可承受损失的资金。完整文本见
+   <code>legal/DISCLAIMER.txt</code>。</p>
+
+  <div class="disclaimer">
+    <strong>Risk disclaimer.</strong> VigilDesk is a software tool, not
+    investment advice. It does not promise any profit or returns. Trading on
+    margin carries a high level of risk; you could lose more than your
+    deposit. Past performance does not guarantee future results.
+    （中文：VigilDesk 是软件工具，不构成投资建议，不承诺收益；杠杆交易风险极高，
+    可能损失超过本金，历史表现不代表未来结果。）
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 VigilDesk</span>
+    <a href="index.html">Home</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="tutorial.html">Tutorial</a>
+    <a href="faq.html">FAQ</a>
+    <a href="faq-zh.html">常见问题</a>
+  </div>
+</footer>
+</body>
+</html>

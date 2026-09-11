@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ — VigilDesk</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <img src="assets/logo.svg" alt="VigilDesk logo">
+    <span class="brand">VigilDesk</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="tutorial.html">Tutorial</a>
+      <a href="security.html">Security</a>
+      <a href="faq.html">FAQ (EN)</a>
+      <a href="faq-zh.html">常见问题 (中文)</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1 class="page">Frequently Asked Questions</h1>
+
+  <details>
+    <summary>How do I install VigilDesk?</summary>
+    <p>1) Download the installer from the home page and verify the file size.
+       2) Right-click → <em>Run as administrator</em>. 3) Follow the first-run
+       wizard. If your antivirus blocks the installer, whitelist it temporarily.
+       If installation still fails, send us the logs under
+       <code>%LOCALAPPDATA%\VigilDesk\logs</code>.</p>
+  </details>
+
+  <details>
+    <summary>How do I activate my license or unbind a machine?</summary>
+    <p>Paste your license key into the wizard's activation step. Your plan
+       limits how many machines run VigilDesk at the same time. To move
+       machines, unbind the old instance in the customer dashboard, then
+       activate on the new one — the slot frees immediately.</p>
+  </details>
+
+  <details>
+    <summary>VigilDesk can't find my MT5 terminal. Where is it?</summary>
+    <p>VigilDesk needs <code>terminal64.exe</code>. Common locations:</p>
+    <ul>
+      <li><code>C:\Program Files\MetaTrader 5\terminal64.exe</code> (standard install)</li>
+      <li>Broker-branded folders, e.g. <code>C:\Program Files\&lt;BrokerName&gt; MT5\</code></li>
+    </ul>
+    <p>Or browse to it in the first-run wizard. Portable MT5 installs: pick the
+       folder containing <code>terminal64.exe</code>.</p>
+  </details>
+
+  <details>
+    <summary>The AI model download is slow / the CDN is lagging.</summary>
+    <p>The bundled model is large. Downloads auto-resume — just restart
+       VigilDesk if interrupted. If the CDN is slow in your region, switch the
+       mirror in <em>Settings → Inference</em>, or point VigilDesk at your own
+       OpenAI-compatible local endpoint (e.g. llama-server / ollama).</p>
+  </details>
+
+  <details>
+    <summary>Firewall / connection problems</summary>
+    <p>VigilDesk talks to your local AI endpoint (default port <code>8080</code>)
+       and optionally to the license/telemetry servers over HTTPS. Allow
+       VigilDesk and the inference server through Windows Defender Firewall and
+       your VPS provider's security group. Everything can run loopback-only —
+       no inbound ports need to be opened.</p>
+  </details>
+
+  <details>
+    <summary>Common errors</summary>
+    <ul>
+      <li><strong>"terminal not found"</strong> — fix the path in Settings → MT5.</li>
+      <li><strong>License expired</strong> — renew; live guarding pauses after
+          the 72h offline grace period.</li>
+      <li><strong>Model failed to load</strong> — check the inference endpoint is
+          running and reachable on <code>127.0.0.1:8080</code>.</li>
+      <li><strong>Symbol not found (e.g. XAUUSDm)</strong> — brokers name symbols
+          differently; set <code>trading.symbol</code> to your broker's exact id.</li>
+    </ul>
+  </details>
+
+  <details id="trial-refund">
+    <summary>What is the trial / refund policy?</summary>
+    <p>7-day free trial with all features, no card required. Full refund within
+       14 days of purchase if the product doesn't work as described — reply to
+       your order email. Cancel subscriptions any time; the plan stays active
+       until the end of the paid period.</p>
+  </details>
+
+  <details>
+    <summary>Does VigilDesk promise profits?</summary>
+    <p><strong>No.</strong> VigilDesk is a safety layer over <em>your own</em>
+       strategy: it caps per-trade losses, enforces daily drawdown limits, and
+       reviews orders with an AI confirmer. It is not investment advice, it
+       does not generate signals of its own, and it never promises returns.
+       Trading involves substantial risk of loss.</p>
+  </details>
+
+  <details id="plans-compare">
+    <summary>What is the difference between Lite (free) and Pro? ｜ 免费版和 Pro 有什么区别？</summary>
+    <p><strong>Lite is free forever</strong> and ships Watchdog Lite only: process
+       guard, crash auto-restart with cooldown and exponential backoff, and
+       basic alerts (structured log + optional webhook). It has no license
+       check, no telemetry, and no AI confirmer.
+       <strong>Pro</strong> adds the full risk-control workstation: AI
+       risk-control gate, per-trade loss caps, daily drawdown guards,
+       Prop-Firm mode, report export, and priority support — on up to
+       5 terminals. See the full comparison on the
+       <a href="pricing.html">Pricing page</a>.</p>
+    <p>中文：<strong>Lite 永久免费</strong>，仅含 Watchdog Lite（进程守护、崩溃自动拉起、
+       重启冷却与指数退避、基础告警），无授权校验、无遥测、无 AI 确认器。
+       <strong>Pro</strong> 是完整风控工作站：AI 风控闸门、单笔亏损上限、日内回撤防护、
+       Prop-Firm 模式、报表导出与优先支持，最多 5 个终端。完整对比见
+       <a href="pricing.html">定价页</a>。</p>
+  </details>
+
+  <details id="upgrade-downgrade">
+    <summary>Can I upgrade, downgrade, or cancel my plan? ｜ 可以随时升级、降级或取消吗？</summary>
+    <p>Yes, any time. Upgrades take effect immediately (you pay the
+       difference, prorated). Downgrades and cancellations take effect at the
+       end of the current paid period — your features stay active until then.
+       Your data and settings are kept, so if you come back within a
+       reasonable time, you resume where you left off. Starting on free Lite
+       and upgrading later requires no migration: the same installer unlocks
+       more features after activation.</p>
+    <p>中文：可以随时操作。升级立即生效（差价按比例补收）；降级与取消在当前
+       已付周期结束时生效，期间功能保持可用。数据与配置会保留，重新订阅即可继续使用。
+       从免费 Lite 起步后升级无需迁移：同一安装包，激活后即解锁更多功能。</p>
+  </details>
+
+  <div class="disclaimer">
+    <strong>Risk disclaimer.</strong> VigilDesk does not promise any profit and
+    is not investment advice. Margin trading carries a high level of risk; you
+    could lose more than your deposit. Past performance does not guarantee
+    future results. See <code>legal/DISCLAIMER.txt</code> for the full text.
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 VigilDesk</span>
+    <a href="index.html">Home</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="tutorial.html">Tutorial</a>
+    <a href="security.html">Security</a>
+    <a href="faq-zh.html">常见问题</a>
+  </div>
+</footer>
+</body>
+</html>
