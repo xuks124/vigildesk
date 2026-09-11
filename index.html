@@ -46,35 +46,47 @@
 <main class="wrap">
   <!-- ── hero: the download comes FIRST ─────────────────────────────────── -->
   <section class="hero">
-    <h1>Your strategy. Our safety layer.</h1>
-    <p class="tagline">
-      A local risk-control workstation for MetaTrader 5 — process guard,
-      per-trade loss caps, daily drawdown guard, and an AI that reviews your
-      own strategy's orders before they go out.
-      ｜ 本地风控工作站：进程守护 + 单笔亏损上限 + 日内回撤保护 + AI 逐单复核。
-    </p>
+    <div class="hero-flex">
+      <div class="hero-copy">
+        <p class="eyebrow">MT5 risk-control workstation</p>
+        <h1>Your strategy. Our safety layer.</h1>
+        <p class="tagline">
+          A local risk-control layer for MetaTrader 5 — process guard, per-trade
+          loss caps, a daily drawdown kill-switch, and an AI that reviews your
+          own strategy's orders before they go out.
+        </p>
+        <p class="tagline-zh">
+          本地风控层：进程守护 · 单笔亏损上限 · 日内回撤熔断 · AI 逐单复核。
+        </p>
 
-    <p style="margin:22px 0 6px;">
-      <a class="btn primary" style="font-size:1.05rem;padding:14px 30px;"
-         href="https://xuks124.github.io/vigildesk/VigilDesk-0.1.6-win64-portable.zip">⬇ Download for Windows — free 7-day trial</a>
-      <a class="btn ghost" style="font-size:1.05rem;padding:14px 22px;"
-         href="#plans">See plans &amp; pricing</a>
-    </p>
-    <p style="margin:0;font-size:13px;color:#8f9cba;">
-      Windows 10/11 · no Python needed · unzip and double-click
-      <code>VigilDesk.exe</code> · <strong>no account, no card</strong> to start
-      ｜ 免安装、免注册、免绑卡即可开始
-    </p>
-    <p style="margin:6px 0 0;font-size:12px;color:#6f7c99;">
-      Download link not responding? Copy this address into your browser ｜
-      下载没反应？把下面地址复制到浏览器打开：<br>
-      <code>https://xuks124.github.io/vigildesk/VigilDesk-0.1.6-win64-portable.zip</code>
-    </p>
-    <p style="margin:10px 0 0;font-size:12px;color:#6f7c99;">
-      First launch may show Windows "Unknown publisher" (we are not code-signed
-      yet): click <em>More info</em> → <em>Run anyway</em>. ｜ 首次启动 Windows
-      可能提示"未知发布者"，点"更多信息 → 仍要运行"即可。
-    </p>
+        <div class="cta-row">
+          <a class="btn primary big"
+             href="https://xuks124.github.io/vigildesk/VigilDesk-0.1.6-win64-portable.zip">⬇ Download for Windows — free 7-day trial</a>
+          <a class="btn ghost" href="#plans">See plans &amp; pricing</a>
+        </div>
+
+        <p class="fineprint">
+          Windows 10/11 · no Python, no account, no card · unzip and run
+          <code>VigilDesk.exe</code>, the 7-day trial starts by itself.
+          ｜ 免安装、免注册、免绑卡。
+        </p>
+        <p class="fineprint">
+          First launch may show Windows "Unknown publisher" (not code-signed
+          yet): click <em>More info</em> → <em>Run anyway</em>. ｜ 首次启动若提示
+          "未知发布者"，点"更多信息 → 仍要运行"。
+        </p>
+        <p class="fineprint">
+          Download not responding? Paste this into your browser ｜ 没反应就把下面
+          地址复制到浏览器：<br>
+          <code>https://xuks124.github.io/vigildesk/VigilDesk-0.1.6-win64-portable.zip</code>
+        </p>
+      </div>
+
+      <div class="hero-art">
+        <img src="assets/dashboard-hero.jpg" width="1100" height="885"
+             alt="VigilDesk dashboard: system status, licence state and the AI risk-gate decision log">
+      </div>
+    </div>
   </section>
 
   <!-- ── plans: clickable, checkout straight from the home page ─────────── -->
@@ -178,9 +190,9 @@
       <p>Windows 10/11. Point VigilDesk at
         <code>terminal64.exe</code>, pick your AI model, set risk limits, and
         smoke-test in dry-run mode. ｜ 安装包为免安装版，首次运行向导四步完成配置。</p>
-      <a href="https://xuks124.github.io/vigildesk/VigilDesk-0.1.6-win64-portable.zip">Get VigilDesk 0.1.6 (Windows 10/11)</a>
+      <a href="https://xuks124.github.io/vigildesk/VigilDesk-0.1.6-win64-portable.zip" target="_blank" rel="noopener">Get VigilDesk 0.1.6 (Windows 10/11)</a>
       <p style="margin:10px 0 0;font-size:12px;color:#8f9cba;">
-        Mirror ｜ 备用下载：<a href="https://github.com/xuks124/vigildesk/releases/latest/download/VigilDesk-0.1.6-win64-portable.zip">GitHub Releases</a>
+        Mirror ｜ 备用下载：<a href="https://github.com/xuks124/vigildesk/releases/latest/download/VigilDesk-0.1.6-win64-portable.zip" target="_blank" rel="noopener">GitHub Releases</a>
       </p>
     </div>
     <div class="card">
@@ -211,14 +223,7 @@
     </div>
   </section>
 
-  <section class="grid" id="screenshot" style="margin-top:26px">
-  <div class="card" style="padding:14px">
-    <h3 style="margin-top:0">What you actually see ｜ 你每天看到的界面</h3>
-    <p>System status, your licence state, and every AI risk-gate decision — logged and explained, not hidden.</p>
-    <img src="assets/dashboard.png" alt="VigilDesk dashboard: system status, licence state and the AI risk-gate decision log" style="width:100%;border-radius:12px;border:1px solid #24304d;margin-top:10px">
-  </div>
-</section>
-<section class="disclaimer">
+  <section class="disclaimer">
     <strong>Risk disclaimer.</strong>
     VigilDesk is a risk-control safety layer over your own trading strategy.
     It is not investment advice and does <strong>not</strong> promise any
