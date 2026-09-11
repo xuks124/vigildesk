@@ -160,4 +160,10 @@ footer.site a:hover { color: var(--fg); }
 @media (max-width: 520px) {
   header.site img { height: 28px; width: 28px; }
   header.site .brand { display: none; }   /* keep the nav on one line */
+  /* the long CTA label must be allowed to wrap on small phones, */
+  /* otherwise nowrap pushes it past the viewport edge            */
+  .btn { white-space: normal; text-align: center; }
+  .btn.big { font-size: .95rem; padding: 13px 18px; }
+  .cta-row { display: block; }
+  .cta-row .btn { display: block; width: 100%; margin-bottom: 10px; }
 }
