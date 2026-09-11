@@ -81,11 +81,6 @@
         </video>
         <img class="hero-fallback" src="assets/dashboard-hero.jpg" width="1100" height="565"
              alt="VigilDesk dashboard: system status, licence state and the AI risk-gate decision log">
-        <p class="fineprint" style="margin-top:10px;">
-          16 seconds, no audio: the AI gate reviewing orders, then the watchdog
-          bringing MetaTrader back after a crash.
-          ｜ 16 秒看懂它怎么干活。
-        </p>
       </div>
     </div>
   </section>
@@ -115,8 +110,9 @@
       <h3 style="margin-top:0;">Pro <span style="font-size:.7rem;color:#e94560;">most popular</span></h3>
       <p style="font-size:1.5rem;margin:2px 0 2px;"><strong>$39</strong><span style="font-size:.85rem;color:#8f9cba;"> /month</span></p>
       <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">7-day free trial · $0.00 today</p>
-      <p>Everything in Starter plus multiple accounts, VPS-friendly operation and
-        priority support. ｜ 含 Starter 全部功能 + 多账户 + VPS 长期运行 + 优先支持。</p>
+      <p>Everything in Starter plus alert channels (email / Telegram when the
+        watchdog restarts something) and priority support.
+        ｜ 含 Starter 全部功能，外加告警推送（邮件 / Telegram）与优先支持。</p>
       <p style="margin:12px 0 0;"><span class="btn primary" style="pointer-events:none;">Start Pro — $39/mo</span></p>
       <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">Click anywhere on this card to start ｜ 点卡片任意位置即可开通</p>
     </div>
@@ -158,9 +154,11 @@
     </div>
     <div class="card">
       <h3>Daily drawdown guard</h3>
-      <p>A daily loss limit plus a global-drawdown kill-switch, built for
-        prop-firm rules — one bad day can't blow the account. ｜ 日内回撤
-        上限 + 全局回撤 kill-switch，适配 Prop-Firm 规则。</p>
+      <p>A daily loss cap (1.5% of balance by default) that stops new entries for
+        the rest of the day when it is hit — and survives a restart, so the cap
+        cannot be bypassed. Consecutive losses automatically reduce size.
+        ｜ 日内亏损上限（默认余额的 1.5%）击穿后当日停止开仓，且重启也无法绕过；
+        连续亏损自动降仓。</p>
     </div>
     <div class="card">
       <h3>AI confirmer</h3>
