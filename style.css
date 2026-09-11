@@ -64,10 +64,15 @@ nav a:hover { color: var(--fg); }
 .hero .fineprint { font-size: .82rem; color: var(--muted); margin: 4px 0 0; max-width: 52ch; }
 .hero .fineprint code { font-size: .78rem; word-break: break-all; }
 .hero-art { position: relative; }
-.hero-art img {
+.hero-art img, .hero-art video {
   width: 100%; height: auto; display: block; border-radius: var(--radius);
   border: 1px solid var(--border);
   box-shadow: 0 24px 60px -24px rgba(0, 0, 0, .75), 0 0 0 1px rgba(22, 199, 154, .06);
+}
+.hero-fallback { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-video { display: none; }
+  .hero-fallback { display: block; }
 }
 .hero-art::after {
   content: ""; position: absolute; inset: -22% -12% auto auto; width: 62%; height: 62%;
