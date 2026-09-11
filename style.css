@@ -70,6 +70,19 @@ nav a:hover { color: var(--fg); }
   box-shadow: 0 24px 60px -24px rgba(0, 0, 0, .75), 0 0 0 1px rgba(22, 199, 154, .06);
 }
 .hero-fallback { display: none; }
+.tour-video {
+  width: 100%; height: auto; display: block; border-radius: var(--radius);
+  border: 1px solid var(--border); background: #05080f;
+  box-shadow: 0 24px 60px -28px rgba(0, 0, 0, .8);
+}
+.tour-list {
+  display: flex; flex-wrap: wrap; gap: 8px 14px; margin: 14px 0 6px;
+  font-size: .82rem; color: var(--muted);
+}
+.tour-list span {
+  border: 1px solid var(--border); border-radius: 999px; padding: 4px 12px;
+  background: rgba(255, 255, 255, .02);
+}
 @media (prefers-reduced-motion: reduce) {
   .hero-video { display: none; }
   .hero-fallback { display: block; }
