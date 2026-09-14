@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Prop-firm daily drawdown rules do not forgive one frustrated trade. VigilDesk makes the daily limit a hard state that a restart cannot bypass — prove it in 5 minutes with the free dry-run.">
+<title>VigilDesk for prop-firm traders — the daily line you cannot cross</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script>
+  Paddle.Initialize({ token: "live_628b3886c1a50dc334fd998072c" });
+  var PRICES = {
+    starter:  "pri_01m1znn33qq6jt0fjpj09rnhj9",
+    pro:      "pri_01m1znydczjg1vr4gh6ardzmhr",
+    lifetime: "pri_01m1zp2kac0vr76ak6npd2dq9r"
+  };
+  function buy(plan) {
+    var priceId = PRICES[plan];
+    if (!priceId) { return false; }
+    Paddle.Checkout.open({ items: [{ priceId: priceId, quantity: 1 }] });
+    return false;
+  }
+</script>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <img src="assets/logo.svg" alt="VigilDesk logo">
+    <span class="brand">VigilDesk</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="propfirm.html">Prop firms</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="tutorial.html">Tutorial</a>
+      <a href="security.html">Security</a>
+      <a href="faq.html">FAQ (EN)</a>
+      <a href="faq-zh.html">常见问题 (中文)</a>
+      <a href="feedback.html">Feedback 反馈</a>
+      <a href="legal.html">Legal</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section class="hero">
+  <span class="eyebrow">For prop-firm traders ｜ 给 Prop-Firm 交易员</span>
+  <h1>The daily line you cannot cross</h1>
+  <p class="tagline">Your firm gives you one daily drawdown. One frustrated trade after a bad
+    morning ends the account — not the strategy. VigilDesk makes that limit a
+    <strong>hard state on disk</strong>, so a crash, a restart or a stray edit cannot reset it.</p>
+  <p class="tagline-zh">考核账户只有一条日内回撤线。真正让账户出局的不是策略，而是上午连亏两笔之后那笔情绪单。
+    VigilDesk 把这条线变成<strong>落盘的硬状态</strong>——崩溃、重启、误改都绕不过去。</p>
+  <div class="cta-row">
+    <a class="btn primary big" href="VigilDesk-0.1.12-win64-portable.zip">⬇ Download for Windows — free 7-day trial</a>
+    <a class="btn ghost" href="#prove">Prove it in 5 minutes ↓</a>
+  </div>
+  <p class="fineprint">Windows 10/11 · no Python needed · runs locally, nothing is uploaded · dry-run by default</p>
+</section>
+
+<section>
+  <h2>What actually ends a challenge</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>① The morning that gets away</h3>
+      <p class="muted">Two losses by 10:00, the third one is not a signal — it is frustration.
+        With a daily cap of 5%, that single order is the whole evaluation.</p>
+    </div>
+    <div class="card">
+      <h3>② The order your plan never allowed</h3>
+      <p class="muted">A signal fires with a stop three times wider than your rule. Nobody
+        recomputes the risk before sending it, so one trade risks four times your limit.</p>
+    </div>
+    <div class="card">
+      <h3>③ The terminal that stops ticking</h3>
+      <p class="muted">MT5 hangs at 03:40. Your EA stops running, the position sits there
+        unprotected. No strategy can defend against its own terminal dying.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>What VigilDesk does about it</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Restart-proof daily kill-switch</h3>
+      <p class="muted">The cap is computed from your starting balance (1.5% by default) and the
+        "done for today" state is written to disk. Close the app, reopen it — new entries stay
+        blocked until the next trading day.</p>
+    </div>
+    <div class="card">
+      <h3>Per-trade cap before the send</h3>
+      <p class="muted">Every order is costed first (0.5% of balance by default). Anything that
+        would risk more is held back and logged with the number it was compared against.</p>
+    </div>
+    <div class="card">
+      <h3>Guard outside the terminal</h3>
+      <p class="muted">A separate watchdog watches your MT5 process: crash, hang or exit, and it
+        restarts it with exponential backoff. If your terminal is already running, it adopts it
+        instead of starting a second one.</p>
+    </div>
+    <div class="card">
+      <h3>AI review with reasons</h3>
+      <p class="muted">Each order gets a written verdict — approved, or held with the reason
+        (<code>direction_conflict</code>, risk-cap breach, …). Reading those reasons is where
+        most people find their leak.</p>
+    </div>
+    <div class="card">
+      <h3>Sizing that backs off</h3>
+      <p class="muted">After consecutive losses the position size steps down automatically, so a
+        bad streak shrinks instead of compounding.</p>
+    </div>
+    <div class="card">
+      <h3>Dry-run first, always</h3>
+      <p class="muted">The whole chain runs in dry-run: orders are simulated until you switch to
+        live guarding. Watch it decide for a session before it can touch anything.</p>
+    </div>
+  </div>
+</section>
+
+<section id="prove">
+  <h2>Prove it in 5 minutes (no purchase, no signup)</h2>
+  <p class="muted">The free tier downloads without an account, and the paid trial needs a card
+    only at the end of 7 days. Here is the fastest way to check whether the daily guard is real:</p>
+  <ol>
+    <li><strong>Download and unzip</strong> — <a href="VigilDesk-0.1.12-win64-portable.zip">VigilDesk-0.1.12-win64-portable.zip</a> (29 MB). No Python, no installer.</li>
+    <li><strong>Double-click <code>VigilDesk.exe</code></strong>. The first-run setup finds your MT5 terminal and your local AI. Nothing is charged.</li>
+    <li><strong>Leave it in dry-run for one session</strong> and open the dashboard:
+      <pre><code>VigilDesk.exe dashboard</code></pre>
+      you will see every decision, and the reason behind it.</li>
+    <li><strong>Try to get past the guard:</strong> let the daily cap trip, then close and reopen
+      the app. It stays blocked for the rest of the day — that is the part an EA cannot do for
+      itself, and the reason we built it outside the strategy.</li>
+    <li><strong>Kill your terminal on purpose.</strong> The watchdog brings it back on its own,
+      and if it is already open it simply adopts the one you have.</li>
+  </ol>
+  <p class="muted">Everything is local: logs, decisions and reports stay in
+    <code>%LOCALAPPDATA%\VigilDesk</code>. There is no telemetry and nothing is uploaded.</p>
+  <div class="cta-row">
+    <a class="btn primary" href="VigilDesk-0.1.12-win64-portable.zip">⬇ Download — free 7-day trial</a>
+    <a class="btn ghost" href="pricing.html">See plans ｜ 看套餐</a>
+  </div>
+</section>
+
+<section>
+  <h2>Honest limits</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>It does not trade for you</h3>
+      <p class="muted">VigilDesk is not a strategy, not signals, and it does not promise a pass.
+        It supervises orders that your own strategy produces, and stops the ones that break your
+        rules.</p>
+    </div>
+    <div class="card">
+      <h3>It does not read the firm's rulebook</h3>
+      <p class="muted">You set the caps to match your challenge (daily %, per-trade %). Choosing
+        numbers that fit your firm is your call — the defaults (1.5% daily, 0.5% per trade) are a
+        conservative starting point, not a recommendation.</p>
+    </div>
+    <div class="card">
+      <h3>Windows + MT5 only</h3>
+      <p class="muted">MetaTrader 5 on Windows 10/11. It runs alongside your EA rather than
+        replacing it.</p>
+    </div>
+  </div>
+  <p class="disclaimer">VigilDesk is a risk-control tool. It is not investment advice, and it does
+    not guarantee any trading result, evaluation outcome or profit. Trading involves risk of loss,
+    and you are responsible for your own decisions.
+    本产品是风控工具，不构成投资建议，不承诺任何交易结果、考核通过或收益。</p>
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>© 2026 VigilDesk</span>
+    <a href="propfirm.html">Prop firms</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="tutorial.html">Tutorial</a>
+    <a href="security.html">Security</a>
+    <a href="faq.html">FAQ</a>
+    <a href="faq-zh.html">常见问题</a>
+    <a href="feedback.html">Feedback</a>
+    <a href="legal.html">Legal</a>
+  </div>
+</footer>
+</body>
+</html>
