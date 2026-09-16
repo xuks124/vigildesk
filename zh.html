@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="VigilDesk 是给 MetaTrader 5 用的本地风控工作站：进程守护、单笔亏损上限、日内回撤熔断，以及下单前逐单复核的 AI 风控闸门。重启绕不过风控。免费版永久可用。">
+<title>VigilDesk — MT5 交易风控工作站（中文）</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script>
+  /* Paddle Billing —— 与英文首页保持同一套价格 ID */
+  Paddle.Initialize({ token: "live_628b3886c1a50dc334fd998072c" });
+  var PRICES = {
+    starter:  "pri_01m1znn33qq6jt0fjpj09rnhj9",
+    pro:      "pri_01m1znydczjg1vr4gh6ardzmhr",
+    lifetime: "pri_01m1zp2kac0vr76ak6npd2dq9r"
+  };
+  function buy(plan) {
+    var priceId = PRICES[plan];
+    if (!priceId) { return false; }
+    Paddle.Checkout.open({ items: [{ priceId: priceId, quantity: 1 }] });
+    return false;
+  }
+</script>
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <img src="assets/logo.svg" alt="VigilDesk logo">
+    <span class="brand">VigilDesk</span>
+    <nav>
+      <a href="zh.html">首页</a>
+      <a href="propfirm.html">Prop Firm</a>
+      <a href="pricing.html">定价</a>
+      <a href="tutorial.html">教程</a>
+      <a href="security.html">安全</a>
+      <a href="faq-zh.html">常见问题</a>
+      <a href="feedback.html">反馈</a>
+      <a href="legal.html">条款</a>
+      <a href="index.html">English</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ── hero ───────────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-flex">
+      <div class="hero-copy">
+        <p class="eyebrow">MT5 交易风控工作站</p>
+        <h1>你的策略，我们的安全层。</h1>
+        <p class="tagline">
+          给 MetaTrader 5 用的本地风控层：进程守护、单笔亏损上限、日内回撤熔断，
+          以及一个在你策略下单之前逐单复核的 AI 风控闸门。
+        </p>
+        <p class="tagline-zh">
+          全本地运行 · 免安装、免注册、免绑卡 · 免费版永久可用（守护 MT5 进程）。
+        </p>
+
+        <div class="cta-row">
+          <a class="btn primary big"
+             href="https://github.com/xuks124/vigildesk/releases/download/v0.1.12/VigilDesk-0.1.12-win64-portable.zip">⬇ 下载 Windows 版（含 7 天免费试用）</a>
+          <a class="btn ghost" href="#plans">查看套餐与价格</a>
+        </div>
+
+        <p class="fineprint">
+          Windows 10/11 · 免 Python、免账号、免绑卡 · 解压后运行
+          <code>VigilDesk.exe</code>，7 天试用自动开始。
+          <a href="#tour">看 80 秒完整功能演示 ↓</a>
+        </p>
+      </div>
+
+      <div class="hero-art">
+        <video class="hero-video" autoplay muted loop playsinline preload="metadata"
+               poster="assets/demo-poster.jpg" width="1280" height="720"
+               aria-label="VigilDesk 实机演示：AI 风控闸门逐单复核，以及 MT5 崩溃后看门狗自动拉起">
+          <source src="assets/vigildesk-demo.mp4" type="video/mp4">
+        </video>
+        <img class="hero-fallback" src="assets/dashboard-hero.jpg" width="1100" height="565"
+             alt="VigilDesk 面板：系统状态、授权状态与 AI 风控闸门决策日志">
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 为什么需要这一层 ───────────────────────────────────────────────── -->
+  <h2 class="page">账户爆掉的原因，基本都不是策略</h2>
+  <p style="margin:0 0 14px;color:#aab6cf;">
+    跑自动化交易，复盘下来真正把账户干掉的从来是这三件事：
+  </p>
+  <section class="grid">
+    <div class="card">
+      <h3>① 终端本身</h3>
+      <p>MT5 半夜崩了或者卡死，EA 不跑了，持仓裸奔几个小时。
+         这个问题在策略内部无解，必须在终端外面盯着。</p>
+    </div>
+    <div class="card">
+      <h3>② 单笔失控</h3>
+      <p>同一个信号，止损距离是计划里的三倍，一笔亏掉本该亏的四倍。</p>
+    </div>
+    <div class="card">
+      <h3>③ 日内那条线</h3>
+      <p>上午连亏两笔，第三笔是情绪单，中午之前日回撤就没了——
+         如果是 prop firm 账户，直接出局。</p>
+    </div>
+  </section>
+
+  <!-- ── 功能巡览 ───────────────────────────────────────────────────────── -->
+  <h2 class="page" id="tour">完整功能演示</h2>
+  <p style="margin:0 0 14px;color:#aab6cf;">
+    80 秒看完 12 项功能，全部是产品真实运行画面，无解说、不藏东西。
+  </p>
+  <video class="tour-video" controls muted loop playsinline preload="metadata"
+         poster="assets/vigildesk-tour-poster.jpg" width="1280" height="720">
+    <source src="assets/vigildesk-tour.mp4" type="video/mp4">
+  </video>
+  <div class="tour-list">
+    <span>① AI 逐单审核</span><span>② 单笔亏损上限</span><span>③ 日内亏损上限</span>
+    <span>④ 连亏自动降仓</span><span>⑤ 超时自动平仓</span><span>⑥ 重启绕不过风控</span>
+    <span>⑦ 进程守护 · 自动救活</span><span>⑧ 免费版守护 MT5</span><span>⑨ 告警推送</span>
+    <span>⑩ 决策日志 · 每日报告</span><span>⑪ 经验库 · 规则自学习</span><span>⑫ 空跑自检</span>
+  </div>
+
+  <!-- ── 核心功能 ───────────────────────────────────────────────────────── -->
+  <h2 class="page">核心功能</h2>
+  <section class="grid" id="features">
+    <div class="card">
+      <h3>进程守护</h3>
+      <p>盯着 MT5 终端和你的 bot：崩溃自动拉起，带冷却与指数退避，不会出现重启风暴，
+         也不会出现凌晨三点终端死了没人管。守护部分永久免费。</p>
+    </div>
+    <div class="card">
+      <h3>单笔亏损上限</h3>
+      <p>给任何一笔交易设一个硬上限，超出预算的订单在**发出之前**就被拦住，
+         而不是事后才发现止损放错了。</p>
+    </div>
+    <div class="card">
+      <h3>日内回撤熔断</h3>
+      <p>日内亏损上限（默认余额的 1.5%）一旦击穿，当天停止开仓；
+         状态落盘，<strong>重启也无法绕过</strong>。连续亏损会自动降仓。</p>
+    </div>
+    <div class="card">
+      <h3>AI 风控闸门</h3>
+      <p>逐单复核你自己的策略产生的订单，并记录每一次放行或拦截的<strong>理由</strong>，
+         全部留痕可在面板复盘。</p>
+    </div>
+    <div class="card">
+      <h3>先空跑，再实盘</h3>
+      <p>整条链路可以先用 dry-run 空跑，订单只做模拟；
+         你确认行为符合预期之后再切换到实盘守护。</p>
+    </div>
+    <div class="card">
+      <h3>数据留在本地</h3>
+      <p>日志、决策记录与报告都在 <code>%LOCALAPPDATA%\VigilDesk</code>；
+         推理走你自己的端点；免费版完全无遥测。</p>
+    </div>
+  </section>
+
+  <!-- ── 套餐 ───────────────────────────────────────────────────────────── -->
+  <h2 class="page" id="plans">套餐与价格</h2>
+  <p style="margin:0 0 14px;color:#aab6cf;">
+    <strong>永久免费：</strong>Watchdog Lite 帮你守住 MT5 进程——免卡、免账号。
+    付费套餐在其之上增加完整风控工作站。
+    <strong>所有付费套餐含 7 天免费试用，今天不扣费</strong>（结账时需绑卡）。
+  </p>
+  <section class="grid" id="plan-cards" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr));">
+    <div class="card" style="cursor:pointer;" onclick="return buy('starter')" title="点击即可开始 7 天试用">
+      <h3 style="margin-top:0;">Starter</h3>
+      <p style="font-size:1.5rem;margin:2px 0 2px;"><strong>$19</strong><span style="font-size:.85rem;color:#8f9cba;"> /月</span></p>
+      <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">7 天免费试用 · 今天 $0.00</p>
+      <p>单个 MT5 账户，完整风控栈 + 进程守护 + 决策留痕。</p>
+      <p style="margin:12px 0 0;"><span class="btn primary" style="pointer-events:none;">开通 Starter — $19/月</span></p>
+      <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">点卡片任意位置即可开通</p>
+    </div>
+
+    <div class="card" style="cursor:pointer;border-color:#e94560;" onclick="return buy('pro')" title="点击即可开始 7 天试用">
+      <h3 style="margin-top:0;">Pro <span style="font-size:.7rem;color:#e94560;">最多人选</span></h3>
+      <p style="font-size:1.5rem;margin:2px 0 2px;"><strong>$39</strong><span style="font-size:.85rem;color:#8f9cba;"> /月</span></p>
+      <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">7 天免费试用 · 今天 $0.00</p>
+      <p><strong>最多 5 个交易账户</strong>——各自一个 MT5 终端，统一守护；含告警通道（邮件 / Telegram）与优先支持。</p>
+      <p style="margin:12px 0 0;"><span class="btn primary" style="pointer-events:none;">开通 Pro — $39/月</span></p>
+      <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">点卡片任意位置即可开通</p>
+    </div>
+
+    <div class="card" style="cursor:pointer;" onclick="return buy('lifetime')" title="点击即可购买">
+      <h3 style="margin-top:0;">Lifetime</h3>
+      <p style="font-size:1.5rem;margin:2px 0 2px;"><strong>$599</strong><span style="font-size:.85rem;color:#8f9cba;"> 一次买断</span></p>
+      <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">无需续费</p>
+      <p>当前全部功能，以及同一台机器上的后续更新。</p>
+      <p style="margin:12px 0 0;"><span class="btn ghost" style="pointer-events:none;">买断 — $599</span></p>
+      <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">点卡片任意位置即可购买</p>
+    </div>
+  </section>
+
+  <p style="margin:12px 0 0;font-size:13px;color:#8f9cba;">
+    支付由 Paddle 处理（记录商户）。试用结束前可随时取消，不产生费用。
+    结账窗口打不开？请用正常浏览器打开本页，或邮件
+    <a href="mailto:760808632@qq.com?subject=VigilDesk%20购买咨询">760808632@qq.com</a> 索取付款链接。
+    详情见 <a href="pricing.html">定价页</a>。
+  </p>
+
+  <!-- ── 下载与安装 ─────────────────────────────────────────────────────── -->
+  <h2 class="page">下载与安装</h2>
+  <section class="grid" id="download">
+    <div class="card">
+      <h3>下载</h3>
+      <p>Windows 10/11，免安装。首次运行向导四步：指向
+        <code>terminal64.exe</code> → 选择 AI 模型 → 设置风控上限 → 空跑自检。</p>
+      <a class="btn primary" href="https://github.com/xuks124/vigildesk/releases/download/v0.1.12/VigilDesk-0.1.12-win64-portable.zip">获取 VigilDesk 0.1.12（Windows 10/11）</a>
+      <p style="margin:12px 0 0;font-size:12px;color:#aab6cf;">
+        备用下载：<a href="https://xuks124.github.io/vigildesk/VigilDesk-0.1.12-win64-portable.zip">本站镜像</a>
+      </p>
+      <p style="margin:12px 0 0;font-size:12px;color:#aab6cf;">
+        按钮没反应？把下面地址复制到浏览器：<br>
+        <code>https://github.com/xuks124/vigildesk/releases/download/v0.1.12/VigilDesk-0.1.12-win64-portable.zip</code>
+      </p>
+      <p style="margin:12px 0 0;font-size:12px;color:#aab6cf;">
+        首次启动若提示"未知发布者"（尚未代码签名），点<em>更多信息</em> → <em>仍要运行</em>。
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>常见问题</h3>
+      <p>安装、激活与解绑、MT5 路径、模型下载慢、防火墙、试用与退款、Prop-Firm 模式、
+         VPS 无人值守——都写在中文 FAQ 里。</p>
+      <p style="margin:12px 0 0;"><a class="btn ghost" href="faq-zh.html">打开中文 FAQ</a></p>
+      <p style="margin:12px 0 0;font-size:12px;color:#aab6cf;">
+        想先搞清它到底能不能解决你的问题？看
+        <a href="propfirm.html">Prop Firm 场景页</a> 或直接邮件问我。
+      </p>
+    </div>
+  </section>
+
+  <!-- ── 联系方式 ───────────────────────────────────────────────────────── -->
+  <h2 class="page">联系我们</h2>
+  <section class="grid">
+    <div class="card">
+      <h3>技术支持与购买咨询</h3>
+      <p>邮件：<a href="mailto:760808632@qq.com">760808632@qq.com</a>（一般 24 小时内回复）</p>
+      <p style="font-size:13px;color:#8f9cba;margin-top:8px;">
+        VigilDesk 是风控工具，不提供交易信号、不代客理财、不承诺任何收益。
+      </p>
+    </div>
+  </section>
+
+  <p class="fineprint" style="margin:24px 0 40px;">
+    © 2026 VigilDesk ·
+    <a href="index.html">English site</a> ·
+    <a href="legal.html">法律条款</a> ·
+    <a href="security.html">安全与合规</a> ·
+    <a href="faq-zh.html">常见问题</a>
+  </p>
+</main>
+</body>
+</html>
