@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="VigilDesk pricing: free Watchdog Lite forever, Starter $19/mo, Pro $39/mo, Lifetime $599 one-time. Every paid plan includes a 7-day free trial — $0.00 today.">
+<meta name="description" content="VigilDesk pricing: free Watchdog Lite forever, Starter $19/mo, Lifetime $599 one-time. Every paid plan includes a 7-day free trial — $0.00 today.">
 <title>Pricing — VigilDesk</title>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
@@ -13,7 +13,6 @@
   Paddle.Initialize({ token: "live_628b3886c1a50dc334fd998072c" });
   var PRICES = {
     starter:  "pri_01m1znn33qq6jt0fjpj09rnhj9",
-    pro:      "pri_01m1znydczjg1vr4gh6ardzmhr",
     lifetime: "pri_01m1zp2kac0vr76ak6npd2dq9r"
   };
   function buy(plan) {
@@ -72,23 +71,10 @@
       <h3 style="margin-top:0;">Starter</h3>
       <p style="font-size:1.5rem;margin:2px 0;"><strong>$19</strong><span style="font-size:.85rem;color:#8f9cba;"> /month</span></p>
       <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">7-day free trial · $0.00 today</p>
-      <p>Built-in strategy, AI risk-control gate, per-trade loss cap, daily
+      <p>Up to 5 MT5 terminals, built-in strategy, AI risk-control gate, per-trade loss cap, daily
         drawdown guard, decision logs and the daily report.
-        ｜ 内置策略、AI 风控闸门、单笔亏损上限、日内回撤熔断、决策日志与日报。</p>
+        ｜ 最多 5 个 MT5 终端、内置策略、AI 风控闸门、单笔亏损上限、日内回撤熔断、决策日志与日报。</p>
       <p style="margin:12px 0 0;"><span class="btn primary" style="pointer-events:none;">Start Starter — $19/mo</span></p>
-      <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">Click anywhere on this card to start ｜ 点卡片任意位置即可开通</p>
-    </div>
-
-    <div class="card" style="cursor:pointer;border-color:#e94560;" onclick="return buy('pro')" title="Click to start the 7-day free trial">
-      <h3 style="margin-top:0;">Pro <span style="font-size:.7rem;color:#e94560;">most popular</span></h3>
-      <p style="font-size:1.5rem;margin:2px 0;"><strong>$39</strong><span style="font-size:.85rem;color:#8f9cba;"> /month</span></p>
-      <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">7-day free trial · $0.00 today</p>
-      <p><strong>Up to 5 trading accounts</strong> — each with its own MT5
-        terminal, engine and risk limits, supervised together and shown on one
-        dashboard. Includes alert channels (email / Telegram) and priority support.
-        ｜ 最多 <strong>5 个交易账户</strong>（各自独立终端、独立引擎、独立风控），
-        统一守护、一块看板总览；另含告警推送与优先支持。</p>
-      <p style="margin:12px 0 0;"><span class="btn primary" style="pointer-events:none;">Start Pro — $39/mo</span></p>
       <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">Click anywhere on this card to start ｜ 点卡片任意位置即可开通</p>
     </div>
 
@@ -96,7 +82,7 @@
       <h3 style="margin-top:0;">Lifetime</h3>
       <p style="font-size:1.5rem;margin:2px 0;"><strong>$599</strong><span style="font-size:.85rem;color:#8f9cba;"> one-time</span></p>
       <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">Pay once · no subscription</p>
-      <p>Everything in Pro plus all future updates. ｜ Pro 全部功能 + 后续版本更新。</p>
+      <p>Everything in Starter plus all future updates. ｜ Starter 全部功能 + 后续版本更新。</p>
       <p style="margin:12px 0 0;"><span class="btn ghost" style="pointer-events:none;">Buy Lifetime — $599</span></p>
       <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">Click anywhere on this card to buy ｜ 点卡片任意位置即可购买</p>
     </div>
@@ -139,7 +125,7 @@
       <td><strong>Starter</strong><br><span class="muted">入门版</span></td>
       <td><span class="price">$19<span class="muted">/mo</span></span><br><span class="muted">7-day free trial</span></td>
       <td>
-        • 1 trading account ｜ 1 个交易账户<br>
+        • Up to 5 terminals ｜ 最多 5 个终端<br>
         • Built-in strategy ｜ 内置策略<br>
         • AI risk-control gate ｜ AI 风控闸门<br>
         • Decision logs + daily report ｜ 决策日志 + 日报
@@ -149,25 +135,11 @@
           onclick="event.stopPropagation(); return buy('starter')">Start — $19/mo ｜ 开通</button>
       </td>
     </tr>
-    <tr style="cursor:pointer;" onclick="return buy('pro')" title="Click to start the 7-day free trial">
-      <td><strong>Pro</strong><br><span class="muted">订阅版</span></td>
-      <td><span class="price">$39<span class="muted">/mo</span></span><br><span class="muted">7-day free trial</span></td>
-      <td>
-        • <strong>Up to 5 accounts</strong> — one MT5 terminal each ｜ 最多 5 个账户，各自独立终端<br>
-        • <strong>Alert channels — email / Telegram</strong> ｜ 告警推送（邮件 / Telegram）<br>
-        • Watchdog restart notifications ｜ 看门狗重启通知<br>
-        • Priority support ｜ 优先支持
-      </td>
-      <td>
-        <button class="btn primary" type="button" style="cursor:pointer;border:none;"
-          onclick="event.stopPropagation(); return buy('pro')">Start — $39/mo ｜ 开通</button>
-      </td>
-    </tr>
     <tr style="cursor:pointer;" onclick="return buy('lifetime')" title="Click to buy once">
       <td><strong>Lifetime</strong><br><span class="muted">买断版（限量）</span></td>
       <td><span class="price">$599</span><br><span class="muted">one-time ｜ 一次性</span></td>
       <td>
-        • Everything in Pro ｜ Pro 全部功能<br>
+        • Everything in Starter ｜ Starter 全部功能<br>
         • All future updates ｜ 终身更新
       </td>
       <td>
@@ -180,12 +152,12 @@
   <section class="grid" style="margin-top:22px;">
     <div class="card">
       <h3>Trial &amp; refund ｜ 试用与退款</h3>
-      <p>Starter and Pro include a 7-day free trial — you won't be charged
+      <p>Starter includes a 7-day free trial — you won't be charged
         during the trial, but a payment method must be added at checkout, and
         you can cancel any time before the trial ends. Lifetime is a one-time
         purchase (no trial). Full refund within 14 days of purchase if the
         product doesn't work as described.
-        ｜ Starter 与 Pro 含 7 天全功能试用——试用期内不扣款，但开通时需绑定
+        ｜ Starter 含 7 天全功能试用——试用期内不扣款，但开通时需绑定
         支付方式，试用结束前可随时取消；Lifetime 为一次性买断（无试用）。
         购买后 14 天内产品与描述不符可全额退款。</p>
       <a href="faq.html#trial-refund">Refund policy ｜ 退款政策</a>
