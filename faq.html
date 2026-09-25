@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="VigilDesk FAQ: installation, license activation, MT5 terminal paths, AI model downloads, firewall, trial & refund policy, Prop-Firm mode, unattended VPS.">
+<meta name="description" content="VigilDesk FAQ: installation, license activation, MT5 terminal paths, AI model downloads, firewall, trial & refund policy, daily-loss cap, unattended VPS.">
 <title>FAQ — VigilDesk</title>
 <link rel="stylesheet" href="docs.css?v=1">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
@@ -118,13 +118,13 @@
        check, no telemetry, and no AI confirmer.
        <strong>Pro</strong> adds the full risk-control workstation: AI
        risk-control gate, per-trade loss caps, daily drawdown guards,
-       Prop-Firm mode, report export, and priority support — on up to
+       and priority support — on up to
        5 terminals. See the full comparison on the
        <a href="pricing.html">Pricing page</a>.</p>
     <p>中文：<strong>Lite 永久免费</strong>，仅含 Watchdog Lite（进程守护、崩溃自动拉起、
        重启冷却与指数退避、基础告警），无授权校验、无遥测、无 AI 确认器。
        <strong>Pro</strong> 是完整风控工作站：AI 风控闸门、单笔亏损上限、日内回撤防护、
-       Prop-Firm 模式、报表导出与优先支持，最多 5 个终端。完整对比见
+       优先支持，最多 5 个终端。完整对比见
        <a href="pricing.html">定价页</a>。</p>
   </details>
 
@@ -182,8 +182,9 @@
 
   <details id="prop-firm">
     <summary>Does VigilDesk work on prop-firm accounts?</summary>
-    <p>VigilDesk's <strong>Prop-Firm mode</strong> enforces a daily-loss cap
-       and a global-drawdown kill-switch so a single bad day can't blow an
+    <p>VigilDesk's <strong>daily-loss cap</strong> stops trading for the day
+       once your set loss limit is hit, and the counter is persisted to disk so it
+       survives a restart — so a single bad day can't blow an
        evaluation account. You remain responsible for following your prop
        firm's own rules — many firms restrict third-party tools or automation,
        so check their terms first. VigilDesk does not guarantee passing any
