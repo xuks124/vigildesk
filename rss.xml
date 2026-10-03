@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel>
+<title>VigilDesk engineering notes</title>
+<link>https://xuks124.github.io/vigildesk/blog/</link>
+<description>Notes on making trading automation failure-recoverable.</description>
+<item>
+  <title>Your daily loss limit resets when MetaTrader restarts. Here is the fix.</title>
+  <link>https://xuks124.github.io/vigildesk/blog/restart-proof-daily-loss-guard.html</link>
+  <guid>https://xuks124.github.io/vigildesk/blog/restart-proof-daily-loss-guard.html</guid>
+  <description>A restart-proof daily loss guard for MetaTrader 5: persist the trading-day stamp, the day-start balance and the blocked flag.</description>
+</item>
+</channel></rss>
