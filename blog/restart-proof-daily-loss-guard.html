@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your daily loss limit resets when MetaTrader restarts. Here is the fix. | VigilDesk</title>
+<meta name="description" content="A restart-proof daily loss guard for MetaTrader 5: persist the trading-day stamp, the day-start balance and the blocked flag, use the broker trading day instead of the local clock, write state after the decision, and verify it by killing the terminal mid-session.">
+<link rel="canonical" href="https://xuks124.github.io/vigildesk/blog/restart-proof-daily-loss-guard.html">
+<meta property="og:title" content="Your daily loss limit resets when MetaTrader restarts. Here is the fix.">
+<meta property="og:description" content="A restart-proof daily loss guard for MetaTrader 5: persist the trading-day stamp, the day-start balance and the blocked flag, use the broker trading day instead of the local clock, write state after the decision, and verify it by killing the terminal mid-session.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://xuks124.github.io/vigildesk/blog/restart-proof-daily-loss-guard.html">
+<link rel="stylesheet" href="/vigildesk/style.css">
+<link rel="stylesheet" href="/vigildesk/docs.css">
+</head>
+<body>
+<header class="site-header"><nav>
+  <a href="/vigildesk/">VigilDesk</a>
+  <a href="/vigildesk/faq.html">FAQ</a>
+  <a href="/vigildesk/tutorial.html">Tutorial</a>
+  <a href="/vigildesk/free.html">Free build</a>
+  <a href="/vigildesk/pricing.html">Pricing</a>
+  <a href="/vigildesk/blog/">Blog</a>
+</nav></header>
+<main class="doc">
+<article>
+<h1>Your daily loss limit resets when MetaTrader restarts. Here is the fix.</h1>
+<p class="meta">VigilDesk engineering notes &middot; also published for the MetaTrader community</p>
+<h2>The bug everyone ships</h2>
+<p>Almost every &quot;daily loss guard&quot; Expert Advisor keeps its state in memory:</p>
+<pre><code>    double today_pnl = 0.0;          // module scope
+    bool   daily_blocked = false;</code></pre>
+<p>It works beautifully — until the terminal is restarted, the EA is recompiled, the chart is switched, or the profile is reloaded. Every one of those events calls OnInit() again with zeroed variables. Your &quot;hard daily limit&quot; politely hands you back the full day&#x27;s risk allowance.</p>
+<p>If you trade a prop-firm account with a 5% daily drawdown rule, that is not a small bug: the guard you are relying on to keep the account alive silently disarms itself exactly when things are going badly. Crashes and restarts cluster around bad sessions, not good ones.</p>
+<h2>What &quot;persisted&quot; has to mean</h2>
+<p>To be honest, the state has to survive four different events:</p>
+<table><thead><tr><th>Event</th><th>In-memory</th><th>Terminal global variables</th><th>File (common folder)</th></tr></thead><tbody><tr><td>New tick, new bar</td><td>yes</td><td>yes</td><td>yes</td></tr><tr><td>EA recompiled / reattached</td><td>no</td><td>yes</td><td>yes</td></tr><tr><td>Terminal restart</td><td>no</td><td>yes</td><td>yes</td></tr><tr><td>Terminal reinstalled / data dir changed / another terminal</td><td>no</td><td>no</td><td>yes</td></tr></tbody></table>
+<p>GlobalVariableSet() is enough for the common case and it is the cheapest option — global variables live in the terminal&#x27;s data folder and survive a restart. Files win on the last row, which matters if you move machines or keep several terminals. The reference implementation below uses a file; the pattern is the same either way.</p>
+<p>There is a fourth level that people forget: the account itself. Open positions and closed deals are already persisted by the broker. That does not replace your own file, but it lets you rebuild the day&#x27;s counters from history when the file is missing or stale — which is exactly what you want after an unclean shutdown.</p>
+<h2>The three things to persist</h2>
+<pre><code>    struct GuardState
+    {
+       long   day_stamp;          // WHICH trading day this state belongs to
+       double day_start_balance;  // the anchor for the day&#x27;s drawdown
+       bool   blocked;            // the cap has been hit today
+    };</code></pre>
+<p>That is the minimum. day_stamp is the field people forget, and without it the restored state is either ignored or — worse — applied forever. A guard that restores yesterday&#x27;s &quot;blocked&quot; flag and never clears it stops trading for good, and you will not notice until the account has been flat for a week.</p>
+<h2>Pitfall 1: use the broker&#x27;s day, not the local clock</h2>
+<pre><code>    long TradingDayStamp()
+    {
+       MqlDateTime t;
+       TimeToStruct(TimeTradeServer(), t);       // NOT TimeLocal(), NOT TimeCurrent() on historical data
+       return((long)t.year * 10000 + t.mon * 100 + t.day);
+    }</code></pre>
+<p>TimeLocal() resets your cap in the middle of the broker&#x27;s session, and at the wrong moment around weekends. TimeCurrent() is the last known server tick time and can lag when the market is quiet. TimeTradeServer() is the broker clock, which is the clock the prop firm uses when it decides whether you broke the rule.</p>
+<p>If you want to be strict, ask the broker which day it is rather than computing it: compare the server timestamp with your own day stamp and treat any rollover as a new day.</p>
+<h2>Pitfall 2: write state after the decision, never before</h2>
+<p>The dangerous ordering is:</p>
+<pre><code>    // WRONG: a crash between these two lines lets one order through
+    blocked = true;
+    SaveState();
+    if(risk_ok) SendOrder();</code></pre>
+<p>Persist, then act — and re-read the flag immediately before the send if your EA can be interrupted:</p>
+<pre><code>    if(blocked) return;                 // cheap, and catches an external trip
+    if(!risk_ok) { blocked = true; SaveState(); return; }
+    SendOrder();</code></pre>
+<p>The rule is simple: the persisted flag must never be less strict than the in-memory flag. When in doubt, save the stricter state and let the next run decide.</p>
+<h2>Pitfall 3: you cannot block other EAs from inside an EA</h2>
+<p>This is the one that surprises people. An Expert Advisor cannot stop the order another EA (or a Python strategy on the same account) is about to send — MQL5 gives no hook into another program&#x27;s order path. Your options are:</p>
+<p>1. Close positions when the cap trips. Defensive, and it is what most commercial guards do. 2. Publish a flag your own code respects. One line in the other EA:</p>
+<pre><code>    if(GlobalVariableGet(&quot;GUARD_BLOCKED_&quot; +
+       (string)AccountInfoInteger(ACCOUNT_LOGIN)) &gt; 0.0) return;</code></pre>
+<pre><code>   It only works for EAs you control, but if all your strategies read it, the account is genuinely covered.</code></pre>
+<p>3. Enforce it outside the terminal. If the thing you need is &quot;the terminal died at 03:40 and the position sat unprotected for two hours&quot;, no EA can help — the EA is dead too. That requires a separate process that watches the terminal and acts on it, which is a different kind of program entirely.</p>
+<h2>A compact, complete implementation</h2>
+<pre><code>    // ---- persistence ----
+    void SaveState()
+    {
+       int h = FileOpen(g_file, FILE_WRITE|FILE_TXT|FILE_COMMON|FILE_ANSI);
+       if(h == INVALID_HANDLE) { PrintFormat(&quot;state save failed: %d&quot;, GetLastError()); return; }
+       FileWriteString(h, StringFormat(&quot;{\&quot;day\&quot;:%I64d,\&quot;start\&quot;:%.2f,\&quot;blocked\&quot;:%s}&quot;,
+                        g_state.day_stamp, g_state.day_start_balance,
+                        g_state.blocked ? &quot;true&quot; : &quot;false&quot;));
+       FileClose(h);
+    }</code></pre>
+<pre><code>    bool LoadState()
+    {
+       int h = FileOpen(g_file, FILE_READ|FILE_TXT|FILE_COMMON|FILE_ANSI);
+       if(h == INVALID_HANDLE) return(false);          // no file yet: not an error
+       string s = &quot;&quot;;
+       while(!FileIsEnding(h)) s += FileReadString(h);
+       FileClose(h);
+       if(StringLen(s) &lt; 10) return(false);
+       g_state.day_stamp          = (long)StringToInteger(Extract(s, &quot;day&quot;));
+       g_state.day_start_balance  = StringToDouble(Extract(s, &quot;start&quot;));
+       g_state.blocked            = (StringFind(s, &quot;true&quot;) &gt;= 0);
+       return(true);
+    }</code></pre>
+<pre><code>    void OnInit()
+    {
+       LoadState();
+       if(g_state.day_stamp != TradingDayStamp())          // new day: reset the anchor
+       {
+          g_state.day_stamp = TradingDayStamp();
+          g_state.day_start_balance = AccountInfoDouble(ACCOUNT_BALANCE);
+          g_state.blocked = false;
+          SaveState();
+       }
+       else if(g_state.blocked)
+          Print(&quot;Today&#x27;s cap was already reached — still blocked.&quot;);
+    }</code></pre>
+<p>Note what happens on the else if branch: the EA does not silently resume trading. It tells you. A guard that recovers quietly is not a guard. Log lines are cheap; a drawdown you did not intend is not.</p>
+<h2>Rebuilding from the account when the file is missing</h2>
+<p>If LoadState() fails, do not assume the day is fresh. Rebuild from history instead:</p>
+<pre><code>    double ClosedPnlToday()
+    {
+       long day = TradingDayStamp();
+       double pnl = 0.0;
+       HistorySelect(0, TimeCurrent());
+       int total = HistoryDealsTotal();
+       for(int i = 0; i &lt; total; i++)
+       {
+          ulong ticket = HistoryDealGetTicket(i);
+          if(ticket == 0) continue;
+          datetime t = (datetime)HistoryDealGetInteger(ticket, DEAL_TIME);
+          MqlDateTime d; TimeToStruct(t, d);
+          long stamp = (long)d.year * 10000 + d.mon * 100 + d.day;
+          if(stamp != day) continue;
+          if(HistoryDealGetInteger(ticket, DEAL_ENTRY) != DEAL_ENTRY_OUT) continue;
+          pnl += HistoryDealGetDouble(ticket, DEAL_PROFIT)
+               + HistoryDealGetDouble(ticket, DEAL_SWAP)
+               + HistoryDealGetDouble(ticket, DEAL_COMMISSION);
+       }
+       return(pnl);
+    }</code></pre>
+<p>Use it as a cross-check: if the rebuilt number is worse than the stored one, trust the rebuilt number. The account is the only source of truth that cannot be deleted by accident.</p>
+<h2>A checklist before you go live</h2>
+<p>- The day stamp comes from the broker clock, not from the local machine. - The state file is written after every decision that can change it. - OnInit() either restores a state for today, or rebuilds one from history — never silently starts fresh. - When the cap trips, the EA says so in the journal, and the flag survives a restart. - You have tested it by killing the terminal, not by trusting the code. - If you run more than one strategy, they read a shared flag, and you know which strategies read it.</p>
+<h2>Testing it properly</h2>
+<p>The uncomfortable test, and the only one worth running:</p>
+<p>1. Set a cap small enough to trip in a few minutes. 2. Let it trip. 3. Kill the terminal (not just the EA) with a position open. 4. Reopen it and try to take another trade.</p>
+<p>If the new process happily sends the order, your state was in memory and the guard is theatre. I have watched this test fail on EAs that &quot;support daily limits&quot; — including paid ones. The test takes ten minutes and it is the difference between a risk limit and a wish.</p>
+<h2>Why not just use GlobalVariableSet()</h2>
+<p>Global variables are the cheapest option and they survive a terminal restart, so it is fair to ask why anyone bothers with a file. Three reasons:</p>
+<p>1. Global variables live in the terminal&#x27;s data folder, not in your account. Move to another machine, reinstall MetaTrader, or start a second portable copy, and your terminal is a different terminal with a different set of globals. 2. They are trivially wiped by the user. &quot;Reset all globals&quot; is one menu item away, and it is exactly the kind of thing a frustrated trader does after a bad session. 3. They are invisible. You cannot open a global in a text editor and see what the guard thought an hour ago; with a file you can, and that matters when you are trying to reconstruct why a trade was or was not taken.</p>
+<p>The pragmatic answer: use globals if you only ever run one terminal on one machine, and mirror the same state into a file if you want to be able to prove anything later. The two are not exclusive, and the file costs one function call per decision.</p>
+<h2>Several terminals, several accounts</h2>
+<p>The moment you run more than one terminal, the state has to be keyed by the thing that distinguishes the accounts — the login. A file named `guard_state.json` will be shared by every terminal that can see the common folder, which means account A can read account B&#x27;s day stamp. The fix is one line:</p>
+<pre><code>    string g_file = StringFormat(&quot;guard_%I64d.json&quot;, AccountInfoInteger(ACCOUNT_LOGIN));</code></pre>
+<p>Do the same for the published block flag, so a strategy on account A does not stop trading because account B hit its cap. If you also run several strategies on the same account, add the strategy name to the file name and keep one shared flag for the account as a whole.</p>
+<p>While you are there, decide what happens when two terminals write the same file at the same moment. `FILE_WRITE` truncates, so the loser of the race can leave a half-written file. Write to a temporary name and then rename, or accept the risk and rebuild from history on the next start — the account is your backstop either way.</p>
+<h2>What the tester does to your guard</h2>
+<p>Backtests are where guards go to lie to you. In the strategy tester the terminal is not restarted between runs, the common folder is not shared the way you expect, and every run starts with whatever state the previous run left behind. If your guard reads a file at the start of a run, run two backtests in a row and watch the second one behave differently.</p>
+<p>Two habits make this harmless:</p>
+<p>- Include a mode check and skip persistence in the tester unless you are deliberately testing the restore path: `if(MQLInfoInteger(MQL_TESTER)) { /* optional */ }`. - When you do test the restore path, test it in the tester on purpose, with a fixed state file, and assert the outcome in the log. A guard whose logic you only ever exercise in production is a guard you have never tested.</p>
+<h2>What to log so you can prove it worked</h2>
+<p>The cheapest insurance is a log line every time the guard changes its mind. Five fields are enough:</p>
+<pre><code>    [guard] day=20261003 pnl=-48.20 cap=50.00 blocked=true reason=daily_cap action=no_new_trades restored_from=file</code></pre>
+<p>With that, a bad day is reconstructable in one sentence, and you can answer the only question that matters afterwards: did the guard stop trading because the cap was hit, or because something else broke? Without the line, you will guess, and you will guess in favour of the code you wrote.</p>
+<h2>Common objections</h2>
+<p>*&quot;My EA already has a daily loss limit.&quot;* Ask where the number lives after a restart. If the answer is a variable, you have a limit that lasts until the next crash — which is exactly when you need it.</p>
+<p>*&quot;I never restart my terminal.&quot;* Then you have never had a Windows update, a VPS reboot, a broker disconnect that required a restart, or a crash. The guard exists for the day your habits fail.</p>
+<p>*&quot;I only trade one strategy, so the shared flag is overkill.&quot;* Then skip it. The first two layers still apply, and they are the ones that fail most often.</p>
+<p>*&quot;This is a lot of code for a safety net.&quot;* It is roughly forty lines, and most of them are the file read and write. The alternative is discovering the gap during the drawdown the guard was supposed to prevent.</p>
+<p>*&quot;What about a terminal-level solution?&quot;* MetaTrader does not expose one. Risk limits that live only inside an EA inherit the EA&#x27;s lifetime, which is the whole problem.</p>
+<h2>Putting it together: the smallest useful guard</h2>
+<p>If you want the shortest version that is still honest, it is this:</p>
+<pre><code>    void OnTick()
+    {
+       if(g_blocked) return;                        // survived a restart
+       if(TradingDayStamp() != g_day) ResetDay();   // broker day, not local
+       if(DayLoss() &lt;= -g_cap)
+       {
+          g_blocked = true; SaveState();            // persist AFTER the decision
+          PrintFormat(&quot;[guard] blocked day=%I64d pnl=%.2f&quot;, g_day, DayLoss());
+          return;
+       }
+       // ... your strategy here
+    }</code></pre>
+<p>Everything else in this article is detail around those six lines: where the state lives, which clock defines the day, and what you do when the file is missing. Get those three decisions right and the guard stops being decoration.</p>
+<h2>Where this leaves you</h2>
+<p>An in-terminal guard can enforce a daily loss cap and a per-trade risk budget, and it should. It cannot restart a dead terminal, watch five accounts from one screen, or review an order before your strategy sends it — those need to live outside MetaTrader. Knowing which failure modes belong to which layer is most of the work; the code above is the easy part.</p>
+<p>Persist the state, use the broker&#x27;s day, and write it after the decision. Those three lines of discipline are the difference between a risk limit and a wish.</p>
+<hr>
+<h2>Get the guard</h2>
+<p>The free, restart-proof MT5 guard EA (source included, no DLLs, no external calls):
+<a href="https://xuks124.github.io/vigildesk/free.html">https://xuks124.github.io/vigildesk/free.html</a></p>
+<h2>Risk disclosure</h2>
+<p>Algorithmic trading carries both technical and market risk. No tool eliminates the possibility of loss.
+Nothing on this page is investment advice, and no performance is promised or implied.</p>
+</article>
+</main>
+<footer class="site-footer"><p>&copy; 2026 VigilDesk &middot; <a href="https://xuks124.github.io/vigildesk/legal.html">Legal</a> &middot; <a href="https://xuks124.github.io/vigildesk/security.html">Security</a></p></footer>
+</body>
+</html>
