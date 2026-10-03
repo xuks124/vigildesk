@@ -1,38 +1,83 @@
-# VigilDesk — Your strategy is the steering wheel. VigilDesk is the brake.
+# VigilDesk
 
-> 你的策略是方向盘，VigilDesk 是刹车。/ Your strategy. Our safety layer. We sell the brake, not the wheel.
+> **Your strategy is the steering wheel. VigilDesk is the brake.**
 
-## 背景 / Why this exists
+![VigilDesk dashboard](assets/dashboard.png)
 
-和很多朋友一样，我写策略脚本是为了把重复劳动自动化。但真正的教训来自一次断线重连——脚本报了错，仓位却还挂着。从那天起我把精力从"让策略更聪明"转到"让失控更可控"，做成了 VigilDesk 这个工作站。
+**A local-first safety layer for algorithmic traders.** Kill-switch, hard risk caps, circuit breakers and an audit log that survives terminal restarts — running on your machine, with account data that never leaves it.
 
-Sharing a lesson learned the hard way: my strategy script crashed on a reconnect, logged an error — and my order was still live. That incident shifted my focus from "making my strategy smarter" to "making failure recoverable", and eventually into VigilDesk, a local-first safety layer for algo traders.
+[🌐 Website](https://xuks124.github.io/vigildesk/) · [📖 Docs & FAQ](https://xuks124.github.io/vigildesk/faq.html) · [⬇️ Download](https://xuks124.github.io/vigildesk/free.html) · [💳 Pricing](https://xuks124.github.io/vigildesk/pricing.html) · [🎬 Demo](assets/vigildesk-demo.mp4)
 
-## 它做什么 / What the brake layer does
+---
 
-- **全局断线/异常监测**：行情断、订单通道断，先停再说 / Kill-switch on connectivity loss & API errors (halt first, diagnose later)
-- **仓位与频率硬上限**：策略再疯，也越不过你设定的护栏 / Hard caps on position size and order frequency
-- **异常行为熔断**：成交回报异常、滑点突变，自动进入保护状态 / Anomaly circuit breakers (erratic fills, abnormal slippage)
-- **全程本地日志**：出了问题有据可查，不用翻交易所后台 / Full local audit log; account data stays on your machine
+## Why this exists
 
-技术栈：Python 桌面应用，本地运行，持仓与账户数据不经过我们的服务器。Tech stack: Python desktop app, runs locally.
+I build strategy scripts to automate the boring parts. The lesson that shaped this project came from a reconnect: **the script logged an error, and my order was still live.**
 
-## 它不能做的事 / What it is NOT
+That incident moved my focus from *"make the strategy smarter"* to *"make failure recoverable."* VigilDesk is the result — a watchdog that halts first and diagnoses later, because in trading the two seconds after a failure are the only ones that matter.
 
-不产生信号、不推荐标的、不代客操作、不承诺任何收益——它是给已经想清楚策略的交易者用的安全层。
+## Features
 
-No signals, no trade recommendations, no managed accounts, and zero performance claims. It is for traders who already have a strategy — this is the safety layer.
+| | |
+|---|---|
+| 🛑 **Kill-switch** | Connectivity loss, feed stalls and API errors halt trading before the damage spreads. |
+| 📐 **Hard caps** | Position size, order frequency and daily loss limits that a buggy strategy cannot argue with. |
+| ⚡ **Circuit breakers** | Erratic fills, abnormal slippage and unexpected account states trigger a protective stop. |
+| 🔁 **Restart-proof state** | Guards persist the trading-day stamp, the day-start balance and the blocked flag — so a terminal restart does not silently hand back the day's full risk allowance. |
+| 📓 **Local audit log** | Every halt, cap trip and anomaly is written to a log you own. Account data stays on your machine. |
+| 🧩 **Strategy-agnostic** | Works next to any EA, Python bot or manual workflow. Read-only by default; it never places an order on your behalf. |
 
-## 风险提示 / Risk disclosure
+> 📄 **Deep dive:** why a daily-loss guard must persist its state across restarts — see the [FAQ](https://xuks124.github.io/vigildesk/faq.html).
 
-程序化交易存在技术故障与市场双重风险，任何工具都不能消除亏损可能。本页不构成投资建议。
+## What VigilDesk is not
 
-Algorithmic trading carries both technical and market risk; no tool eliminates the possibility of loss. Not financial advice.
+- **No signals.** It does not tell you what to trade.
+- **No advice.** It is not investment advice and makes no recommendations.
+- **No managed accounts.** It never touches your order path on its own.
+- **No performance claims.** Any tool that promised you that would be lying.
 
-## 链接 / Links
+It is for traders who already have a strategy and want a safety layer around it.
 
-- 项目主页 / Project page: <https://xuks124.github.io>
-- 在线文档 / Docs: <https://xuks124.github.io/faq.html> · <https://xuks124.github.io/tutorial.html>
-- 下载 / Download: <https://xuks124.github.io/free.html>
+## Quick start
 
-欢迎拍砖（Discussions），尤其欢迎"你们为什么不做 XX"这类问题。Roast it — especially the parts you'd design differently.
+**Desktop watchdog (Windows)**
+
+1. Download `VigilDesk-<version>-win64-portable.zip` from [the website](https://xuks124.github.io/vigildesk/free.html) (or the [Releases](../../releases) page).
+2. Unzip and run `VigilDesk.exe` — portable, nothing is installed system-wide.
+3. Point it at your terminal's data folder and set your caps. It starts in read-only mode.
+
+**Free MT5 guard EA (MQL5)**
+
+A minimal, restart-proof daily-loss guard that does the single most important job:
+
+- Source: [`mql5/VigilDeskGuardFree.mq5`](mql5/VigilDeskGuardFree.mq5) — read it, modify it, ship your own version.
+- Attach `VigilDeskGuardFree.ex5` to a chart and set your cap. It persists state across restarts and uses the broker's trading day, not your local clock.
+
+## Documentation
+
+- [FAQ](https://xuks124.github.io/vigildesk/faq.html) · [Tutorial](https://xuks124.github.io/vigildesk/tutorial.html) · [Prop-firm mode](https://xuks124.github.io/vigildesk/propfirm.html)
+- [Security & privacy](https://xuks124.github.io/vigildesk/security.html) · [Legal](https://xuks124.github.io/vigildesk/legal.html)
+- [中文主页](https://xuks124.github.io/vigildesk/zh.html)
+
+## Tech notes
+
+- **Python desktop app**, local-first: no accounts, no cloud, no outbound account data.
+- Integrates with MetaTrader 5 through its data/log folder — read-only by default.
+- State is persisted to disk so protection survives crashes, restarts and recompiles.
+
+## Risk disclosure
+
+Algorithmic trading carries both technical and market risk. No tool eliminates the possibility of loss. Nothing here is investment advice.
+
+---
+
+## 中文
+
+**你的策略是方向盘，VigilDesk 是刹车。** 一个本地运行的交易安全层：断线/异常即停、仓位与频率硬上限、成交异常熔断、**重启不丢状态的风控记录**，数据不出本机。
+
+- 不产生信号 · 不做推荐 · 不代客操作 · 不承诺收益
+- 主页 <https://xuks124.github.io/vigildesk/zh.html> · 免费版 <https://xuks124.github.io/vigildesk/free.html>
+
+## License
+
+See [LICENSE.md](LICENSE.md). In short: the website and the free MQL5 guard are free to use and modify with attribution; the VigilDesk application itself is proprietary and covered by its own EULA.
