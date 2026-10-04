@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What a kill switch should actually do (and the four ways they fail) | VigilDesk</title>
+<meta name="description" content="A kill switch is easy to write and hard to trust. Four failure modes - never armed, never disarmed, wrong trigger, wrong clock - and the small design decisions that separate a switch from a decoration.">
+<link rel="canonical" href="https://xuks124.github.io/vigildesk/blog/what-a-kill-switch-should-do.html">
+<meta property="og:title" content="What a kill switch should actually do (and the four ways they fail)"><meta property="og:description" content="A kill switch is easy to write and hard to trust. Four failure modes - never armed, never disarmed, wrong trigger, wrong clock - and the small design decisions that separate a switch from a decoration.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://xuks124.github.io/vigildesk/blog/what-a-kill-switch-should-do.html">
+<link rel="stylesheet" href="/vigildesk/style.css"><link rel="stylesheet" href="/vigildesk/docs.css">
+</head><body>
+<header class="site-header"><nav>
+<a href="/vigildesk/">VigilDesk</a><a href="/vigildesk/faq.html">FAQ</a><a href="/vigildesk/tutorial.html">Tutorial</a>
+<a href="/vigildesk/free.html">Free build</a><a href="/vigildesk/pricing.html">Pricing</a><a href="/vigildesk/blog/">Blog</a>
+</nav></header>
+<main class="doc"><article>
+<h1>What a kill switch should actually do (and the four ways they fail)</h1><p class="meta">VigilDesk engineering notes</p>
+
+<p>A kill switch looks like the simplest component in a trading system: one condition, one action, done. In practice
+it is the component people trust most and test least, and there are four ways it stops being a switch.</p>
+
+<h2>1. It is never armed</h2>
+<p>The switch exists in code and is never wired to the thing it is supposed to stop. The classic version: the guard
+sets a flag that the order path never reads. The flag is correct, the logs say "blocked", and orders keep going out.</p>
+<p><strong>Design note:</strong> the switch must sit <em>on</em> the order path, at the last point before submission -
+not on a parallel path that is supposed to synchronise with it.</p>
+
+<h2>2. It is never disarmed</h2>
+<p>A switch that latches and never clears turns a bad hour into a flat month. If the "blocked" flag is persisted
+without the date it belongs to, yesterday's decision is applied to today - silently, because a blocked system is
+indistinguishable from a quiet one.</p>
+<p><strong>Design note:</strong> persist the state <em>with the day it belongs to</em>, and make the restart path
+decide: restore, or reset. Silence is not a decision.</p>
+
+<h2>3. It triggers on the wrong thing</h2>
+<p>Two failure shapes, opposite directions:</p>
+<ul>
+<li><strong>False positive:</strong> a 16-second clock drift tripping a kill switch by mistake. Real incident,
+<a href="https://dev.to/wataru_suda_d295dab9cca4f/a-16-second-clock-drift-falsely-tripped-my-trading-bots-kill-switch-a-postmortem-4k2f" target="_blank" rel="noopener">written up here</a>.
+The trigger was a comparison between two timestamps, and the two timestamps disagreed about what "now" means.</li>
+<li><strong>False negative:</strong> the guard reads a value that is technically zero - a snapshot that stopped
+updating, a counter attached to the wrong account - and concludes everything is fine. Nothing throws, nothing stops,
+and the switch that should have fired does not.</li>
+</ul>
+<p><strong>Design note:</strong> distinguish "healthy" from "no data". A guard that cannot read its input must treat
+that as an incident, not as a zero.</p>
+
+<h2>4. It uses the wrong clock</h2>
+<p>Anything with a daily boundary - a daily loss cap, a per-day trade limit - depends on which day it is, and the
+host clock is not the broker's clock. When they disagree the boundary moves by hours, and both directions are bad:
+the cap resets early (the account spends the daily allowance twice inside one broker day) or never (the daily rule
+quietly becomes a weekly one). This has
+<a href="/vigildesk/blog/which-day-is-it-trading-day-boundary.html">its own note</a> in this series.</p>
+<p><strong>Design note:</strong> derive the date from the system that owns the boundary - in MetaTrader 5 that is
+<code>TimeTradeServer()</code> - and record the drift between the two clocks every cycle.</p>
+
+<h2>What separates a switch from a decoration</h2>
+<table>
+<thead><tr><th>Property</th><th>Why it matters</th></tr></thead>
+<tbody>
+<tr><td>It sits on the order path, last</td><td>Flags on parallel paths get out of sync with reality</td></tr>
+<tr><td>It persists state <em>with</em> its date</td><td>Otherwise it either resets too eagerly or never clears</td></tr>
+<tr><td>It writes state <em>after</em> the decision</td><td>A crash between write and action lets one order through</td></tr>
+<tr><td>It treats "no data" as an incident</td><td>Zero and unknown must not look the same</td></tr>
+<tr><td>It uses the broker's day</td><td>The broker is who decides whether you broke the rule</td></tr>
+<tr><td>It says out loud when it fires</td><td>A silent switch is indistinguishable from a broken one</td></tr>
+</tbody>
+</table>
+
+<h2>The test that matters</h2>
+<p>Not "does the function return the right boolean" - the boundary tests:</p>
+<ul>
+<li>Let the switch trip, then <strong>kill the process with a position open</strong>, restart it, and watch the next
+cycle. If trading resumes as if nothing happened, the switch was stateless.</li>
+<li><strong>Pull the input out from under it</strong> - stop the data source, move the timezone, disconnect the
+broker - and check that the switch notices rather than reading zero.</li>
+</ul>
+<p>Both take ten minutes and both have found real problems in software that had passing test suites, including mine.</p>
+
+<hr>
+<h2>Get the guard</h2>
+<p>Free MT5 kill-switch / daily-loss guard, source included, state persisted across restarts:
+<a href="/vigildesk/free.html">https://xuks124.github.io/vigildesk/free.html</a></p>
+<h2>Risk disclosure</h2>
+<p>Algorithmic trading carries both technical and market risk. No tool eliminates the possibility of loss. Nothing on
+this page is investment advice, and no performance is implied or promised.</p>
+</article></main>
+<footer class="site-footer"><p>&copy; 2026 VigilDesk &middot; <a href="/vigildesk/legal.html">Legal</a></p></footer>
+</body></html>
