@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Which day is it? Broker time, host time, and the trading-day boundary | VigilDesk</title>
+<meta name="description" content="Daily loss caps, daily counters and daily resets all depend on one answer: which day is it. Three clocks can disagree, and the failure is silent. Here is how to pick the right one.">
+<link rel="canonical" href="https://xuks124.github.io/vigildesk/blog/which-day-is-it-trading-day-boundary.html">
+<meta property="og:title" content="Which day is it? Broker time, host time, and the trading-day boundary"><meta property="og:description" content="Daily loss caps, daily counters and daily resets all depend on one answer: which day is it. Three clocks can disagree, and the failure is silent. Here is how to pick the right one.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://xuks124.github.io/vigildesk/blog/which-day-is-it-trading-day-boundary.html">
+<link rel="stylesheet" href="/vigildesk/style.css"><link rel="stylesheet" href="/vigildesk/docs.css">
+</head><body>
+<header class="site-header"><nav>
+<a href="/vigildesk/">VigilDesk</a><a href="/vigildesk/faq.html">FAQ</a><a href="/vigildesk/tutorial.html">Tutorial</a>
+<a href="/vigildesk/free.html">Free build</a><a href="/vigildesk/pricing.html">Pricing</a><a href="/vigildesk/blog/">Blog</a>
+</nav></header>
+<main class="doc"><article>
+<h1>Which day is it? Broker time, host time, and the trading-day boundary</h1>
+<p class="meta">VigilDesk engineering notes</p>
+
+<p>Every "daily" rule in trading software eventually asks the same question: <strong>which day is it right now?</strong>
+A daily loss cap, a daily trade counter, a daily reset, a "one trade per day" limit, a prop-firm drawdown window -
+they all resolve to a date, and the date comes from a clock.</p>
+
+<p>The trouble is that a trading system has at least three clocks, and they can disagree:</p>
+
+<table>
+<thead><tr><th>Clock</th><th>What it is</th><th>Where it lies to you</th></tr></thead>
+<tbody>
+<tr><td>Host clock</td><td>The machine running your code</td><td>Timezone and DST are local conventions; a VPS move or a hosting migration changes it silently</td></tr>
+<tr><td>Broker / server clock</td><td>The clock of the system that defines your trading session</td><td>Usually the right answer - but it is not what <code>datetime.now()</code> returns</td></tr>
+<tr><td>Last tick time</td><td>When the market last spoke</td><td>Stale during quiet periods and after a disconnect; it is data, not time</td></tr>
+</tbody>
+</table>
+
+<h2>Why the failure is silent</h2>
+<p>When the host clock and the broker clock disagree, nothing throws. Every timestamp inside your system is
+consistent with every other timestamp - <em>they are all wrong together</em>. Logs read coherently. The tests pass,
+because tests usually run on one machine in one timezone. The only thing that changes is the moment your daily
+boundary is crossed, and that changes by hours.</p>
+
+<p>Two ways this bites:</p>
+<ul>
+<li><strong>The cap resets early.</strong> Your guard starts a fresh day while the broker is still inside the old
+one, so the account can spend the full daily risk allowance twice inside a single broker day.</li>
+<li><strong>The cap never resets</strong> (or resets at a strange hour), and a guard that was supposed to be daily
+behaves like a weekly or an undefined one.</li>
+</ul>
+
+<p>A public postmortem from another developer shows the same family from the other direction: a
+<a href="https://dev.to/wataru_suda_d295dab9cca4f/a-16-second-clock-drift-falsely-tripped-my-trading-bots-kill-switch-a-postmortem-4k2f" target="_blank" rel="noopener">16-second clock drift</a>
+was enough to trip a kill switch by mistake. Sixteen seconds is not a rounding error in a system that compares
+timestamps to decide whether to stop trading.</p>
+
+<h2>Pick the clock that defines the day</h2>
+<p>For anything with a daily boundary, derive the date from the system that owns the boundary. In MetaTrader 5:</p>
+<pre><code>long TradingDayStamp()
+{
+   MqlDateTime t;
+   TimeToStruct(TimeTradeServer(), t);   // broker clock, not TimeLocal(), not TimeCurrent()
+   return((long)t.year * 10000 + t.mon * 100 + t.day);
+}</code></pre>
+<p><code>TimeLocal()</code> is your machine. <code>TimeCurrent()</code> is the last known market tick, which can lag
+when the market is quiet. <code>TimeTradeServer()</code> is the broker's clock - the one the broker will use when it
+decides whether you broke a rule.</p>
+
+<h2>Store the day, not just the counter</h2>
+<p>A daily counter without its date is meaningless. Persist the day stamp alongside the value, so that on the next
+start you can answer the only question that matters: <em>does this counter belong to today?</em> Without that field,
+a restored state is either ignored or - worse - applied forever, and a guard that latched "blocked" last Tuesday
+will keep you flat all week.</p>
+
+<h2>Log the drift, do not just monitor the clock</h2>
+<p>One line per cycle turns an invisible bug into a number:</p>
+<pre><code>[guard] host=2026.10.04 03:12:07 broker=2026.10.04 05:12:07 delta=+2.0h day=20261004</code></pre>
+<p>Anything above a threshold should be loud. If you only ever check that "the clock exists", you will never see a
+two-hour disagreement between two clocks that are both technically working.</p>
+
+<h2>Test the boundary, not the function</h2>
+<p>The bug lives at the boundary, so test the boundary: set the clock to 23:59:50, watch what the rollover does,
+then change the timezone and repeat. Unit-testing <code>TradingDayStamp()</code> at 12:00 on a Tuesday proves
+nothing about the only moment that matters.</p>
+
+<h2>The uncomfortable version</h2>
+<p>The nastiest variant is an <em>asymmetric</em> drift: fine after a reconnect, wrong on the first tick after a long
+disconnect. "Is my data stale?" must be answered by comparing timestamps explicitly - not by "did I receive a tick",
+because you always received something.</p>
+
+<p>None of this is exotic. It is the ordinary consequence of asking a computer what day it is, and accepting an
+answer from a clock that does not own the calendar you care about.</p>
+
+<hr>
+<h2>Get the guard</h2>
+<p>The free MT5 daily-loss guard that uses the broker's trading day (and persists it across restarts):
+<a href="/vigildesk/free.html">https://xuks124.github.io/vigildesk/free.html</a></p>
+<h2>Risk disclosure</h2>
+<p>Algorithmic trading carries both technical and market risk. No tool eliminates the possibility of loss. Nothing on
+this page is investment advice, and no performance is implied or promised.</p>
+</article></main>
+<footer class="site-footer"><p>&copy; 2026 VigilDesk &middot; <a href="/vigildesk/legal.html">Legal</a></p></footer>
+</body></html>
