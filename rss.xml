@@ -10,6 +10,12 @@
   <description>why in-terminal guards lose their state, and how to make one that survives a restart.</description>
 </item>
 <item>
+  <title>Is your guard real or decorative? A checklist</title>
+  <link>https://xuks124.github.io/vigildesk/blog/is-your-guard-real-or-decorative.html</link>
+  <guid>https://xuks124.github.io/vigildesk/blog/is-your-guard-real-or-decorative.html</guid>
+  <description>twelve questions that separate a guard from a decoration.</description>
+</item>
+<item>
   <title>Memory plus an expiry policy: what a restarted guard is allowed to assume</title>
   <link>https://xuks124.github.io/vigildesk/blog/memory-plus-expiry-policy.html</link>
   <guid>https://xuks124.github.io/vigildesk/blog/memory-plus-expiry-policy.html</guid>
