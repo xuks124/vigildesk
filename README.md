@@ -57,10 +57,15 @@ A minimal, restart-proof daily-loss guard that does the single most important jo
 
 Notes from building this, written for anyone who has to make trading automation fail safely:
 
-- [Your daily loss limit resets when MetaTrader restarts. Here is the fix.](https://xuks124.github.io/vigildesk/blog/restart-proof-daily-loss-guard.html) — the restart-persistence problem, with implementation.
+- [Your daily loss limit resets when MetaTrader restarts. Here is the fix.](https://xuks124.github.io/vigildesk/blog/restart-proof-daily-loss-guard.html) — why in-terminal guards lose their state, and how to make one that survives a restart.
+- [Is your guard real or decorative? A checklist](https://xuks124.github.io/vigildesk/blog/is-your-guard-real-or-decorative.html) — twelve questions that separate a guard from a decoration.
+- [Memory plus an expiry policy: what a restarted guard is allowed to assume](https://xuks124.github.io/vigildesk/blog/memory-plus-expiry-policy.html) — the hard half of persistence is the assumptions, not the serialisation.
+- [Detection is not resolution: the gap that makes guards decorative](https://xuks124.github.io/vigildesk/blog/detection-is-not-resolution.html) — time-to-detect is an engineering metric; time-to-effect describes the damage.
+- [Decisionless monitoring: the reports nobody acts on](https://xuks124.github.io/vigildesk/blog/decisionless-monitoring.html) — if a report changes no decision it belongs on a dashboard, not in an inbox.
 - [What a kill switch should actually do (and the four ways they fail)](https://xuks124.github.io/vigildesk/blog/what-a-kill-switch-should-do.html) — never armed, never disarmed, wrong trigger, wrong clock.
-- [Silent failures in trading automation: the three that cost the most](https://xuks124.github.io/vigildesk/blog/silent-failures-in-trading-automation.html) — guards that read zero, configs that override code, state that dies with the process.
+- [Silent failures in trading automation: the three that cost the most](https://xuks124.github.io/vigildesk/blog/silent-failures-in-trading-automation.html) — guards that read zero, configs that override code, and state that dies with the process.
 - [Which day is it? Broker time, host time, and the trading-day boundary](https://xuks124.github.io/vigildesk/blog/which-day-is-it-trading-day-boundary.html) — three clocks can disagree, and the failure is silent.
+
 
 ## Documentation
 
