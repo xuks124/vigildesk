@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Silent failures in trading automation: the three that cost the most | VigilDesk</title>
+<meta name="description" content="Guards that read zero, configs that quietly override the code, and state that dies with the process - three silent failure modes in trading automation, and the cheap tests that catch them.">
+<link rel="canonical" href="https://xuks124.github.io/vigildesk/blog/silent-failures-in-trading-automation.html">
+<meta property="og:title" content="Silent failures in trading automation: the three that cost the most"><meta property="og:description" content="Guards that read zero, configs that quietly override the code, and state that dies with the process - three silent failure modes in trading automation, and the cheap tests that catch them.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://xuks124.github.io/vigildesk/blog/silent-failures-in-trading-automation.html">
+<link rel="stylesheet" href="/vigildesk/style.css"><link rel="stylesheet" href="/vigildesk/docs.css">
+</head><body>
+<header class="site-header"><nav>
+<a href="/vigildesk/">VigilDesk</a><a href="/vigildesk/faq.html">FAQ</a><a href="/vigildesk/tutorial.html">Tutorial</a>
+<a href="/vigildesk/free.html">Free build</a><a href="/vigildesk/pricing.html">Pricing</a><a href="/vigildesk/blog/">Blog</a>
+</nav></header>
+<main class="doc"><article>
+<h1>Silent failures in trading automation: the three that cost the most</h1>
+<p class="meta">VigilDesk engineering notes</p>
+
+<p>Every automation failure I have paid for fell into the same category: <strong>nothing threw</strong>. The logs were clean,
+the code was correct, and the system did exactly what it was told - with the wrong inputs. Three of these are worth
+knowing by name, because the fix for each is a few lines and the detection is one cheap test.</p>
+
+<h2>1. The guard that reads zero</h2>
+<p>A margin or drawdown guard is one of the simplest shapes in trading software: read a number, compare it to a
+threshold, refuse to act if it is too big. It is also one of the easiest things to connect to the wrong source.</p>
+<p>I have seen this in production: the rule ran on schedule, the comparison was correct, and the number it read was
+always <code>0</code> - because the snapshot it read from was refreshed by a different code path that had silently
+stopped updating. Nothing failed. The guard was decorative for weeks.</p>
+<p><strong>Detection:</strong> assert on the <em>effective</em> value the decision uses, not on the value the config
+intended. If production reads <code>state.margin_used</code>, the test must assert on <code>state.margin_used</code> -
+not on a freshly computed copy that happens to be correct.</p>
+
+<h2>2. The config that quietly overrides the code</h2>
+<p>A position-sizing ladder returned <code>1.5</code> or <code>2.0</code>. An <code>int()</code> conversion downstream
+truncated it to <code>1</code>. At the configuration value the code was written against, the truncation was invisible;
+after a config change two months later, every position ran at half the intended leverage. The code was right under a
+configuration nobody remembered changing.</p>
+<p><strong>Detection:</strong> log the number that was actually used, every cycle, not the constant it was supposed to
+come from. <code>leverage=1.0</code> in a log line on day one beats a month of "the code looks correct".</p>
+
+<h2>3. The state that dies with the process</h2>
+<p>This is the one I care about most, because it is the failure mode of every in-terminal risk limit: the counter lives
+in memory, so a restart, a recompile, a deploy or a VM migration resets it. The rule "never risk more than X% today"
+politely hands back the full X% - exactly on the day things are going badly, because that is when restarts happen.</p>
+<p><strong>Detection:</strong> one destructive test. Let the limit trip, then kill the process <em>with a position
+open</em>, restart it, and watch what the guard does on its next cycle. If it happily continues, the state was in RAM.</p>
+<p><strong>Fix:</strong> persist the state - which trading day it belongs to, the anchor it measures against, and the
+decision flag - and write it <em>after</em> the decision, never before. Derive "today" from the broker's clock rather
+than the host clock, or a timezone change moves your daily boundary without anything throwing.
+There is a longer write-up of this one, with the implementation, in
+<a href="/vigildesk/blog/restart-proof-daily-loss-guard.html">the daily-loss-limit note</a>.</p>
+
+<h2>The pattern behind all three</h2>
+<p>Successful silent failures share a shape: <strong>the thing that is asserted on is not the thing that production
+reads.</strong> Tests check the intended value; monitors check the process is alive; reviewers check that an assertion
+exists. None of them check the join between intent and reality.</p>
+<p>Three habits, all cheap:</p>
+<ul>
+<li>assert on effective values, from the same object production reads;</li>
+<li>log the effective values, not the configured ones;</li>
+<li>have at least one test that destroys the process rather than calling a function.</li>
+</ul>
+
+<h2>Where this shows up in trading specifically</h2>
+<p>Trading automation concentrates these failures, because the environment is hostile in ways unit tests do not
+simulate: the process is restarted by the user at 3am, the clock is in a different timezone than the broker, the
+broker disconnects mid-trade, and the platform may recompile your code without asking. A guard that behaves correctly
+under <code>pytest</code> can still be decorative under those conditions - and you will not find out until it matters.</p>
+
+<hr>
+<h2>Get the guard</h2>
+<p>Free, restart-proof MT5 daily-loss guard, source included: <a href="/vigildesk/free.html">https://xuks124.github.io/vigildesk/free.html</a></p>
+<h2>Risk disclosure</h2>
+<p>Algorithmic trading carries both technical and market risk. No tool eliminates the possibility of loss. Nothing on
+this page is investment advice, and no performance is implied or promised.</p>
+</article></main>
+<footer class="site-footer"><p>&copy; 2026 VigilDesk &middot; <a href="/vigildesk/legal.html">Legal</a></p></footer>
+</body></html>
