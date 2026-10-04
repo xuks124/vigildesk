@@ -53,6 +53,15 @@ A minimal, restart-proof daily-loss guard that does the single most important jo
 - Source: [`mql5/VigilDeskGuardFree.mq5`](mql5/VigilDeskGuardFree.mq5) — read it, modify it, ship your own version.
 - Attach `VigilDeskGuardFree.ex5` to a chart and set your cap. It persists state across restarts and uses the broker's trading day, not your local clock.
 
+## Writing
+
+Notes from building this, written for anyone who has to make trading automation fail safely:
+
+- [Your daily loss limit resets when MetaTrader restarts. Here is the fix.](https://xuks124.github.io/vigildesk/blog/restart-proof-daily-loss-guard.html) — the restart-persistence problem, with implementation.
+- [What a kill switch should actually do (and the four ways they fail)](https://xuks124.github.io/vigildesk/blog/what-a-kill-switch-should-do.html) — never armed, never disarmed, wrong trigger, wrong clock.
+- [Silent failures in trading automation: the three that cost the most](https://xuks124.github.io/vigildesk/blog/silent-failures-in-trading-automation.html) — guards that read zero, configs that override code, state that dies with the process.
+- [Which day is it? Broker time, host time, and the trading-day boundary](https://xuks124.github.io/vigildesk/blog/which-day-is-it-trading-day-boundary.html) — three clocks can disagree, and the failure is silent.
+
 ## Documentation
 
 - [FAQ](https://xuks124.github.io/vigildesk/faq.html) · [Tutorial](https://xuks124.github.io/vigildesk/tutorial.html) · [Prop-firm mode](https://xuks124.github.io/vigildesk/propfirm.html)
