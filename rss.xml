@@ -7,18 +7,20 @@
   <title>Your daily loss limit resets when MetaTrader restarts. Here is the fix.</title>
   <link>https://xuks124.github.io/vigildesk/blog/restart-proof-daily-loss-guard.html</link>
   <guid>https://xuks124.github.io/vigildesk/blog/restart-proof-daily-loss-guard.html</guid>
-  <description>Why in-terminal guards lose their state, and how to make one that survives a restart.</description>
+</item>
+<item>
+  <title>What a kill switch should actually do (and the four ways they fail)</title>
+  <link>https://xuks124.github.io/vigildesk/blog/what-a-kill-switch-should-do.html</link>
+  <guid>https://xuks124.github.io/vigildesk/blog/what-a-kill-switch-should-do.html</guid>
 </item>
 <item>
   <title>Silent failures in trading automation: the three that cost the most</title>
   <link>https://xuks124.github.io/vigildesk/blog/silent-failures-in-trading-automation.html</link>
   <guid>https://xuks124.github.io/vigildesk/blog/silent-failures-in-trading-automation.html</guid>
-  <description>Guards that read zero, configs that override code, and state that dies with the process.</description>
 </item>
 <item>
   <title>Which day is it? Broker time, host time, and the trading-day boundary</title>
   <link>https://xuks124.github.io/vigildesk/blog/which-day-is-it-trading-day-boundary.html</link>
   <guid>https://xuks124.github.io/vigildesk/blog/which-day-is-it-trading-day-boundary.html</guid>
-  <description>Three clocks can disagree, and the failure is silent. How to pick the one that defines your trading day.</description>
 </item>
 </channel></rss>
