@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Is an account-level guard worth it? An honest decision guide | VigilDesk</title><meta name="description" content="Most EAs already have a stop loss. That is not the same control as an account-level daily cap. When the extra layer earns its place, when it does not, and how to tell in ten minutes.">
+<link rel="canonical" href="https://xuks124.github.io/vigildesk/blog/is-an-account-level-guard-worth-it.html">
+<meta property="og:title" content="Is an account-level guard worth it? An honest decision guide"><meta property="og:description" content="Most EAs already have a stop loss. That is not the same control as an account-level daily cap. When the extra layer earns its place, when it does not, and how to tell in ten minutes.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://xuks124.github.io/vigildesk/blog/is-an-account-level-guard-worth-it.html">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Is an account-level guard worth it? An honest decision guide","description":"Most EAs already have a stop loss. That is not the same control as an account-level daily cap. When the extra layer earns its place, when it does not, and how to tell in ten minutes.","url":"https://xuks124.github.io/vigildesk/blog/is-an-account-level-guard-worth-it.html","author":{"@type":"Organization","name":"VigilDesk","url":"https://xuks124.github.io/vigildesk/"},"publisher":{"@type":"Organization","name":"VigilDesk","url":"https://xuks124.github.io/vigildesk/"}}</script>
+<link rel="stylesheet" href="/vigildesk/style.css"><link rel="stylesheet" href="/vigildesk/docs.css">
+</head><body>
+<header class="site-header"><nav>
+<a href="/vigildesk/">VigilDesk</a><a href="/vigildesk/faq.html">FAQ</a><a href="/vigildesk/tutorial.html">Tutorial</a>
+<a href="/vigildesk/free.html">Free build</a><a href="/vigildesk/pricing.html">Pricing</a><a href="/vigildesk/blog/">Blog</a>
+</nav></header>
+<main class="doc"><article>
+<h1>Is an account-level guard worth it? An honest decision guide</h1><p class="meta">VigilDesk engineering notes</p>
+
+<p>Short answer: it depends on one question - <strong>can a single bad day, or a single misbehaving EA, take the account
+somewhere you would not accept?</strong> If yes, an account-level cap is a different control from anything inside the EA,
+and it is usually the cheapest insurance in the stack. If no, you probably do not need it.</p>
+
+<h2>What a stop loss does not do</h2>
+<p>A stop loss is a per-trade control. An account-level daily cap is a per-account, per-day control. They fail in
+different ways:</p>
+<table>
+<thead><tr><th>Situation</th><th>Per-trade stop loss</th><th>Account-level daily cap</th></tr></thead>
+<tbody>
+<tr><td>One EA on one chart, one bad trade</td><td>Handles it</td><td>Not needed</td></tr>
+<tr><td>Same EA on three charts</td><td>Each trade is "correctly" sized; the account carries 3 correlated positions</td><td>Sees the account total and stops</td></tr>
+<tr><td>An EA that misbehaves (loop, wrong size, no stop)</td><td>Depends entirely on that EA being correct</td><td>Stops the day regardless of what the EA thinks</td></tr>
+<tr><td>A prop-firm daily loss rule</td><td>Not what the firm measures</td><td>Measures the same thing the firm measures</td></tr>
+<tr><td>You close the terminal mid-session and reopen it</td><td>Unaffected</td><td>Only works if its state survives the restart</td></tr>
+</tbody>
+</table>
+
+<h2>When it earns its place</h2>
+<ul>
+<li>You run <strong>more than one chart or more than one EA</strong> on the same account or the same symbol.</li>
+<li>You are on a <strong>prop-firm or risk-managed account</strong> with a hard daily rule.</li>
+<li>You are <strong>not watching</strong> (VPS, overnight, unattended) and want a bound that does not depend on your attention.</li>
+<li>You have ever had a day you would describe as "that should not have been possible".</li>
+</ul>
+
+<h2>When it does not</h2>
+<ul>
+<li><strong>You have one strategy, one chart, and a hard stop on every trade</strong>, and you accept full per-trade risk. A daily cap adds a layer that will occasionally stop a day that would have recovered - that is a real cost, not a hypothetical one.</li>
+<li><strong>You want it to make money.</strong> It will not. A guard reduces the tail; it does not add edge. If the strategy has no edge, risk control just makes the account last longer on the way down.</li>
+<li><strong>You want to be told what to trade.</strong> This is not a signal tool.</li>
+</ul>
+
+<h2>The ten-minute test</h2>
+<p>Before buying anything (including free things - your time is the cost), do this on your current setup:</p>
+<ol>
+<li>Write down your <strong>worst plausible day</strong>: the largest loss your current configuration could produce if several things went wrong together. If you cannot answer, that is the finding.</li>
+<li>Let a limit trip deliberately on a demo account, then <strong>kill the terminal with a position open</strong> and restart it. Does the protection come back? If it does not, whatever you are relying on has the lifetime of an in-memory variable.</li>
+<li>Ask: <strong>if I ignored this tool completely, would anything be different?</strong> If the answer is no, it is decoration.</li>
+</ol>
+
+<h2>What this project actually is</h2>
+<p>VigilDesk Guard is an account-level daily loss cap for MetaTrader 5 - one number for the account, derived from the
+broker's trading day, persisted so a restart cannot reset it, sitting above whatever EAs you already run. It is free,
+source-included, with no DLLs and no external calls. It is <strong>not</strong> a strategy, not a signal service, and it
+does not promise anything about performance. If the test above tells you that you do not need it, that is a perfectly good
+outcome - you have just saved yourself a dependency.</p>
+
+<p>The free build and the source: <a href="/vigildesk/free.html">xuks124.github.io/vigildesk/free.html</a></p>
+
+<hr>
+<h2>Related notes</h2><ul>
+<li><a href="/vigildesk/blog/is-your-guard-real-or-decorative.html">Is your guard real or decorative? A checklist</a></li>
+<li><a href="/vigildesk/blog/restart-proof-daily-loss-guard.html">Your daily loss limit resets when MetaTrader restarts. Here is the fix.</a></li>
+<li><a href="/vigildesk/blog/memory-plus-expiry-policy.html">Memory plus an expiry policy: what a restarted guard is allowed to assume</a></li>
+<li><a href="/vigildesk/blog/detection-is-not-resolution.html">Detection is not resolution: the gap that makes guards decorative</a></li>
+<li><a href="/vigildesk/blog/decisionless-monitoring.html">Decisionless monitoring: the reports nobody acts on</a></li>
+<li><a href="/vigildesk/blog/what-a-kill-switch-should-do.html">What a kill switch should actually do (and the four ways they fail)</a></li>
+<li><a href="/vigildesk/blog/silent-failures-in-trading-automation.html">Silent failures in trading automation: the three that cost the most</a></li>
+<li><a href="/vigildesk/blog/which-day-is-it-trading-day-boundary.html">Which day is it? Broker time, host time, and the trading-day boundary</a></li>
+</ul>
+<h2>Risk disclosure</h2>
+<p>Algorithmic trading carries both technical and market risk. No tool eliminates the possibility of loss. Nothing on this
+page is investment advice, and no performance is implied or promised.</p>
+</article></main>
+<footer class="site-footer"><p>&copy; 2026 VigilDesk &middot; <a href="/vigildesk/legal.html">Legal</a></p></footer>
+</body></html>
