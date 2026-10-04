@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memory plus an expiry policy: what a restarted guard is allowed to assume | VigilDesk</title><meta name="description" content="Restoring state is the easy half. The hard half is deciding what the resumed process may assume about a world that moved while it was gone - and whether it can tell how old its own memory is.">
+<link rel="canonical" href="https://xuks124.github.io/vigildesk/blog/memory-plus-expiry-policy.html">
+<meta property="og:title" content="Memory plus an expiry policy: what a restarted guard is allowed to assume"><meta property="og:description" content="Restoring state is the easy half. The hard half is deciding what the resumed process may assume about a world that moved while it was gone - and whether it can tell how old its own memory is.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://xuks124.github.io/vigildesk/blog/memory-plus-expiry-policy.html">
+<link rel="stylesheet" href="/vigildesk/style.css"><link rel="stylesheet" href="/vigildesk/docs.css">
+</head><body>
+<header class="site-header"><nav>
+<a href="/vigildesk/">VigilDesk</a><a href="/vigildesk/faq.html">FAQ</a><a href="/vigildesk/tutorial.html">Tutorial</a>
+<a href="/vigildesk/free.html">Free build</a><a href="/vigildesk/pricing.html">Pricing</a><a href="/vigildesk/blog/">Blog</a>
+</nav></header>
+<main class="doc"><article>
+<h1>Memory plus an expiry policy: what a restarted guard is allowed to assume</h1><p class="meta">VigilDesk engineering notes</p>
+
+<p>Persisting state is the easy half. Every interesting bug I have hit in restart-safe guards was in the second
+half: <strong>deciding what the resumed process is allowed to assume</strong> about a world that kept moving while
+it was gone.</p>
+
+<p>The resumed process is not the same process resumed. It is a new process that happens to share a file.</p>
+
+<h2>1. A counter without a date is not state</h2>
+<p>Restore the value and forget <em>which day it belongs to</em>, and you get one of two failures, both of which look
+like success:</p>
+<ul>
+<li>the restored counter is ignored (so the guard silently starts the day fresh);</li>
+<li>the restored counter is applied forever (so last Tuesday's "blocked" keeps you flat all week).</li>
+</ul>
+<p>Neither throws. Both are the persistence "working".</p>
+
+<h2>2. Write ordering is a real decision</h2>
+<p>Persist <em>before</em> acting and a crash in between lets the action through twice. Persist <em>after</em> acting
+and the crash window is genuinely there - an action that happened and was not recorded. Only the second ordering
+cannot double-act, and choosing it means <strong>accepting an unbounded-by-default window</strong> instead of
+pretending the window does not exist. Bound it deliberately (the action is idempotent, the state is reconciled from
+the broker on start) rather than hoping.</p>
+
+<h2>3. Staleness must be a first-class state</h2>
+<p>The resumed guard inherits a world model that was true <em>four minutes ago</em>. If it cannot distinguish
+"my memory is old" from "my memory is current", it will act on a stale premise with complete confidence - which is
+exactly the shape of every silent failure in this series.</p>
+<p>So the question worth designing against is not <em>"did the memory survive?"</em> but:</p>
+<blockquote><p><strong>"Does the system know how old its own memory is?"</strong></p></blockquote>
+<p>If the answer is no, then everything downstream is unfalsifiable.</p>
+
+<h2>4. The unit is a record, not a value</h2>
+<table>
+<thead><tr><th>Field</th><th>Why it must be persisted together with the value</th></tr></thead>
+<tbody>
+<tr><td>the value</td><td>obviously</td></tr>
+<tr><td>its day / period stamp</td><td>otherwise the record cannot be scoped to a period, only applied or discarded</td></tr>
+<tr><td>when it was written</td><td>so the next process can measure its own staleness instead of guessing</td></tr>
+<tr><td>which clock it was written against</td><td>the broker's day is not the host's day (see the trading-day note)</td></tr>
+<tr><td>the decision it encodes</td><td>state that records inputs without the verdict can be re-derived wrongly</td></tr>
+</tbody>
+</table>
+
+<h2>What this looks like in practice</h2>
+<pre><code>{
+  "day":        20261004,          // broker trading day this record scopes to
+  "anchor":     10000.00,          // equity at the start of that day
+  "used":       412.50,            // measured drawdown/usage inside the day
+  "blocked":    true,              // the verdict, persisted, not recomputed
+  "written_at": 1759555200,        // so a later process can compute its own age
+  "clock":      "trade_server"
+}</code></pre>
+<p>On start: compare <code>day</code> with the current broker day. Equal -&gt; restore. Different -&gt; reset, and say so
+in the log. Measure <code>now - written_at</code>: if it exceeds the policy, treat the record as untrusted and say so.
+Two comparisons, and the whole class of "it restored, therefore it is protecting me" disappears.</p>
+
+<h2>The uncomfortable summary</h2>
+<p>Persistence answers "did the memory survive?". It does not answer "is the memory still true?", "is it still mine?",
+or "is it still today?". Those are policy questions, and they have to be written down next to the data - because the
+process reading them later cannot reconstruct the context it was written in.</p>
+
+<hr>
+<h2>Related notes</h2><ul>
+<li><a href="/vigildesk/blog/restart-proof-daily-loss-guard.html">Your daily loss limit resets when MetaTrader restarts. Here is the fix.</a></li>
+<li><a href="/vigildesk/blog/detection-is-not-resolution.html">Detection is not resolution: the gap that makes guards decorative</a></li>
+<li><a href="/vigildesk/blog/what-a-kill-switch-should-do.html">What a kill switch should actually do (and the four ways they fail)</a></li>
+<li><a href="/vigildesk/blog/silent-failures-in-trading-automation.html">Silent failures in trading automation: the three that cost the most</a></li>
+<li><a href="/vigildesk/blog/which-day-is-it-trading-day-boundary.html">Which day is it? Broker time, host time, and the trading-day boundary</a></li>
+</ul>
+<h2>Get the guard</h2>
+<p>Free MT5 daily-loss guard, source included: <a href="/vigildesk/free.html">https://xuks124.github.io/vigildesk/free.html</a></p>
+<h2>Risk disclosure</h2>
+<p>Algorithmic trading carries both technical and market risk. No tool eliminates the possibility of loss. Nothing on
+this page is investment advice, and no performance is implied or promised.</p>
+</article></main>
+<footer class="site-footer"><p>&copy; 2026 VigilDesk &middot; <a href="/vigildesk/legal.html">Legal</a></p></footer>
+</body></html>
