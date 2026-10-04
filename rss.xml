@@ -10,6 +10,12 @@
   <description>why in-terminal guards lose their state, and how to make one that survives a restart.</description>
 </item>
 <item>
+  <title>Is an account-level guard worth it? An honest decision guide</title>
+  <link>https://xuks124.github.io/vigildesk/blog/is-an-account-level-guard-worth-it.html</link>
+  <guid>https://xuks124.github.io/vigildesk/blog/is-an-account-level-guard-worth-it.html</guid>
+  <description>when the extra layer earns its place, and when it does not.</description>
+</item>
+<item>
   <title>Is your guard real or decorative? A checklist</title>
   <link>https://xuks124.github.io/vigildesk/blog/is-your-guard-real-or-decorative.html</link>
   <guid>https://xuks124.github.io/vigildesk/blog/is-your-guard-real-or-decorative.html</guid>
