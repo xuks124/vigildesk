@@ -1,9 +1,13 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <title>VigilDesk engineering notes</title><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Notes on making trading automation failure-recoverable.">
 <link rel="stylesheet" href="/vigildesk/style.css"></head><body>
 <header class="site-header"><nav><a href="/vigildesk/">VigilDesk</a><a href="/vigildesk/faq.html">FAQ</a><a href="/vigildesk/free.html">Free build</a></nav></header>
 <main class="doc"><h1>Engineering notes</h1>
-<ul><li><a href="/vigildesk/blog/restart-proof-daily-loss-guard.html">Your daily loss limit resets when MetaTrader restarts. Here is the fix.</a>
-&mdash; why in-terminal guards lose their state, and how to make one that survives a restart.</li></ul>
-</main>
+<ul>
+<li><a href="/vigildesk/blog/restart-proof-daily-loss-guard.html">Your daily loss limit resets when MetaTrader restarts. Here is the fix.</a>
+&mdash; why in-terminal guards lose their state, and how to make one that survives a restart.</li>
+<li><a href="/vigildesk/blog/silent-failures-in-trading-automation.html">Silent failures in trading automation: the three that cost the most</a>
+&mdash; guards that read zero, configs that override code, and state that dies with the process.</li>
+</ul></main>
 <footer class="site-footer"><p>&copy; 2026 VigilDesk</p></footer></body></html>
