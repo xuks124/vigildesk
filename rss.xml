@@ -22,6 +22,12 @@
   <description>time-to-detect is an engineering metric; time-to-effect describes the damage.</description>
 </item>
 <item>
+  <title>Decisionless monitoring: the reports nobody acts on</title>
+  <link>https://xuks124.github.io/vigildesk/blog/decisionless-monitoring.html</link>
+  <guid>https://xuks124.github.io/vigildesk/blog/decisionless-monitoring.html</guid>
+  <description>if a report changes no decision it belongs on a dashboard, not in an inbox.</description>
+</item>
+<item>
   <title>What a kill switch should actually do (and the four ways they fail)</title>
   <link>https://xuks124.github.io/vigildesk/blog/what-a-kill-switch-should-do.html</link>
   <guid>https://xuks124.github.io/vigildesk/blog/what-a-kill-switch-should-do.html</guid>
