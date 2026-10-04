@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detection is not resolution: the gap that makes guards decorative | VigilDesk</title><meta name="description" content="A guard that notices in 200ms and acts in 15 minutes does not exist, as far as the account is concerned. Time-to-detect is an engineering metric; time-to-effect is the one that describes the damage.">
+<link rel="canonical" href="https://xuks124.github.io/vigildesk/blog/detection-is-not-resolution.html">
+<meta property="og:title" content="Detection is not resolution: the gap that makes guards decorative"><meta property="og:description" content="A guard that notices in 200ms and acts in 15 minutes does not exist, as far as the account is concerned. Time-to-detect is an engineering metric; time-to-effect is the one that describes the damage.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://xuks124.github.io/vigildesk/blog/detection-is-not-resolution.html">
+<link rel="stylesheet" href="/vigildesk/style.css"><link rel="stylesheet" href="/vigildesk/docs.css">
+</head><body>
+<header class="site-header"><nav>
+<a href="/vigildesk/">VigilDesk</a><a href="/vigildesk/faq.html">FAQ</a><a href="/vigildesk/tutorial.html">Tutorial</a>
+<a href="/vigildesk/free.html">Free build</a><a href="/vigildesk/pricing.html">Pricing</a><a href="/vigildesk/blog/">Blog</a>
+</nav></header>
+<main class="doc"><article>
+<h1>Detection is not resolution: the gap that makes guards decorative</h1><p class="meta">VigilDesk engineering notes</p>
+
+<p>Every monitoring discussion quotes one number: <strong>how fast did we notice?</strong> The number that describes
+the damage is the second one - <strong>how long until the behaviour actually changed?</strong> For a trading guard,
+the honest version of that pair is often "200 milliseconds" and "fifteen minutes".</p>
+
+<p>From the account's point of view, a guard that notices in 200ms and stops trading in 15 minutes does not exist.
+And the dashboard is green at every moment anyone looks at it, because "we detected it" is true.</p>
+
+<h2>Why the gap opens</h2>
+<p>Almost always architecturally. Detection writes a flag; a different component reads the flag and acts. Between them
+sits an interface that both sides assume behaves like a function call, when it actually behaves like a message: it can
+be delayed, read by nobody, or interpreted against a stale view of the world.</p>
+
+<p>Anything that can be <em>detected but not acted on</em> is really two systems with a hopeful interface between them.
+Kubernetes calls one version of this "a dead node that keeps receiving traffic for thirteen minutes". Trading calls
+one version of it "the log says blocked, and the order path never reads the flag". Same shape.</p>
+
+<h2>Three habits that close it</h2>
+<ol>
+<li><strong>Measure both numbers, alert on the second.</strong> Time-to-detect is an engineering metric. Time-to-effect
+is the operational one. Teams that only page on the first look beautifully instrumented right up until the review.</li>
+<li><strong>Make the detection path and the action path the same path.</strong> If a separate controller has to notice,
+then you have two definitions of "now" in the system, and they will disagree at exactly the wrong moment.</li>
+<li><strong>Test the reaction, not the detection.</strong> Pull the input, kill the process, cut the feed - and time how
+long until the behaviour stops, not until the alert fires. Most test suites check the first half of the sentence and
+call it covered.</li>
+</ol>
+
+<h2>What this looks like in trading</h2>
+<table>
+<thead><tr><th>Signal you can observe</th><th>What it does not tell you</th></tr></thead>
+<tbody>
+<tr><td>The guard evaluated and logged a breach</td><td>Whether the order path consulted the verdict</td></tr>
+<tr><td>The alert fired within 200ms</td><td>Whether anything stopped</td></tr>
+<tr><td>The state file was written</td><td>Whether it was written <em>after</em> the decision (a crash in between lets one order through)</td></tr>
+<tr><td>The block flag is set</td><td>Whether it belongs to today, or to last Tuesday</td></tr>
+<tr><td>The process is alive</td><td>Whether it is still connected to reality</td></tr>
+</tbody>
+</table>
+
+<p>Each row is a case of a monitor reporting <em>detection</em> as if it were <em>resolution</em>. They are comfortable
+failures: everything you can see agrees with everything else you can see.</p>
+
+<h2>The two tests worth running this week</h2>
+<ol>
+<li><strong>Time the effect, not the alert.</strong> Trigger a limit breach and measure wall-clock time until the system
+is genuinely unable to place the next order. Write that number down; it is the real specification of your guard.</li>
+<li><strong>Kill it with something open.</strong> Terminate the process mid-position, restart, and watch the next cycle.
+If the guard's verdict does not survive, then your protection has the same lifetime as an in-memory variable.</li>
+</ol>
+
+<p>Neither test is sophisticated. Both require admitting that "we would notice" is not the same claim as "we would stop",
+and only the second one is what you actually sold yourself.</p>
+
+<hr>
+<h2>Related notes</h2><ul>
+<li><a href="/vigildesk/blog/restart-proof-daily-loss-guard.html">Your daily loss limit resets when MetaTrader restarts. Here is the fix.</a></li>
+<li><a href="/vigildesk/blog/what-a-kill-switch-should-do.html">What a kill switch should actually do (and the four ways they fail)</a></li>
+<li><a href="/vigildesk/blog/silent-failures-in-trading-automation.html">Silent failures in trading automation: the three that cost the most</a></li>
+<li><a href="/vigildesk/blog/which-day-is-it-trading-day-boundary.html">Which day is it? Broker time, host time, and the trading-day boundary</a></li>
+</ul>
+<h2>Get the guard</h2>
+<p>Free MT5 daily-loss guard, source included: <a href="/vigildesk/free.html">https://xuks124.github.io/vigildesk/free.html</a></p>
+<h2>Risk disclosure</h2>
+<p>Algorithmic trading carries both technical and market risk. No tool eliminates the possibility of loss. Nothing on
+this page is investment advice, and no performance is implied or promised.</p>
+</article></main>
+<footer class="site-footer"><p>&copy; 2026 VigilDesk &middot; <a href="/vigildesk/legal.html">Legal</a></p></footer>
+</body></html>
