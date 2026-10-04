@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Is your guard real or decorative? A checklist | VigilDesk</title><meta name="description" content="Twelve questions that separate a risk guard that protects an account from one that produces reassuring logs. Every one of them can be answered by running something, not by reading code.">
+<link rel="canonical" href="https://xuks124.github.io/vigildesk/blog/is-your-guard-real-or-decorative.html">
+<meta property="og:title" content="Is your guard real or decorative? A checklist"><meta property="og:description" content="Twelve questions that separate a risk guard that protects an account from one that produces reassuring logs. Every one of them can be answered by running something, not by reading code.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://xuks124.github.io/vigildesk/blog/is-your-guard-real-or-decorative.html">
+<link rel="stylesheet" href="/vigildesk/style.css"><link rel="stylesheet" href="/vigildesk/docs.css">
+</head><body>
+<header class="site-header"><nav>
+<a href="/vigildesk/">VigilDesk</a><a href="/vigildesk/faq.html">FAQ</a><a href="/vigildesk/tutorial.html">Tutorial</a>
+<a href="/vigildesk/free.html">Free build</a><a href="/vigildesk/pricing.html">Pricing</a><a href="/vigildesk/blog/">Blog</a>
+</nav></header>
+<main class="doc"><article>
+<h1>Is your guard real or decorative? A checklist</h1><p class="meta">VigilDesk engineering notes</p>
+
+<p>Every question below can be answered by <em>running something</em> rather than reading code. That is the point:
+guards fail silently, so the only useful evidence is behaviour under conditions you deliberately created.</p>
+
+<h2>A. Is it on the path that can act?</h2>
+<ol>
+<li>Does the component that decides also <em>prevent</em>, or does it write a flag somebody else is supposed to read?
+(<a href="/vigildesk/blog/what-a-kill-switch-should-do.html">A signal nobody consults is a log line with a notification attached.</a>)</li>
+<li>If you disable the guard, does an order get refused - or does everything look identical? Try it.</li>
+<li>Is the check the <em>last</em> thing before submission, or one of several parallel opinions that can disagree?</li>
+</ol>
+
+<h2>B. Does it survive being killed?</h2>
+<ol start="4">
+<li>Let the limit trip with a position open, then <strong>kill the process</strong> (not the unit test), restart it, and watch
+the next cycle. Does the block survive? (<a href="/vigildesk/blog/restart-proof-daily-loss-guard.html">If not, your protection has the lifetime of an in-memory variable.</a>)</li>
+<li>Does the restored state know <em>which day it belongs to</em>? Without that, it is either ignored or applied forever.
+(<a href="/vigildesk/blog/memory-plus-expiry-policy.html">Both look like success.</a>)</li>
+<li>Can the resumed process tell <em>how old</em> its own memory is? If not, it will act on a stale premise confidently.</li>
+</ol>
+
+<h2>C. Does it know what time it is?</h2>
+<ol start="7">
+<li>Is "today" derived from the broker's clock or from <code>TimeLocal()</code>? Change the host timezone and re-run the
+rollover test. (<a href="/vigildesk/blog/which-day-is-it-trading-day-boundary.html">The boundary moves by hours and nothing throws.</a>)</li>
+<li>Do you log the drift between the two clocks every cycle? If the answer is no, the first time you will see a two-hour
+disagreement is during an incident.</li>
+<li>Is "no data" distinguishable from "zero"? A guard that reads zero because its feed died is a guard that is not
+guarding.</li>
+</ol>
+
+<h2>D. Does anything measure the effect?</h2>
+<ol start="10">
+<li>What is your <strong>time-to-effect</strong> - wall-clock from a real breach to the system being genuinely unable to
+act? If you have never measured it, you do not know what you bought.
+(<a href="/vigildesk/blog/detection-is-not-resolution.html">Time-to-detect is the easy number.</a>)</li>
+<li>Which alerts, if ignored entirely, would change no decision? Those are not alerts.
+(<a href="/vigildesk/blog/decisionless-monitoring.html">Decisionless is not the same as wrong.</a>)</li>
+<li>When the guard last fired for real, what did anyone do differently - and did the log say so out loud?</li>
+</ol>
+
+<h2>What a "yes" set looks like</h2>
+<table>
+<thead><tr><th>Property</th><th>Evidence that satisfies it</th></tr></thead>
+<tbody>
+<tr><td>On the action path</td><td>Disabling it provably refuses an order</td></tr>
+<tr><td>Restart-proof</td><td>Kill-with-position test, verdict survives, dated</td></tr>
+<tr><td>Clock-correct</td><td>Timezone-changed rollover test passes</td></tr>
+<tr><td>Freshness-aware</td><td>Feed cut -> guard reports an incident, not a zero</td></tr>
+<tr><td>Effect measured</td><td>A number, in seconds, from breach to inability to act</td></tr>
+<tr><td>Loud when it fires</td><td>The blocked state is visible without reading a database</td></tr>
+</tbody>
+</table>
+
+<p>Six properties, five of which are found by <em>breaking</em> something on purpose. That is the whole difference between
+a guard and a decoration: the decoration is only ever tested on the day everything works.
+(<a href="/vigildesk/blog/silent-failures-in-trading-automation.html">The silent failure modes that make this list necessary.</a>)</p>
+
+<p>If you want a reference implementation of the state/persistence half of this list, the free MT5 guard is
+<a href="/vigildesk/free.html">here</a> - source included, nothing to install beyond the terminal.</p>
+
+<hr>
+<h2>Related notes</h2><ul>
+<li><a href="/vigildesk/blog/restart-proof-daily-loss-guard.html">Your daily loss limit resets when MetaTrader restarts. Here is the fix.</a></li>
+<li><a href="/vigildesk/blog/memory-plus-expiry-policy.html">Memory plus an expiry policy: what a restarted guard is allowed to assume</a></li>
+<li><a href="/vigildesk/blog/detection-is-not-resolution.html">Detection is not resolution: the gap that makes guards decorative</a></li>
+<li><a href="/vigildesk/blog/decisionless-monitoring.html">Decisionless monitoring: the reports nobody acts on</a></li>
+<li><a href="/vigildesk/blog/what-a-kill-switch-should-do.html">What a kill switch should actually do (and the four ways they fail)</a></li>
+<li><a href="/vigildesk/blog/silent-failures-in-trading-automation.html">Silent failures in trading automation: the three that cost the most</a></li>
+<li><a href="/vigildesk/blog/which-day-is-it-trading-day-boundary.html">Which day is it? Broker time, host time, and the trading-day boundary</a></li>
+</ul>
+<h2>Risk disclosure</h2>
+<p>Algorithmic trading carries both technical and market risk. No tool eliminates the possibility of loss. Nothing on
+this page is investment advice, and no performance is implied or promised.</p>
+</article></main>
+<footer class="site-footer"><p>&copy; 2026 VigilDesk &middot; <a href="/vigildesk/legal.html">Legal</a></p></footer>
+</body></html>
