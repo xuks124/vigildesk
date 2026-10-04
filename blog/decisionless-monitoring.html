@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decisionless monitoring: the reports nobody acts on | VigilDesk</title><meta name="description" content="Most alert noise is not wrong, it is decisionless. If a report changes no decision it belongs on a dashboard, not in an inbox - and the two error types must be measured apart, never averaged together.">
+<link rel="canonical" href="https://xuks124.github.io/vigildesk/blog/decisionless-monitoring.html">
+<meta property="og:title" content="Decisionless monitoring: the reports nobody acts on"><meta property="og:description" content="Most alert noise is not wrong, it is decisionless. If a report changes no decision it belongs on a dashboard, not in an inbox - and the two error types must be measured apart, never averaged together.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://xuks124.github.io/vigildesk/blog/decisionless-monitoring.html">
+<link rel="stylesheet" href="/vigildesk/style.css"><link rel="stylesheet" href="/vigildesk/docs.css">
+</head><body>
+<header class="site-header"><nav>
+<a href="/vigildesk/">VigilDesk</a><a href="/vigildesk/faq.html">FAQ</a><a href="/vigildesk/tutorial.html">Tutorial</a>
+<a href="/vigildesk/free.html">Free build</a><a href="/vigildesk/pricing.html">Pricing</a><a href="/vigildesk/blog/">Blog</a>
+</nav></header>
+<main class="doc"><article>
+<h1>Decisionless monitoring: the reports nobody acts on</h1><p class="meta">VigilDesk engineering notes</p>
+
+<p>A monitoring system that reports everything is indistinguishable from one that reports nothing: both train the
+reader to stop reading. The interesting question is not "how accurate are our alerts" but <strong>"what decision does
+this report change?"</strong></p>
+
+<h2>Decisionless is not the same as wrong</h2>
+<p>When a team deletes most of its reports, the removed ones are usually not false - they are <em>decisionless</em>.
+Nothing anyone would do differently depended on them. That is a different and much more fixable property than accuracy:
+a false report can be argued about, a decisionless one can simply be moved to a dashboard.</p>
+<p>The test is one sentence long: <strong>if this arrives and I do nothing, what have I lost?</strong> If the answer is
+"nothing", it is not an alert.</p>
+
+<h2>The two error types must be measured apart</h2>
+<table>
+<thead><tr><th>Error</th><th>Cost in trading</th><th>Cost on call</th></tr></thead>
+<tbody>
+<tr><td>Missed event (false negative)</td><td>Direct, sometimes terminal</td><td>Depends entirely on the event</td></tr>
+<tr><td>Useless page (false positive)</td><td>Annoying, cheap</td><td>Expensive - it trains people to ignore the channel the real event will use</td></tr>
+</tbody>
+</table>
+<p>Same system, opposite optimisation. Averaging the two into a single "precision" number hides which one you are
+trading away, which is why an alerting setup can look well-tuned while being useless in both directions at once.</p>
+
+<h2>The metric that actually describes protection</h2>
+<p>Not alert volume. Not detection latency. The number that corresponds to the thing you were buying is:</p>
+<blockquote><p><strong>After a real breach, how long until the behaviour actually changes?</strong></p></blockquote>
+<p>Time-to-detect is an engineering metric that is easy to instrument. Time-to-effect requires staging a real breach and
+timing the outcome - which is exactly why it is usually missing, and exactly why adding alerts feels like progress while
+protection does not move. If you only measure the first, you will look well-instrumented right up until the review.</p>
+
+<h2>Three questions to ask of any report</h2>
+<ol>
+<li><strong>What decision does this change?</strong> None -> dashboard, not an inbox.</li>
+<li><strong>If it is wrong in each direction, what does each cost?</strong> If you cannot answer separately, you cannot
+tune it.</li>
+<li><strong>Is it on the path that can act?</strong> A signal that no component consults is a log line with a
+notification attached.</li>
+</ol>
+
+<p>The pattern behind all of this is the same one that turns risk guards into decoration: something that
+<em>looks</em> like protection, occupies the attention that protection would need, and does not sit on the path where
+the decision is actually made.</p>
+
+<hr>
+<h2>Related notes</h2><ul>
+<li><a href="/vigildesk/blog/restart-proof-daily-loss-guard.html">Your daily loss limit resets when MetaTrader restarts. Here is the fix.</a></li>
+<li><a href="/vigildesk/blog/memory-plus-expiry-policy.html">Memory plus an expiry policy: what a restarted guard is allowed to assume</a></li>
+<li><a href="/vigildesk/blog/detection-is-not-resolution.html">Detection is not resolution: the gap that makes guards decorative</a></li>
+<li><a href="/vigildesk/blog/what-a-kill-switch-should-do.html">What a kill switch should actually do (and the four ways they fail)</a></li>
+<li><a href="/vigildesk/blog/silent-failures-in-trading-automation.html">Silent failures in trading automation: the three that cost the most</a></li>
+<li><a href="/vigildesk/blog/which-day-is-it-trading-day-boundary.html">Which day is it? Broker time, host time, and the trading-day boundary</a></li>
+</ul>
+<h2>Get the guard</h2>
+<p>Free MT5 daily-loss guard, source included: <a href="/vigildesk/free.html">https://xuks124.github.io/vigildesk/free.html</a></p>
+<h2>Risk disclosure</h2>
+<p>Algorithmic trading carries both technical and market risk. No tool eliminates the possibility of loss. Nothing on
+this page is investment advice, and no performance is implied or promised.</p>
+</article></main>
+<footer class="site-footer"><p>&copy; 2026 VigilDesk &middot; <a href="/vigildesk/legal.html">Legal</a></p></footer>
+</body></html>
