@@ -182,6 +182,12 @@
 <p>An in-terminal guard can enforce a daily loss cap and a per-trade risk budget, and it should. It cannot restart a dead terminal, watch five accounts from one screen, or review an order before your strategy sends it — those need to live outside MetaTrader. Knowing which failure modes belong to which layer is most of the work; the code above is the easy part.</p>
 <p>Persist the state, use the broker&#x27;s day, and write it after the decision. Those three lines of discipline are the difference between a risk limit and a wish.</p>
 <hr>
+<h2>Related notes</h2>
+<ul>
+<li><a href="/vigildesk/blog/what-a-kill-switch-should-do.html">What a kill switch should actually do (and the four ways they fail)</a></li>
+<li><a href="/vigildesk/blog/silent-failures-in-trading-automation.html">Silent failures in trading automation: the three that cost the most</a></li>
+<li><a href="/vigildesk/blog/which-day-is-it-trading-day-boundary.html">Which day is it? Broker time, host time, and the trading-day boundary</a></li>
+</ul>
 <h2>Get the guard</h2>
 <p>The free, restart-proof MT5 guard EA (source included, no DLLs, no external calls):
 <a href="https://xuks124.github.io/vigildesk/free.html">https://xuks124.github.io/vigildesk/free.html</a></p>
