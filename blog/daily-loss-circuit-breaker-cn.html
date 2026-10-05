@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>MT5 EA 日亏损熔断器：重启后失效，和把单子全部拦死的死锁 | VigilDesk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="给 MT5 EA 写日亏损上限/熔断的人，大概率踩过这三个坑：状态随重启清零、止损下限高于上限的数学死锁（真实案例 87,324 次拒单）、放宽止损后又被资金门二次拦截。含验证方法与修复思路。">
+<link rel="canonical" href="https://xuks124.github.io/vigildesk/blog/daily-loss-circuit-breaker-cn.html">
+<meta property="og:title" content="MT5 EA 日亏损熔断器：重启后失效，和把单子全部拦死的死锁">
+<meta property="og:description" content="三个真实踩过的坑：状态随重启清零、止损地板高于天花板的数学死锁、宽止损单被资金门二次拦截。附验证方法。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://xuks124.github.io/vigildesk/blog/daily-loss-circuit-breaker-cn.html">
+<link rel="stylesheet" href="/vigildesk/style.css"><link rel="stylesheet" href="/vigildesk/docs.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "MT5 EA 日亏损熔断器：重启后失效，和把单子全部拦死的死锁", "description": "状态随重启清零、止损地板高于天花板、宽止损被资金门二次拦截——三个真实案例。", "url": "https://xuks124.github.io/vigildesk/blog/daily-loss-circuit-breaker-cn.html", "author": {"@type": "Organization", "name": "VigilDesk", "url": "https://xuks124.github.io/vigildesk/"}, "publisher": {"@type": "Organization", "name": "VigilDesk", "url": "https://xuks124.github.io/vigildesk/"}, "inLanguage": "zh-CN"}</script>
+</head><body>
+<header class="site-header"><nav><a href="/vigildesk/zh.html">VigilDesk</a><a href="/vigildesk/free.html">免费工具</a><a href="/vigildesk/blog/">技术笔记</a><a href="/vigildesk/faq-zh.html">常见问题</a><a href="/vigildesk/buy-cn.html">购买</a></nav></header>
+<main class="doc">
+
+<h1>MT5 EA 的日亏损熔断器：重启后失效，和把单子全部拦死的死锁</h1>
+<p class="doc-meta">VigilDesk 团队 · 2026-10-05 · 阅读约 6 分钟</p>
+
+<p>给 MT5 EA 写"日亏损上限"的人，多半以为难点在怎么算亏损。真正难的是：它<strong>看起来一直正常工作，直到出事那天才发现它没工作</strong>。下面三个坑，都是我们在真实环境里踩过、并且有日志证据的。</p>
+
+<h2>坑一：重启，把你的限额清零</h2>
+<p>最常见的实现是模块变量：<code>double today_pnl = 0</code>。它在以下任何一件事发生时归零：终端重启、EA 重编译、切换图表、加载配置。<code>OnInit()</code> 一跑，"硬性日损帽"就变回了一个摆设——而且通常发生在最需要它的那几天（行情坏的时候，崩溃和重启也最频繁）。</p>
+<p>真正需要持久化的只有三样：<strong>交易日戳、日起始余额、封锁标志</strong>。注意交易日要取<strong>券商时间</strong>（<code>TimeTradeServer()</code>），用本地时间会在券商的交易日中途把限额重置；拿最后一根 tick 的时间（<code>TimeCurrent()</code>）在行情清淡时又可能滞后。写入时机也要讲究：<strong>先写状态、再放行订单</strong>——崩溃如果卡在两行之间，就是开了个后门。</p>
+
+<h2>坑二：止损的"地板"比"天花板"还高（数学死锁）</h2>
+<p>这是今天（2026-10-05）刚在生产环境抓到的案例。我们的止损下限取了三个因子的最大值：</p>
+<pre>SL = max(1.2×ATR, 结构位 + 0.3×ATR, 0.5×近15根振幅, 3×点差)</pre>
+<p>上限是另一个公式：<code>max(3×ATR, 0.7×区间宽 + 0.4×ATR)</code>。当行情剧烈时：</p>
+<pre>振幅地板 = 0.5 × 32.5 = 16.26
+上限     = max(3×2.26, 0.7×8.68+0.4×2.26) = 6.77
+16.26 &gt; 6.77 → 该区间每一个信号数学性必拒</pre>
+<p>后果不是"少赚一笔"，是<strong>同一个信号被逐 tick 反复拒绝</strong>——日志里累计 <strong>87,324 次</strong>这种"白拒"，而每一条看起来都像"风控规则在正常工作"。历史数据里，上一次这个死锁花了 6,117 次拒单才换来 1 笔成交；这次谁都没发现，因为没人会去数日志行数。</p>
+<p>修复原则：把<strong>地板的那一项也纳入上限</strong>（留容差倍数），并保持"越界过深仍可拒绝"的本意。仅这一改，上限从 6.77 抬到 17.40，死锁解除。</p>
+
+<h2>坑三：放宽止损后，第二道门又把它拦了</h2>
+<p>还有一道容易漏掉的门：单笔风险预算（余额 × 0.5%）。止损距离从 6 变成 17 之后，如果手数不变，<code>SL × 手数 × 100</code> 会超过预算，单子又在下一道门被静默丢弃——你刚修好第一道门，第二道门马上复活同样的死锁。</p>
+<p>正确的接法是把预算<strong>反推成手数</strong>：<code>手数 = 预算 / (SL × 100)</code>（按 0.01 手取整、最低 0.01）。止损变宽只意味着仓位变小，<strong>单笔美元风险一分不变</strong>。这是"宽止损"和"高风险"之间唯一不撒谎的连接方式。</p>
+
+<h2>怎么验证你的熔断器是真的</h2>
+<p>别用回测验证，用这十分钟的实弹测试：</p>
+<ol>
+<li>把日损帽调小到几分钟就能触发；</li>
+<li>让它触发，此时 EA 应拒绝开新仓；</li>
+<li><strong>杀掉整个终端</strong>（不是只移除 EA），留一个持仓；</li>
+<li>重启后，尝试再开一单。</li>
+<li>如果新进程痛快地下了单——你的状态在内存里，熔断器是装饰品。</li>
+</ol>
+<p>我们见过付费 EA 挂在这一关上。这个测试没有替代品。</p>
+
+<h2>顺带：还有一个杀不死的坑</h2>
+<p>EA 拦不住别的 EA。你自己的策略可以直接在下单前查一个共享标志，但你无法阻止同一账户上另一个程序（或网页端手动单）去开仓。要真正"账户级"的防护，熔断逻辑必须有一部分活在终端之外——这属于另一个层面的工程问题，值得单独写一篇。</p>
+
+<hr>
+<p>VigilDesk 免费版（Watchdog Lite）做的就是上面这些：进程守护、崩溃自启、状态在重启之间存活。源码级的实现细节见我们的 <a href="/vigildesk/free.html">免费工具页</a>，英文长文见 <a href="/vigildesk/blog/restart-proof-daily-loss-guard.html">Your daily loss limit resets when MetaTrader restarts</a>。</p>
+
+</main>
+<footer class="site-footer"><p>&copy; 2026 VigilDesk · <a href="/vigildesk/zh.html">首页</a> · <a href="/vigildesk/legal.html">条款</a></p></footer>
+</body></html>
