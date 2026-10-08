@@ -4,6 +4,8 @@
 <link rel="stylesheet" href="/vigildesk/style.css"></head><body>
 <header class="site-header"><nav><a href="/vigildesk/">VigilDesk</a><a href="/vigildesk/faq.html">FAQ</a><a href="/vigildesk/free.html">Free build</a></nav></header>
 <main class="doc"><h1>Engineering notes</h1><ul>
+<li><a href="/vigildesk/blog/log-spam-and-reason-labels-cn.html">日志骗了你两次：MT5 EA 的刷屏日志与说谎的平仓原因字段</a> &mdash; 两组真实数字：191,717 行日志里只有 0.002% 有信息量；reason=server_sl 的 127 笔平仓里有 35 笔是盈利单（合计 +766.23）。附四步日志节流与双字段修复。</li>
+
 <li><a href="/vigildesk/blog/daily-loss-circuit-breaker-cn.html">MT5 EA 日亏损熔断器：重启后失效，和把单子全部拦死的死锁</a> &mdash; 三个真实踩过的坑：状态随重启清零、止损地板高于天花板、宽止损被资金门二次拦截。附实弹验证方法。</li>
 
 <li><a href="/vigildesk/blog/restart-proof-daily-loss-guard.html">Your daily loss limit resets when MetaTrader restarts. Here is the fix.</a> &mdash; why in-terminal guards lose their state, and how to make one that survives a restart.</li>
