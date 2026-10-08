@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>日志骗了你两次：MT5 EA 的刷屏日志与说谎的平仓原因字段 | VigilDesk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="来自一个真实 MT5 EA 的两组数字：18.1 MB / 191,717 行日志里，真正有信息量的只有 0.002%；账本里 127 笔 reason=server_sl 的平仓，有 35 笔其实是赚钱的。附两个可直接照做的修复。">
+<link rel="canonical" href="https://xuks124.github.io/vigildesk/blog/log-spam-and-reason-labels-cn.html">
+<meta property="og:title" content="日志骗了你两次：MT5 EA 的刷屏日志与说谎的平仓原因字段">
+<meta property="og:description" content="191,717 行日志里只有 3 行是真相；127 笔"被止损"里 35 笔是盈利单。两个真实数字与两个修复。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://xuks124.github.io/vigildesk/blog/log-spam-and-reason-labels-cn.html">
+<link rel="stylesheet" href="/vigildesk/style.css"><link rel="stylesheet" href="/vigildesk/docs.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "日志骗了你两次：MT5 EA 的刷屏日志与说谎的平仓原因字段", "description": "191,717 行日志里只有 0.002% 有信息量；reason=server_sl 的平仓里 28% 是盈利单——两个真实数字与两个修复。", "url": "https://xuks124.github.io/vigildesk/blog/log-spam-and-reason-labels-cn.html", "author": {"@type": "Organization", "name": "VigilDesk", "url": "https://xuks124.github.io/vigildesk/"}, "publisher": {"@type": "Organization", "name": "VigilDesk", "url": "https://xuks124.github.io/vigildesk/"}, "inLanguage": "zh-CN"}</script>
+</head><body>
+<header class="site-header"><nav><a href="/vigildesk/zh.html">VigilDesk</a><a href="/vigildesk/free.html">免费工具</a><a href="/vigildesk/blog/">技术笔记</a><a href="/vigildesk/faq-zh.html">常见问题</a><a href="/vigildesk/buy-cn.html">购买</a></nav></header>
+<main class="doc">
+
+<h1>日志骗了你两次：MT5 EA 的刷屏日志与说谎的平仓原因字段</h1>
+<p class="doc-meta">VigilDesk 团队 · 2026-10-08 · 阅读约 6 分钟</p>
+
+<p>出问题的时候，你打开日志想找一个答案。真正的问题是：<strong>答案要么被冲走了，要么从一开始就写错了</strong>。下面两组数字都来自我们自己在跑的 MT5 EA，不是举例。</p>
+
+<h2>陷阱一：同一行，写了两万次</h2>
+<p>我们的 <code>bot_output.log</code> 当时是 <strong>18.1 MB、191,717 行</strong>，其中不同的行有 33,136 种。听起来信息量很大，直到你按出现次数排一下：</p>
+<pre>10,726 次 (5.59%)  [部分止盈A/B] 下一笔(第2笔) 臂=off
+ 8,584 次 (4.48%)  [部分止盈A/B] 下一笔(第1笔) 臂=on
+ 4,354 次 (2.27%)  [规则] sl_floor_atr(rule_008) 生效:
+                   P1止损尺子超限(23.11&gt;3.0×ATR=8.13)弃单 BUY@4349.30
+──── 前 12 行合计 33,083 行 = 全日志的 17.3%</pre>
+<p>注意第三行：<strong>同一个规则、同一组数字（23.11 &gt; 8.13）、同一个价格</strong>，被记录了 4,354 次。它不是 4,354 个不同的判断，而是同一个判断在每个 tick 被重新算了一遍、又重新说了一遍。真正有信息量的行（余额、日汇总、错误）在同一份日志里只有 <strong>3 行</strong>，占 <strong>0.002%</strong>。</p>
+<p>危害不只是占磁盘。故障发生的那一刻，它的上下文会被随后几万行淹没；更糟的是，<strong>"日志在涨"会让你误以为"系统正常"</strong>——毕竟程序还在说话。</p>
+<p>反过来用才是对的：我们把<strong>日志增长速度</strong>做成了比日志内容更可靠的存活信号。一个独立巡检脚本每 20 秒数一次行数增量，正常应低于 20 行（今天实测 20 秒才 241 字节），而此前的一次死锁期是<strong>每分钟数百行</strong>。故障先从"量"上暴露，再去看"内容"，顺序反了就会迟到。</p>
+<p>可以照做的四件事：</p>
+<ol>
+<li><strong>摘要日志和明细日志分家。</strong>明细按天滚存、只留 7 天；摘要每轮只写一行（余额 / 当日笔数与盈亏 / 本周笔数与盈亏）。</li>
+<li><strong>同一条"消息 + 参数"在时间窗内只写一次</strong>，重复次数写成 <code>×N</code>。上面那 4,354 行会变成 1 行加一个计数。</li>
+<li><strong>规则拒单只记首末与总数</strong>，不要逐 tick 打点——被拒的决策不产生新信息。</li>
+<li><strong>把日志行数增速当探针</strong>：超过阈值就告警，而不是等日志里出现 "ERROR"。</li>
+</ol>
+
+<h2>陷阱二：<code>reason</code> 字段的字面意思不是语义</h2>
+<p>同一套系统的交易账本 <code>trade_ledger.jsonl</code> 有 403 行，其中 185 笔平仓。按平仓原因统计：</p>
+<pre>server_sl   127 笔 (69%)   合计 -277.15   其中盈利 35 笔 (28%)
+time_stop    48 笔 (26%)   合计  +44.99   其中盈利 26 笔 (54%)
+server        5 笔          合计  +14.86
+server_tp     5 笔          合计  +59.78</pre>
+<p>第一行就是坑：<strong>127 笔 "server_sl" 里有 35 笔是赚钱的，这 35 笔合计 +766.23，单笔最大 +88.47</strong>——全账本最大的一笔盈利，原因字段写着"被止损打掉"。如果你照着字段名字统计，你会得到"127 笔止损单"，真相是 92 笔；你会得出"胜率 31%"这种结论，也会去"优化"一个根本不存在的问题（比如认定止损太紧）。</p>
+<p>机制在代码里一目了然：</p>
+<pre>if d.reason == mt5.DEAL_REASON_SL: rsn = "server_sl"</pre>
+<p>它把<strong>服务端的成交流水原因</strong>直接当成了<strong>交易语义</strong>。而服务端只会告诉你"这单是被某个止损单平掉的"，不会区分那个止损单是<strong>最初的亏损止损</strong>，还是<strong>被上移到成本价之上的保本/移动止损</strong>。后者被打掉时，服务端照样报 <code>DEAL_REASON_SL</code>。所以我们账本里 2026-10-07 23:32 那笔卖单，原因写着 <code>server_sl</code>，实际盈亏是 <strong>+59.55（2.39R）</strong>。</p>
+<p>修复很简单，但要改结构：平仓记录里同时存<strong>两个</strong>字段——</p>
+<ul>
+<li><code>server_reason</code>：服务端为什么平（SL / TP / 手动 / 强平），只用于区分"谁动的"；</li>
+<li><code>close_kind</code>：框架自己判定这笔属于哪一类（初始止损 / 保护性止损 / 止盈 / 超时 / 反手）。</li>
+</ul>
+<p>判定的依据不要用原因名，而用事实：止损价相对入场价在盈利侧还是亏损侧、以及盈亏符号。<code>price</code> 和 <code>pnl</code> 不会撒谎，字段名会。</p>
+
+<h2>十分钟自查</h2>
+<p>拉出你自己的账本，统计<strong>原因名与实际盈亏符号不一致</strong>的比例。我们的数字是 <code>server_sl</code> 127 笔里 35 笔不一致（28%），<code>time_stop</code> 48 笔里 26 笔不一致（54%）。<strong>如果你的数字超过 20%，那么你基于日志做过的复盘结论，大概有一半是错的</strong>——而且你会一直不知道，因为日志看上去一直很详细、很努力。</p>
+
+<hr>
+<p>VigilDesk 免费版（Watchdog Lite）做的是这一类"让记录说实话"的活：进程守护、崩溃自启、状态在重启之间存活，并把摘要与明细分开落盘。实现细节见<a href="/vigildesk/free.html">免费工具页</a>；英文长文见 <a href="/vigildesk/blog/restart-proof-daily-loss-guard.html">Your daily loss limit resets when MetaTrader restarts</a>。</p>
+
+</main>
+<footer class="site-footer"><p>&copy; 2026 VigilDesk · <a href="/vigildesk/zh.html">首页</a> · <a href="/vigildesk/legal.html">条款</a></p></footer>
+</body></html>
