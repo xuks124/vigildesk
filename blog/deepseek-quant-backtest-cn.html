@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>用 DeepSeek 做量化回测：为什么你找不到"年化10%"的策略 | VigilDesk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="DeepSeek 量化回测为什么总找不到年化10%的策略？三个统计学原因 + 一个大多数教程不提的判断标准：先看结构（R期望、盈亏比、止盈兑现率），再看收益。附我们自己186笔实盘的统计口径。">
+<link rel="canonical" href="https://xuks124.github.io/vigildesk/blog/deepseek-quant-backtest-cn.html">
+<meta property="og:title" content="用 DeepSeek 做量化回测：为什么你找不到年化10%的策略">
+<meta property="og:description" content="三个统计学原因 + 先看结构再看收益的判断标准，附186笔实盘统计口径。">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="/vigildesk/style.css"><link rel="stylesheet" href="/vigildesk/docs.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "用 DeepSeek 做量化回测：为什么你找不到年化10%的策略", "description": "DeepSeek 量化回测的三个统计学坑与结构优先的判断标准。", "author": {"@type": "Organization", "name": "VigilDesk", "url": "https://xuks124.github.io/vigildesk/"}, "inLanguage": "zh-CN"}</script>
+</head><body>
+<header class="site-header"><nav><a href="/vigildesk/zh.html">VigilDesk</a><a href="/vigildesk/free.html">免费工具</a><a href="/vigildesk/blog/">技术笔记</a><a href="/vigildesk/faq-zh.html">常见问题</a></nav></header>
+<main class="doc">
+
+<h1>用 DeepSeek 做量化回测：为什么你找不到"年化10%"的策略</h1>
+<p class="doc-meta">VigilDesk 团队 · 2026-10-08 · 阅读约 5 分钟</p>
+
+<p>刷到一条很火的视频（"如何用 DeepSeek 搭建量化交易平台"，几百万点赞），评论区里有一条比视频本身更有价值：</p>
+<blockquote>"我试过 deepseek 做回测，因为做了多个策略但找不到一个年化大于 10 个点的，就没有后续了。"</blockquote>
+<p>这是绝大多数人走这条路的真实结局。问题通常不在模型，在<b>你问它的问题和你验收它的标准</b>。这篇把三个统计学的坑说清楚，再给一个我们自己在实盘上用的判断顺序。</p>
+
+<h2>坑一：把"回测好看"当成"策略存在"</h2>
+<p>让模型生成 50 个策略、挨个回测、挑收益最高的——这在统计上是<b>数据挖掘</b>：样本足够多时，随机噪声也能"挖"出年化 20% 的曲线。它的外推期望会向均值塌陷，上实盘第一天就开始回归。正确姿势是先固定一类逻辑（比如突破、均值回归），再做样本外验证：训练段选参数，验证段只跑一次，验证段的数字才是你要相信的数。</p>
+
+<h2>坑二：忽略成本，回测里"赚钱"实盘里"亏手续费"</h2>
+<p>黄金外汇一个来回的点差+手续费看着小，高频信号一年几百次累积起来能吃掉全部毛利。粗算：每笔固定成本 C，年化 20% 的策略若平均单笔利润只有 1.5C，样本一换参数就翻负。先问"每笔期望扣完成本还剩多少"，再问年化。</p>
+
+<h2>坑三：只看收益分布，不看亏损结构</h2>
+<p>"年化 10%"是结果，它由三个更原始的量决定：<b>胜率、盈亏比、以及最大连亏</b>。同样年化 10%，胜率 35%×盈亏比 2.0 和胜率 60%×盈亏比 0.5 是完全不同的两种死法——后者死于一次深回撤，前者死于温水煮。回测报告如果不给这三项和回撤路径，它给你的"年化"是没有地基的。</p>
+
+<h2>我们的判断顺序：先结构，后收益</h2>
+<p>我们在 186 笔实盘上用的口径（每笔按开仓时的止损距离记为 1R）：</p>
+<ol>
+<li><b>R 期望</b>：每笔平均赚几个 R。负数直接杀掉策略，不看年化。</li>
+<li><b>盈亏比</b>（赢均值/亏均值）：目标 ≥1.5，低于 1.2 的结构靠胜率撑不住。</li>
+<li><b>止盈兑现率</b>：设计里 2.5R 的止盈实际有多少笔走到（我们只有 2.7%）——这告诉你"大盈利"是真配置还是摆设。</li>
+<li><b>摸到过多少 R（MFE 分布）</b>：赢单平均摸 2R 却只收 1.1R，说明回吐在吃利润，该修出场而不是换策略。</li>
+<li>以上四项都过了，才轮到年化和夏普。</li>
+</ol>
+<p>把顺序倒过来（先用年化筛），就会出现"找不到年化 10% 的策略"的死循环——因为你不是没找到，是你没有能验证它的框架。</p>
+
+<h2>DeepSeek（和所有 LLM）在这条链里的正确位置</h2>
+<p>它擅长的是：写回测代码、解释统计口径、把复盘日志翻译成假设。它不擅长的：替你决定什么算"过拟合"、替你承担实盘的执行风险。让模型生成候选 + 让统计框架杀掉不合格的 + 让风控在实盘上兜底（日损帽这类熔断），三段各自干各自的，链路才闭环。</p>
+
+<hr>
+<p>VigilDesk 免费版做的事就是第三段的兜底：进程守护、日损熔断、重启后状态不丢——回测再漂亮，实盘没有这层，一笔意外就能推翻全部。见 <a href="/vigildesk/free.html">免费工具页</a>，我们 186 笔实盘的完整结构分析见 <a href="/vigildesk/blog/daily-loss-circuit-breaker-cn.html">日亏损熔断器一文</a>。</p>
+
+</main>
+<footer class="site-footer"><p>&copy; 2026 VigilDesk · <a href="/vigildesk/zh.html">首页</a></p></footer>
+</body></html>
