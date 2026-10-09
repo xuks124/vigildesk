@@ -6,7 +6,7 @@
 
 **A local-first safety layer for algorithmic traders.** Kill-switch, hard risk caps, circuit breakers and an audit log that survives terminal restarts — running on your machine, with account data that never leaves it.
 
-[🌐 Website](https://xuks124.github.io/vigildesk/) · [📖 Docs & FAQ](https://xuks124.github.io/vigildesk/faq.html) · [⬇️ Download](https://xuks124.github.io/vigildesk/free.html) · [💳 Pricing](https://xuks124.github.io/vigildesk/pricing.html) · [🎬 Demo](assets/vigildesk-demo.mp4)
+[🌐 Website](https://xuks124.github.io/vigildesk/) · [📖 Docs & FAQ](https://xuks124.github.io/vigildesk/faq.html) · [⬇️ Download](https://xuks124.github.io/vigildesk/free.html) · [💳 Pricing](https://xuks124.github.io/vigildesk/pricing.html) · [🎬 Demo](assets/vigildesk-demo.mp4) · [🧾 Risk proof](https://xuks124.github.io/vigildesk/proof/)
 
 ---
 
@@ -15,6 +15,10 @@
 I build strategy scripts to automate the boring parts. The lesson that shaped this project came from a reconnect: **the script logged an error, and my order was still live.**
 
 That incident moved my focus from *"make the strategy smarter"* to *"make failure recoverable."* VigilDesk is the result — a watchdog that halts first and diagnoses later, because in trading the two seconds after a failure are the only ones that matter.
+
+**In plain words:** your strategy decides what to trade; this decides when to stop. It sits next to your setup, watches the account, and hits the brake when something looks wrong — a dropped connection, an order that outlived the script that placed it, a limit that is being exceeded.
+
+**Why you can believe that it works:** because we publish the times it did not. Two of them were ours and they were ugly — a daily loss limit we configured at $50 that our own code silently overwrote with ~$142 (it never fired, and 5 of 42 trading days closed below the limit we believed in), and a restart path that dropped one field and permanently disabled the trailing stop for every adopted position. Dates, numbers and root causes are in **[WHY.md](WHY.md)**.
 
 ## Features
 
@@ -57,6 +61,7 @@ A minimal, restart-proof daily-loss guard that does the single most important jo
 
 Notes from building this, written for anyone who has to make trading automation fail safely:
 
+- [Our code silently replaced our own $50 daily loss limit with $142](https://dev.to/xuks124/our-code-silently-replaced-our-own-50-daily-loss-limit-with-142-226k) — the cap that never armed, and how we found it by comparing what we configured against what actually happened.
 - [Your daily loss limit resets when MetaTrader restarts. Here is the fix.](https://xuks124.github.io/vigildesk/blog/restart-proof-daily-loss-guard.html) — why in-terminal guards lose their state, and how to make one that survives a restart.
 - [Is your guard real or decorative? A checklist](https://xuks124.github.io/vigildesk/blog/is-your-guard-real-or-decorative.html) — twelve questions that separate a guard from a decoration.
 - [Memory plus an expiry policy: what a restarted guard is allowed to assume](https://xuks124.github.io/vigildesk/blog/memory-plus-expiry-policy.html) — the hard half of persistence is the assumptions, not the serialisation.
@@ -69,6 +74,7 @@ Notes from building this, written for anyone who has to make trading automation 
 
 ## Documentation
 
+- [Why we build this](WHY.md) · [Risk proof page](https://xuks124.github.io/vigildesk/proof/)
 - [FAQ](https://xuks124.github.io/vigildesk/faq.html) · [Tutorial](https://xuks124.github.io/vigildesk/tutorial.html) · [Prop-firm mode](https://xuks124.github.io/vigildesk/propfirm.html)
 - [Security & privacy](https://xuks124.github.io/vigildesk/security.html) · [Legal](https://xuks124.github.io/vigildesk/legal.html)
 - [中文主页](https://xuks124.github.io/vigildesk/zh.html)
