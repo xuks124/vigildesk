@@ -26,7 +26,9 @@ Result: across **42 trading days**, **5 days closed below the limit we believed 
 
 The fix: when a rule and a default disagree, take the stricter one — a rule may tighten the cap, never loosen it.
 
-**In plain numbers:** this account is **down −5.07% overall** (−$506.65 on a $10,000 deposit, MT5 server records, 2026-10-08). Finding that bug did not make it profitable, and we are not claiming otherwise. The account was losing while the guard was off — which is exactly why the guard being off mattered.
+**In plain numbers:** on MT5 server records (2026-10-08) the account's realised result is a **net loss of roughly −5% overall** — we publish the share, not the account totals. Finding that bug did not make it profitable, and we are not claiming otherwise. The account was losing while the guard was off — which is exactly why the guard being off mattered.
+
+**The three numbers we would want to be judged on are bounds, not returns:** worst single trade **−$53.99**, worst single day **1.00% of the deposit**, worst peak-to-trough drawdown of the guarded run **4.855%**. Those measure how bad a bad day can get. There is no return figure on this page to put next to them. **We sell brakes, not engines.**
 
 ### 3. The restart that silently killed the trailing stop
 
@@ -69,7 +71,9 @@ Longer notes on the same theme, including the two incidents above in full:
 
 **为什么做 VigilDesk：** 我们自己的交易自动化在三个地方伤过我们，而三次的共同点是——**表面上一切正常**：①脚本报错但订单还活着、没人管；②我们自己设的 $50 日亏损上限被代码无条件覆盖成约 $142（余额×1.5%），42 个交易日里有 5 天跌破我们以为在生效的那条线，最差一天 −$100.26，而这个上限**一次都没触发过**；③重启接管持仓时漏传了一个字段，导致追踪止损对恢复后的持仓**永久失效**——进程活着、仓位在、日志干净。
 
-这个账户本身是亏的：**入金 10,000 美元，现余额 9,493.35，累计 −5.07%**（MT5 服务端记录，2026-10-08）。找到这个 bug 并没有让它变成盈利，我们也不这么宣称——正因为账户在亏，那个失效的风控才格外要命。
+这个账户本身不赚钱：**整体实现结果为约 −5% 的净亏损**（MT5 服务端记录，2026-10-08）——我们只说比例，不列账户金额。找到这个 bug 并没有让它变成盈利，我们也不这么宣称——正因为账户在亏，那个失效的风控才格外要命。
+
+**我们卖的是刹车，不是引擎。** 可以拿来衡量我们的三个边界数字是：最差单笔 **−53.99 美元**、最差单日 **占入金 1.00%**、全程最大回撤 **4.855%**——都是"亏损有边界"的证据，不是收益。如果你直接问我们"这账户赚钱吗"，我们会如实回答：策略部分不赚钱，我们不卖策略。
 
 我们主张：诚实就是产品本身；不卖信号、不卖建议、不代客操作；不做任何收益承诺；**没见它触发过的风控只是假设，不是保护**。数据不出本机。
 
