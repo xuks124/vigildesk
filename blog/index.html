@@ -6,6 +6,8 @@
 <main class="doc"><h1>Engineering notes</h1><ul>
 <li><a href="/vigildesk/blog/deepseek-quant-backtest-cn.html">用 DeepSeek 做量化回测：为什么你找不到「年化10%」的策略</a> &mdash; 三个统计学坑（数据挖掘、成本、亏损结构）+ 先结构后收益的判断顺序，附 186 笔实盘口径。</li>
 
+<li><a href="/vigildesk/blog/sl-distance-bands-cn.html">止损设多远？189 笔实盘分桶后：最危险的是「中间带」</a> &mdash; 六周 189 笔平仓按止损距离分桶：≤1 点 8 笔死 7 笔（平均 -0.93R）；3-6 中间带纯价格止损离场 -287.64、换时间止损 +70.78；全账本前五大盈利单全在 &gt;6 点档，但固定手数让宽止损单笔风险静默翻倍。附风险归一手数公式与分桶自查脚本。</li>
+
 <li><a href="/vigildesk/blog/log-spam-and-reason-labels-cn.html">日志骗了你两次：MT5 EA 的刷屏日志与说谎的平仓原因字段</a> &mdash; 两组真实数字：191,717 行日志里只有 0.002% 有信息量；reason=server_sl 的 127 笔平仓里有 35 笔是盈利单（合计 +766.23）。附四步日志节流与双字段修复。</li>
 
 <li><a href="/vigildesk/blog/daily-loss-circuit-breaker-cn.html">MT5 EA 日亏损熔断器：重启后失效，和把单子全部拦死的死锁</a> &mdash; 三个真实踩过的坑：状态随重启清零、止损地板高于天花板、宽止损被资金门二次拦截。附实弹验证方法。</li>
@@ -19,5 +21,4 @@
 <li><a href="/vigildesk/blog/what-a-kill-switch-should-do.html">What a kill switch should actually do (and the four ways they fail)</a> &mdash; never armed, never disarmed, wrong trigger, wrong clock.</li>
 <li><a href="/vigildesk/blog/silent-failures-in-trading-automation.html">Silent failures in trading automation: the three that cost the most</a> &mdash; guards that read zero, configs that override code, and state that dies with the process.</li>
 <li><a href="/vigildesk/blog/which-day-is-it-trading-day-boundary.html">Which day is it? Broker time, host time, and the trading-day boundary</a> &mdash; three clocks can disagree, and the failure is silent.</li>
-<li>TEST</li>
 </ul></main><footer class="site-footer"><p>&copy; 2026 VigilDesk</p></footer></body></html>
