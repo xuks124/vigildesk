@@ -45,7 +45,7 @@ ul{padding-left:22px}
 .small{font-size:13.5px;color:var(--mut)}
 footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--mut)}
 </style></head><body><div class="wrap">
-<div class="kicker">Verifiable proof &middot; not a promise</div>
+<div class="kicker">Verifiable proof &middot; not a promise &nbsp;|&nbsp; <a href="zh.html">中文版</a></div>
 <h1>We sell brakes, not engines.</h1>
 <p class="zhline">我们卖的是刹车，不是引擎。</p>
 <p class="lede">VigilDesk is a <strong>risk guard</strong> that sits next to whatever strategy you already trade. It caps what a single trade can cost you, caps what a single day can cost you, and stops you trading when you are tilted. We are not selling returns — we are selling a floor under the bad day. This page proves the one claim we actually make — <strong>losses stay bounded</strong> — using the raw deal history of a real account, including the parts that do not flatter us.</p>
@@ -128,7 +128,7 @@ footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);font-si
 <tr><td>Max concurrent positions</td><td>2</td><td><code>trading_bot.py</code> L168<br><span class="src">MAX_POSITIONS = 2</span></td></tr>
 <tr><td>Cooldown after 3 straight losses</td><td>60 minutes, no entries allowed</td><td><code>trading_bot.py</code> L297<br><span class="src">LOSS_COOLDOWN_MINUTES = 60       # 连亏3笔后冷却1小时禁止开仓</span></td></tr>
 <tr><td>No overnight exposure</td><td>forced flat from 23:45 local</td><td><code>trading_bot.py</code> L221<br><span class="src">NO_OVERNIGHT_MIN = 23 * 60 + 45          # 2026-10-08 老板四指令之一「不做隔夜单」: 23:45后禁开+强平（周末另由调度停机）</span></td></tr>
-<tr><td>Spike-bar filter</td><td>no entry when the signal bar range &gt; 1.5 × ATR</td><td><code>trading_bot.py</code> L218<br><span class="src">SPIKE_BAR_ATR_MULT = 1.5    # 2026-10-08 老板批「改」洞2: 大针不接(信号bar振幅&gt;1.5×ATR)，证据见 D:\backtest\report_fix_exp_202610</span></td></tr>
+<tr><td>Spike-bar filter</td><td>no entry when the signal bar range &gt; 1.5 × ATR</td><td><code>trading_bot.py</code> L218<br><span class="src">SPIKE_BAR_ATR_MULT = 1.5    # 2026-10-08 老板批「改」洞2: 大针不接(…振幅&gt;1.5×ATR)，证据见 D:\backtest\report_fix_exp_202610</span></td></tr>
 </table><p class="small">11 of the 18 rules in the rule store are active; the inactive ones are listed too, and the guard's own rule-audit sweeps for rules that are configured but never fire. That sweep is how the $50 bug above was supposed to be caught — and, eventually, how it was. <span class="src">[Source: MT5 deal history, Exness-MT5Trial5 account 277705107, as of 2026-10-08; rule store: D:\trading_review\experience_store.json, version field + enabled flags]</span></p></div>
 <h2>5. How to check every number on this page yourself</h2>
 <div class="card">
