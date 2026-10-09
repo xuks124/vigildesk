@@ -3,7 +3,9 @@
 <meta name="description" content="Notes on making trading automation failure-recoverable.">
 <link rel="stylesheet" href="/vigildesk/style.css"></head><body>
 <header class="site-header"><nav><a href="/vigildesk/">VigilDesk</a><a href="/vigildesk/faq.html">FAQ</a><a href="/vigildesk/free.html">Free build</a></nav></header>
-<main class="doc"><h1>Engineering notes</h1><ul>
+<main class="doc"><h1>Engineering notes</h1>
+<p style="background:#eef4ff;border-radius:10px;padding:12px 14px"><strong>中文内容入口（我们自己踩过的坑 · 4 篇）</strong>：<a href="/vigildesk/blog/zh.html">我们卖的是刹车，不是引擎 —— 中文博客</a>&nbsp;｜&nbsp;<a href="/vigildesk/proof/zh.html">证明页（中文）</a></p>
+<ul>
 <li><a href="/vigildesk/blog/deepseek-quant-backtest-cn.html">用 DeepSeek 做量化回测：为什么你找不到「年化10%」的策略</a> &mdash; 三个统计学坑（数据挖掘、成本、亏损结构）+ 先结构后收益的判断顺序，附 186 笔实盘口径。</li>
 
 <li><a href="/vigildesk/blog/sl-distance-bands-cn.html">止损设多远？189 笔实盘分桶后：最危险的是「中间带」</a> &mdash; 六周 189 笔平仓按止损距离分桶：≤1 点 8 笔死 7 笔（平均 -0.93R）；3-6 中间带纯价格止损离场 -287.64、换时间止损 +70.78；全账本前五大盈利单全在 &gt;6 点档，但固定手数让宽止损单笔风险静默翻倍。附风险归一手数公式与分桶自查脚本。</li>
