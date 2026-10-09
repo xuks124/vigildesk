@@ -1,0 +1,160 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VigilDesk — 我们卖的是刹车，不是引擎（可复核的风控证明，原始 MT5 成交数据）</title>
+<style>
+:root{--ink:#151b23;--mut:#5a6672;--line:#e3e8ee;--bg:#fbfcfd;--acc:#1f6feb;--ok:#2f9e5f;--bad:#d5453f;--warn:#b8860b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:40px 22px 80px}
+h1{font-size:34px;line-height:1.22;margin:0 0 10px;letter-spacing:-.5px}
+h2{font-size:23px;margin:52px 0 14px;letter-spacing:-.2px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+h3{font-size:17px;margin:30px 0 10px}
+p,li{color:#22292f}
+.lede{font-size:19px;color:var(--mut);margin:0 0 26px}
+.kicker{display:inline-block;background:#eef4ff;color:var(--acc);font-weight:700;font-size:12.5px;
+ letter-spacing:.9px;text-transform:uppercase;padding:5px 11px;border-radius:99px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.not{background:#fff6f5;border-color:#f4cfcc}
+.is{background:#f4fbf6;border-color:#cbe8d5}
+table{width:100%;border-collapse:collapse;margin:10px 0 6px;font-size:15px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--mut);font-weight:700}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.src{display:block;font-size:11.5px;color:#8b95a1;font-weight:400;letter-spacing:.1px;text-transform:none}
+.big{font-size:30px;font-weight:800;letter-spacing:-.6px;line-height:1.1}
+.bad{color:var(--bad)}.ok{color:var(--ok)}.mut{color:var(--mut)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+.kpis.k3{grid-template-columns:repeat(3,1fr)}
+.zhline{font-size:15px;color:#8b95a1;margin:-4px 0 22px;letter-spacing:.2px}
+@media(max-width:720px){.kpis{grid-template-columns:repeat(2,1fr)}.kpis.k3{grid-template-columns:1fr}}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.kpi .lab{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.6px;font-weight:700;margin-bottom:6px}
+.kpi .src{margin-top:7px}
+pre{background:#0f1720;color:#dbe4ee;padding:14px 16px;border-radius:9px;overflow-x:auto;font-size:13px;line-height:1.5}
+code{background:#eef1f5;padding:1.5px 5px;border-radius:4px;font-size:13.5px}
+pre code{background:none;padding:0;color:inherit}
+blockquote{margin:14px 0;padding:12px 16px;border-left:4px solid var(--acc);background:#f2f7ff;border-radius:0 8px 8px 0}
+.fig{margin:22px 0 8px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px 4px}
+.cap{font-size:13px;color:var(--mut);margin:4px 2px 10px;line-height:1.5}
+.warn{background:#fffaf0;border:1px solid #f0dcae;border-radius:12px;padding:20px 22px;margin:18px 0}
+.hr{height:1px;background:var(--line);margin:40px 0}
+ul{padding-left:22px}
+.small{font-size:13.5px;color:var(--mut)}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--mut)}
+</style></head><body><div class="wrap">
+<div class="kicker">可核对的证明 &middot; 不是承诺 &nbsp;|&nbsp; <a href="index.html">English version</a></div>
+<h1>我们卖的是刹车，不是引擎。</h1>
+<p class="zhline">We sell brakes, not engines.</p>
+<p class="lede">VigilDesk 是一层<strong>风险护栏</strong>，它贴在你已经在用的那套策略旁边。它管住三件事：一笔单子最多能让你亏多少、一天最多能让你亏多少、以及你上头的时候不让你继续下单。我们卖的<strong>不是收益</strong>，是"糟糕的那一天"底下垫的那层地板。这一页用一个真实账户的原始成交记录，来证明我们唯一敢说的那句话——<strong>亏损是有边界的</strong>——包括那些不替我们说好话的部分。</p>
+<div class="card"><table><tr><th style="width:52%">VigilDesk 是什么</th><th>它<span class="bad">不是</span>什么</th></tr><tr><td>一层护栏：硬性风险上限、急停开关、熔断器、重启也丢不掉的审计日志。</td><td><strong>不是策略。</strong>我们不告诉你什么时候买、什么时候卖。</td></tr><tr><td><em>并列</em>运行在你现有的 MT5 / Python 策略旁边——你的策略或我们的策略都行。</td><td><strong>不提供任何交易指令。</strong>不喊单、不给可照抄的操作建议。</td></tr><tr><td>它的任务是让糟糕的一天活得过去，不是让每一天都变成红的（赚钱的意思）。</td><td><strong>不承诺收益。</strong>我们不宣称命中率、不宣称回报率、不宣称你能赚到钱。</td></tr></table></div>
+<h2>1. 我们的主张，就用三个数字说</h2>
+<p>VigilDesk 不承诺你能赚到钱。它承诺的是：你的亏损待在一个你看得见、查得到的边界里面。下面是这个边界，量的是真跑在这套护栏下的那个系统——336 笔已平仓交易，全部取自原始成交记录：</p>
+<div class="kpis k3">
+<div class="kpi"><div class="lab">最差单笔亏损</div><div class="big bad">$-53.99</div><span class="src">[来源：MT5 成交记录，Exness-MT5Trial5 账户 277705107，截至 2026-10-08；336 笔中有 191 笔亏损；magic 250804]</span></div>
+<div class="kpi"><div class="lab">最差单日亏损</div><div class="big bad">入金的 1.00%</div><span class="src">[来源：MT5 成交记录，Exness-MT5Trial5 账户 277705107，截至 2026-10-08；2026-09-22，即 $-100.26；按机器人本地日（UTC+8）]</span></div>
+<div class="kpi"><div class="lab">整个过程的最大回撤</div><div class="big bad">4.855%</div><span class="src">[来源：MT5 成交记录，Exness-MT5Trial5 账户 277705107，截至 2026-10-08；已实现盈亏的峰到谷，最深点在 2026-09-28 02:00:07]</span></div>
+</div>
+<p class="small">刹车就是用这几个数字做的。它们<strong>不是收益</strong>，这一页也不含任何收益数据——不含胜率、不含盈利曲线、不含任何预测。下面全部内容，都是为上面这三个数字提供证据，包括我们自己记录里那些不光彩的部分。 <span class="src">[来源：MT5 成交记录，Exness-MT5Trial5 账户 277705107，截至 2026-10-08]</span></p>
+<h2>2. 这三个数字背后的证据</h2>
+<p>三条边界，全部量自同一份 336 笔的成交记录，每一条都能从原始成交里重新算出来。</p>
+<div class="card"><h3 style="margin-top:0">边界一 —— 一笔单子不可能悄悄变成一场灾难</h3>
+<table><tr><th>对 191 笔亏损单的度量</th><th class="n">数值</th><th>说明</th></tr>
+<tr><td>最差单笔亏损</td><td class="n bad">$-53.99</td><td><span class="src">[来源：MT5 成交记录，Exness-MT5Trial5 账户 277705107，截至 2026-10-08]</span></td></tr>
+<tr><td>亏损中位数</td><td class="n">$-9.94</td><td>一半的亏损比这个数还小。 <span class="src">[来源：同上]</span></td></tr>
+<tr><td>亏损的第 90 百分位</td><td class="n">$-23.36</td><td>只有 10% 的亏损比它更差。 <span class="src">[来源：同上]</span></td></tr>
+<tr><td>亏损超过 $50 的笔数</td><td class="n">1</td><td>191 笔亏损里的 1 笔。 <span class="src">[来源：同上]</span></td></tr>
+<tr><td>亏损超过 $100 的笔数</td><td class="n ok">0</td><td>一笔都没有。从来没有。 <span class="src">[来源：同上]</span></td></tr>
+</table>
+<p class="small">护栏给每一笔单子按"单笔风险预算 <strong>$47.47</strong>"定仓位——即余额的 <code>RISK_PER_TRADE_PCT = 0.005</code>（0.5%），见 <code>trading_bot.py</code> 第 319 行。实测最差亏损（$-53.99）与该预算加上滑点相吻合。 <span class="src">[来源：MT5 成交记录，账户 277705107，截至 2026-10-08；常量直接读自源码，不是抄的宣传话术]</span></p>
+<div class="fig"><svg viewBox="0 0 880 240" width="100%" role="img" aria-label="亏损单的分布（美元，已含手续费与隔夜利息）"><line x1="52" y1="30.0" x2="862" y2="30.0" stroke="#e8ecf1"/><text x="45" y="33.5" text-anchor="end" font-size="11" fill="#6b7684">39</text><line x1="52" y1="82.7" x2="862" y2="82.7" stroke="#e8ecf1"/><text x="45" y="86.2" text-anchor="end" font-size="11" fill="#6b7684">26</text><line x1="52" y1="135.3" x2="862" y2="135.3" stroke="#e8ecf1"/><text x="45" y="138.8" text-anchor="end" font-size="11" fill="#6b7684">13</text><line x1="52" y1="188.0" x2="862" y2="188.0" stroke="#e8ecf1"/><text x="45" y="191.5" text-anchor="end" font-size="11" fill="#6b7684">0</text><rect x="53.0" y="54.3" width="55.9" height="133.7" fill="#d5453f" rx="1.5"><title>$-4.01 to $-0.17: 33 trades</title></rect><rect x="110.9" y="46.2" width="55.9" height="141.8" fill="#d5453f" rx="1.5"><title>$-7.86 to $-4.01: 35 trades</title></rect><rect x="168.7" y="30.0" width="55.9" height="158.0" fill="#d5453f" rx="1.5"><title>$-11.70 to $-7.86: 39 trades</title></rect><rect x="226.6" y="70.5" width="55.9" height="117.5" fill="#d5453f" rx="1.5"><title>$-15.55 to $-11.70: 29 trades</title></rect><rect x="284.4" y="111.0" width="55.9" height="77.0" fill="#d5453f" rx="1.5"><title>$-19.39 to $-15.55: 19 trades</title></rect><rect x="342.3" y="123.2" width="55.9" height="64.8" fill="#d5453f" rx="1.5"><title>$-23.24 to $-19.39: 16 trades</title></rect><rect x="400.1" y="171.8" width="55.9" height="16.2" fill="#d5453f" rx="1.5"><title>$-27.08 to $-23.24: 4 trades</title></rect><rect x="458.0" y="163.7" width="55.9" height="24.3" fill="#d5453f" rx="1.5"><title>$-30.92 to $-27.08: 6 trades</title></rect><rect x="515.9" y="183.9" width="55.9" height="4.1" fill="#d5453f" rx="1.5"><title>$-34.77 to $-30.92: 1 trades</title></rect><rect x="573.7" y="167.7" width="55.9" height="20.3" fill="#d5453f" rx="1.5"><title>$-38.61 to $-34.77: 5 trades</title></rect><rect x="631.6" y="179.9" width="55.9" height="8.1" fill="#d5453f" rx="1.5"><title>$-42.46 to $-38.61: 2 trades</title></rect><rect x="689.4" y="183.9" width="55.9" height="4.1" fill="#d5453f" rx="1.5"><title>$-46.30 to $-42.46: 1 trades</title></rect><rect x="747.3" y="188.0" width="55.9" height="0.0" fill="#d5453f" rx="1.5"><title>$-50.15 to $-46.30: 0 trades</title></rect><rect x="805.1" y="183.9" width="55.9" height="4.1" fill="#d5453f" rx="1.5"><title>$-53.99 to $-50.15: 1 trades</title></rect><text x="52.0" y="232" text-anchor="middle" font-size="11" fill="#6b7684">$-0.17</text><text x="457.0" y="232" text-anchor="middle" font-size="11" fill="#6b7684">$-27.08</text><text x="862.0" y="232" text-anchor="middle" font-size="11" fill="#6b7684">$-53.99</text><text x="52" y="18" font-size="12.5" fill="#3d4753" font-weight="600">亏损单的分布（美元，已含手续费与隔夜利息）</text></svg></div><div class="cap">191 笔亏损单全部在这里——左边是亏得最小的，右边是最差的。绝大部分伤害都很小（亏损中位数 $-9.94）；右边那条尾巴几乎是一下子就塌掉了。336 笔里<strong>只有一笔</strong>亏超过 $50，<strong>没有一笔</strong>接近 $100。那条塌掉的尾巴，就是这个产品本身。 <span class="src">[来源：MT5 成交记录，账户 277705107，截至 2026-10-08；按持仓净盈亏]</span></div>
+</div>
+<div class="card"><h3 style="margin-top:0">边界二 —— 一天不可能悄悄变成一场灾难</h3>
+<table><tr><th>每日度量（42 个交易日）</th><th class="n">数值</th><th>说明</th></tr>
+<tr><td>最差单日</td><td class="n bad">$-100.26</td><td>2026-09-22（11 笔）。 <span class="src">[来源：MT5 成交记录，账户 277705107，截至 2026-10-08]</span></td></tr>
+<tr><td>该亏损占账户的比例</td><td class="n">1.00%</td><td>一律按"占入金的比例"给；本页任何地方都不出现账户总额类金额。 <span class="src">[来源：同上]</span></td></tr>
+<tr><td>收盘为负的天数</td><td class="n">42 天里的 21 天</td><td>差不多一半的交易日。 <span class="src">[来源：同上]</span></td></tr>
+<tr><td>最长连续亏损天数</td><td class="n">6 天</td><td>截至 2026-09-25。 <span class="src">[来源：同上]</span></td></tr>
+<tr><td>最长连续亏损笔数</td><td class="n">连亏 12 笔</td><td>截至 2026-09-22 06:00:02。 <span class="src">[来源：同上]</span></td></tr>
+</table>
+<h3>同一条边界，按月份看</h3><table>
+<tr><th>月份</th><th class="n">交易笔数</th><th class="n">交易日</th><th class="n">亏损日</th><th class="n">最差一天</th><th>最差一天的日期</th></tr>
+<tr><td>2026-08</td><td class="n">143</td><td class="n">15</td><td class="n">4</td><td class="n bad">$-81.45</td><td>2026-08-27</td></tr>
+<tr><td>2026-09</td><td class="n">169</td><td class="n">21</td><td class="n">14</td><td class="n bad">$-100.26</td><td>2026-09-22</td></tr>
+<tr><td>2026-10</td><td class="n">24</td><td class="n">6</td><td class="n">3</td><td class="n bad">$-77.68</td><td>2026-10-08</td></tr>
+</table><p class="small">这里只列最差的那几天。我们不公布按月盈利数字——本页按设计就没有这类数据。这里要说的是：<strong>一个月在下跌方向上最多能把你带到哪</strong>。 <span class="src">[来源：MT5 成交记录，账户 277705107，截至 2026-10-08；magic=250804，按机器人本地日（UTC+8）分组]</span></p>
+<p class="small">护栏里有一道"日内亏损熔断"。它实际执行的帽子，取的是两个数字里<strong>更保守的那个</strong>：一个是余额的 <code>DAILY_LOSS_PCT = 0.015</code>（1.5%，见 <code>trading_bot.py</code> 第 320 行），今天等于 <strong>$142.40</strong>；另一个是规则库里那条规则值，为 <strong>$100</strong>。所以今天真正生效的帽子是 <strong>min($142.40, $100) = $100</strong>。请注意有记录以来最差的那一天（2026-09-22 的 $-100.26）落在哪：它基本上正好压在我们现在执行的这条帽子上。 <span class="src">[来源：MT5 成交记录，账户 277705107，截至 2026-10-08；trading_bot.py 第 320 行 + 规则库]</span></p>
+<div class="fig"><svg viewBox="0 0 880 250" width="100%" role="img" aria-label="受护栏系统的亏损日，与现在执行的日损帽（21 个亏损日）"><line x1="52" y1="198.0" x2="862" y2="198.0" stroke="#e8ecf1"/><text x="45" y="201.5" text-anchor="end" font-size="11" fill="#6b7684">$-108</text><line x1="52" y1="156.0" x2="862" y2="156.0" stroke="#e8ecf1"/><text x="45" y="159.5" text-anchor="end" font-size="11" fill="#6b7684">$-79</text><line x1="52" y1="114.0" x2="862" y2="114.0" stroke="#e8ecf1"/><text x="45" y="117.5" text-anchor="end" font-size="11" fill="#6b7684">$-49</text><line x1="52" y1="72.0" x2="862" y2="72.0" stroke="#e8ecf1"/><text x="45" y="75.5" text-anchor="end" font-size="11" fill="#6b7684">$-20</text><line x1="52" y1="30.0" x2="862" y2="30.0" stroke="#e8ecf1"/><text x="45" y="33.5" text-anchor="end" font-size="11" fill="#6b7684">$10</text><rect x="57.4" y="44.2" width="27.8" height="44.9" fill="#d5453f" rx="1.5"><title>08-13: $-31.63</title></rect><rect x="96.0" y="44.2" width="27.8" height="7.0" fill="#d5453f" rx="1.5"><title>08-14: $-4.93</title></rect><rect x="134.5" y="44.2" width="27.8" height="115.7" fill="#d5453f" rx="1.5"><title>08-27: $-81.45</title></rect><rect x="173.1" y="44.2" width="27.8" height="33.2" fill="#d5453f" rx="1.5"><title>08-28: $-23.36</title></rect><rect x="211.7" y="44.2" width="27.8" height="51.9" fill="#d5453f" rx="1.5"><title>09-01: $-36.54</title></rect><rect x="250.3" y="44.2" width="27.8" height="89.3" fill="#d5453f" rx="1.5"><title>09-02: $-62.92</title></rect><rect x="288.8" y="44.2" width="27.8" height="52.0" fill="#d5453f" rx="1.5"><title>09-08: $-36.64</title></rect><rect x="327.4" y="44.2" width="27.8" height="99.8" fill="#d5453f" rx="1.5"><title>09-10: $-70.25</title></rect><rect x="366.0" y="44.2" width="27.8" height="53.9" fill="#d5453f" rx="1.5"><title>09-11: $-37.98</title></rect><rect x="404.5" y="44.2" width="27.8" height="40.3" fill="#d5453f" rx="1.5"><title>09-14: $-28.37</title></rect><rect x="443.1" y="44.2" width="27.8" height="35.0" fill="#d5453f" rx="1.5"><title>09-15: $-24.65</title></rect><rect x="481.7" y="44.2" width="27.8" height="26.5" fill="#d5453f" rx="1.5"><title>09-18: $-18.66</title></rect><rect x="520.3" y="44.2" width="27.8" height="28.6" fill="#d5453f" rx="1.5"><title>09-21: $-20.16</title></rect><rect x="558.8" y="44.2" width="27.8" height="142.4" fill="#d5453f" rx="1.5"><title>09-22: $-100.26</title></rect><rect x="597.4" y="44.2" width="27.8" height="19.4" fill="#d5453f" rx="1.5"><title>09-23: $-13.68</title></rect><rect x="636.0" y="44.2" width="27.8" height="37.2" fill="#d5453f" rx="1.5"><title>09-24: $-26.22</title></rect><rect x="674.5" y="44.2" width="27.8" height="10.0" fill="#d5453f" rx="1.5"><title>09-25: $-7.05</title></rect><rect x="713.1" y="44.2" width="27.8" height="3.1" fill="#d5453f" rx="1.5"><title>09-29: $-2.21</title></rect><rect x="751.7" y="44.2" width="27.8" height="63.6" fill="#d5453f" rx="1.5"><title>10-05: $-44.79</title></rect><rect x="790.3" y="44.2" width="27.8" height="1.1" fill="#d5453f" rx="1.5"><title>10-06: $-0.79</title></rect><rect x="828.8" y="44.2" width="27.8" height="110.3" fill="#d5453f" rx="1.5"><title>10-08: $-77.68</title></rect><line x1="52" y1="186.2" x2="862" y2="186.2" stroke="#1f6feb" stroke-width="1.4" stroke-dasharray="6 4"/><text x="58" y="181.2" font-size="11.5" fill="#1f6feb" font-weight="600">现在执行的日损帽：$-100</text><line x1="52" y1="44.2" x2="862" y2="44.2" stroke="#8b95a1" stroke-width="1.1"/><text x="71.3" y="242" text-anchor="middle" font-size="11" fill="#6b7684">08-13</text><text x="457.0" y="242" text-anchor="middle" font-size="11" fill="#6b7684">09-15</text><text x="842.7" y="242" text-anchor="middle" font-size="11" fill="#6b7684">10-08</text><text x="52" y="18" font-size="12.5" fill="#3d4753" font-weight="600">受护栏系统的亏损日，与现在执行的日损帽（21 个亏损日）</text></svg></div><div class="cap">每一个亏损日，按顺序排开——只画亏损日，并把我们现在执行的日损帽横着拉过去。看两件事：柱子大都离帽子还有距离，而且没有一根柱子穿过去。地板不等于赚钱的一天；地板是"该停就停"的一个亏损日。 <span class="src">[来源：MT5 成交记录，账户 277705107，截至 2026-10-08]</span></div>
+</div>
+<div class="card"><h3 style="margin-top:0">边界三 —— 整个过程也有地板</h3>
+<table><tr><th>对整段运行的度量</th><th class="n">数值</th><th>说明</th></tr>
+<tr><td>已平仓交易</td><td class="n">336 笔</td><td>其中 191 笔收在负数。 <span class="src">[来源：MT5 成交记录，账户 277705107，截至 2026-10-08]</span></td></tr>
+<tr><td>整段运行的峰到谷回撤</td><td class="n bad">入金的 4.855%</td><td>最深点在 2026-09-28 02:00:07。口径是已实现盈亏；我们<strong>不</strong>声称任何净值口径或盘中口径的回撤。 <span class="src">[来源：同上]</span></td></tr>
+<tr><td>亏损分布（191 笔亏损）</td><td class="n">中位 $-9.94</td><td>第 90 百分位 $-23.36；最差单笔 $-53.99。 <span class="src">[来源：同上]</span></td></tr>
+<tr><td>持仓时间中位数</td><td class="n">11.8 分钟</td><td>短是刻意的——这套护栏是为"不持仓过夜"的策略做的。 <span class="src">[来源：同上]</span></td></tr>
+</table>
+<p class="small">336 笔交易，跨 59.0 天，从 2026-08-10 13:55:23 到 2026-10-08 14:36:03（UTC）。 <span class="src">[来源：MT5 成交记录，账户 277705107，截至 2026-10-08]</span></p>
+<div class="fig"><svg viewBox="0 0 880 260" width="100%" role="img" aria-label="相对最高点的回撤（占入金的百分比）"><line x1="52" y1="208.0" x2="862" y2="208.0" stroke="#e8ecf1" stroke-width="1"/><text x="45" y="211.5" text-anchor="end" font-size="11" fill="#6b7684">-0.3%</text><line x1="52" y1="163.5" x2="862" y2="163.5" stroke="#e8ecf1" stroke-width="1"/><text x="45" y="167.0" text-anchor="end" font-size="11" fill="#6b7684">1.1%</text><line x1="52" y1="119.0" x2="862" y2="119.0" stroke="#e8ecf1" stroke-width="1"/><text x="45" y="122.5" text-anchor="end" font-size="11" fill="#6b7684">2.4%</text><line x1="52" y1="74.5" x2="862" y2="74.5" stroke="#e8ecf1" stroke-width="1"/><text x="45" y="78.0" text-anchor="end" font-size="11" fill="#6b7684">3.8%</text><line x1="52" y1="30.0" x2="862" y2="30.0" stroke="#e8ecf1" stroke-width="1"/><text x="45" y="33.5" text-anchor="end" font-size="11" fill="#6b7684">5.1%</text><line x1="52" y1="198.5" x2="862" y2="198.5" stroke="#b9c2cc" stroke-width="1.2" stroke-dasharray="4 3"/><polyline fill="none" stroke="#d5453f" stroke-width="1.9" points="52.0,198.5 54.4,198.5 56.8,191.4 59.2,183.0 61.6,198.5 64.1,198.5 66.5,192.7 68.9,187.8 71.3,189.7 73.7,191.8 76.1,198.5 78.5,198.5 80.9,193.2 83.3,187.5 85.8,185.4 88.2,183.4 90.6,183.4 93.0,178.2 95.4,173.3 97.8,177.0 100.2,177.9 102.6,179.5 105.0,182.7 107.4,169.6 109.9,157.2 112.3,146.9 114.7,139.9 117.1,122.3 119.5,115.6 121.9,147.9 124.3,144.0 126.7,179.3 129.1,174.0 131.6,184.2 134.0,198.5 136.4,188.4 138.8,189.4 141.2,183.3 143.6,171.3 146.0,168.7 148.4,175.1 150.8,182.2 153.2,174.5 155.7,167.1 158.1,160.3 160.5,152.1 162.9,158.7 165.3,176.5 167.7,166.5 170.1,170.5 172.5,174.0 174.9,182.3 177.4,188.8 179.8,195.5 182.2,188.3 184.6,197.1 187.0,198.5 189.4,196.9 191.8,195.5 194.2,198.5 196.6,198.5 199.1,198.5 201.5,198.5 203.9,198.5 206.3,198.5 208.7,193.0 211.1,197.3 213.5,198.5 215.9,198.5 218.3,198.5 220.8,194.3 223.2,197.1 225.6,198.5 228.0,195.3 230.4,193.9 232.8,192.6 235.2,185.1 237.6,177.6 240.0,180.0 242.4,185.9 244.9,182.6 247.3,189.1 249.7,197.6 252.1,198.5 254.5,196.3 256.9,198.5 259.3,196.8 261.7,198.5 264.1,197.1 266.6,198.5 269.0,196.8 271.4,197.4 273.8,198.5 276.2,194.9 278.6,197.5 281.0,198.5 283.4,197.8 285.8,198.5 288.2,198.5 290.7,198.5 293.1,198.5 295.5,197.4 297.9,193.4 300.3,196.7 302.7,198.5 305.1,197.8 307.5,193.8 309.9,192.5 312.4,194.2 314.8,191.3 317.2,185.3 319.6,186.4 322.0,184.3 324.4,177.9 326.8,177.6 329.2,176.9 331.6,174.1 334.1,169.3 336.5,164.8 338.9,161.8 341.3,166.0 343.7,157.2 346.1,158.5 348.5,162.3 350.9,164.6 353.3,160.9 355.8,163.8 358.2,156.2 360.6,149.2 363.0,152.2 365.4,154.4 367.8,160.9 370.2,155.8 372.6,150.9 375.0,147.0 377.4,144.0 379.9,141.3 382.3,135.2 384.7,145.4 387.1,154.9 389.5,162.6 391.9,158.3 394.3,159.8 396.7,160.4 399.1,158.9 401.6,159.7 404.0,156.4 406.4,153.2 408.8,154.7 411.2,154.2 413.6,147.9 416.0,141.7 418.4,140.8 420.8,140.5 423.2,143.9 425.7,148.5 428.1,142.4 430.5,136.0 432.9,127.3 435.3,128.2 437.7,127.3 440.1,128.4 442.5,128.1 444.9,127.4 447.4,127.2 449.8,128.1 452.2,134.9 454.6,138.8 457.0,135.9 459.4,140.3 461.8,143.6 464.2,136.2 466.6,132.7 469.1,139.6 471.5,142.9 473.9,145.0 476.3,147.7 478.7,146.3 481.1,147.9 483.5,157.7 485.9,163.4 488.3,166.6 490.8,169.2 493.2,166.0 495.6,168.6 498.0,164.0 500.4,160.9 502.8,159.9 505.2,159.7 507.6,158.5 510.0,157.1 512.4,158.7 514.9,157.7 517.3,160.4 519.7,163.5 522.1,164.4 524.5,164.1 526.9,162.8 529.3,163.6 531.7,162.8 534.1,165.3 536.6,166.4 539.0,163.5 541.4,159.3 543.8,158.9 546.2,164.2 548.6,160.6 551.0,155.0 553.4,155.1 555.8,159.8 558.2,155.9 560.7,158.8 563.1,157.3 565.5,153.6 567.9,153.4 570.3,151.5 572.7,159.0 575.1,154.1 577.5,156.2 579.9,153.1 582.4,157.1 584.8,154.6 587.2,147.8 589.6,147.2 592.0,146.3 594.4,144.5 596.8,145.9 599.2,140.9 601.6,146.3 604.1,150.4 606.5,156.3 608.9,154.0 611.3,151.8 613.7,151.6 616.1,148.3 618.5,146.3 620.9,151.8 623.3,145.5 625.8,146.0 628.2,139.3 630.6,133.3 633.0,130.2 635.4,127.1 637.8,121.3 640.2,122.6 642.6,118.7 645.0,115.1 647.4,113.8 649.9,111.9 652.3,117.7 654.7,115.0 657.1,120.2 659.5,125.5 661.9,122.9 664.3,130.7 666.7,127.8 669.1,120.8 671.6,129.0 674.0,124.3 676.4,114.5 678.8,105.2 681.2,117.3 683.6,111.6 686.0,106.9 688.4,103.5 690.8,100.8 693.2,106.1 695.7,103.5 698.1,112.1 700.5,108.0 702.9,104.1 705.3,115.5 707.7,110.7 710.1,105.8 712.5,99.7 714.9,96.8 717.4,93.1 719.8,91.3 722.2,89.7 724.6,87.3 727.0,84.7 729.4,81.3 731.8,80.8 734.2,78.5 736.6,79.3 739.1,76.8 741.5,63.5 743.9,60.3 746.3,55.8 748.7,51.8 751.1,49.5 753.5,47.2 755.9,44.9 758.3,43.1 760.8,43.3 763.2,46.1 765.6,39.5 768.0,52.1 770.4,54.2 772.8,53.0 775.2,52.6 777.6,48.7 780.0,46.0 782.4,44.8 784.9,41.2 787.3,63.1 789.7,63.9 792.1,62.4 794.5,63.9 796.9,64.7 799.3,65.6 801.7,66.6 804.1,70.0 806.6,79.3 809.0,74.6 811.4,71.9 813.8,72.0 816.2,69.6 818.6,71.9 821.0,68.1 823.4,97.1 825.8,97.6 828.2,97.5 830.7,95.9 833.1,94.8 835.5,91.8 837.9,82.4 840.3,97.5 842.7,85.4 845.1,94.3 847.5,82.1 849.9,101.6 852.4,89.4 854.8,75.4 857.2,72.4 859.6,76.2 862.0,76.2"/><text x="52.0" y="252" text-anchor="middle" font-size="11" fill="#6b7684">08-10</text><text x="457.0" y="252" text-anchor="middle" font-size="11" fill="#6b7684">09-03</text><text x="862.0" y="252" text-anchor="middle" font-size="11" fill="#6b7684">10-08</text><text x="52" y="18" font-size="12.5" fill="#3d4753" font-weight="600">相对最高点的回撤（占入金的百分比）</text></svg></div><div class="cap">整段运行相对它自己最高点最多跌下去多少，按占入金的比例画。最深到过 4.855%，从头到尾都没接近"把账户一起带走"。地板画出来的形状就是这样：不是一条直线——是一条永远不陡的线。 <span class="src">[来源：MT5 成交记录，账户 277705107，截至 2026-10-08]</span></div>
+</div>
+<h2>3. 不替我们说好话的那部分</h2>
+<div class="warn">
+<p><strong>我们那条"日亏 $50"的规则，在这个账户大部分生命里什么都没干。我们发现了、修好了，并且把证据摊在这里给你看——因为藏起这种事的卖家，恰恰是你不该把账户交给他的那种卖家。</strong></p>
+<p>最早写这一页的时候，我们本来打算写一句：<em>"$50 的日损帽从来没有被击穿。"</em> 然后我们去核对了。这句话是假的，而且错在两处：</p>
+<ol><li><strong>当时真正在跑的帽子根本不是那条 $50 的规则。</strong>代码无条件把规则值覆盖成了 <code>余额 × 1.5%</code>——大约 <strong>$142</strong>——所以配置里的 $50 被丢掉了，整个运行期间这道熔断器一次都没有响过。</li><li><strong>42 个交易日里有 5 天收盘差于 −$50</strong>，最差的一天收在 <strong>$-100.26</strong>，约为入金的 1.00%。</li></ol>
+<p>越过 $50 这条线的 5 天，完全按 MT5 记录原样列出：</p>
+<table><tr><th>日期（机器人自己的日历日，UTC+8）</th><th class="n">当天亏损</th><th class="n">笔数</th><th>相对 $50 帽</th></tr>
+<tr><td>2026-09-22</td><td class="n bad">$-100.26</td><td class="n">11</td><td class="bad">越过 $50.26</td></tr>
+<tr><td>2026-08-27</td><td class="n bad">$-81.45</td><td class="n">15</td><td class="bad">越过 $31.45</td></tr>
+<tr><td>2026-10-08</td><td class="n bad">$-77.68</td><td class="n">4</td><td class="bad">越过 $27.68</td></tr>
+<tr><td>2026-09-10</td><td class="n bad">$-70.25</td><td class="n">10</td><td class="bad">越过 $20.25</td></tr>
+<tr><td>2026-09-02</td><td class="n bad">$-62.92</td><td class="n">8</td><td class="bad">越过 $12.92</td></tr>
+</table>
+<p class="small"><span class="src">[来源：MT5 成交记录，账户 277705107，截至 2026-10-08；按机器人自己的日界分组；见下面的口径说明]</span></p>
+<p>下面是收据，来自我们自己的源码——这段注释是 2026-10-02 发现这个 bug 时写下的：</p>
+<pre><code># 2026-10-02 修复：原为【无条件覆盖】经验库固定值 → rule_003 配的 max_loss=50 被静默丢弃。 (line 2473)
+# 这正是 rule_003 hits=0 的原因：实际帽 = 余额×1.5% ≈ $142，而单日最大亏损仅 $100.26，永不触发。 (line 2474)
+# 改为取【更保守者】：规则只能收紧、不能放松（与工作区约束"约束只许收紧不许放松"一致）。 (line 2475)</code></pre>
+<p><strong>翻成人话：</strong>2026-10-02 之前，实际生效的帽子是 <code>余额 × 1.5% ≈ $142</code>，而最差的一天只有 <strong>$100.26</strong>——所以熔断器从来没触发过，那条规则的命中次数是 0。<em>注意：$100.26 这个数字是我们的代码独立算出来的，这一页背后的 MT5 分析也算出同一个数——两个来源，同一个数字。</em></p>
+<p><strong>改了什么：</strong>帽子现在取 <code>min(余额 × 1.5%, 规则值)</code>，也就是说规则只可能把护栏改得更严，绝不会改得更松（第 2479 行）。规则值已于 2026-10-08 收紧到 <strong>$100</strong>。这是一次真实的、有日期、可核对的修复——不是一句承诺。</p>
+<p class="small">我们原来那个数字为什么是错的：我们一直在引用一个 $50 的帽子，而代码根本没有在执行它，我们也没有拿它跟成交记录对账。现在我们把"量具"也一起公布在下面，这样同一个错误没办法再藏起来。</p>
+</div>
+<h2>4. 护栏实际在强制什么</h2>
+<p>下面每一行都是从正在运行的源码里读出来的，连行号一起给出，你可以自己核。</p>
+<div class="card"><table><tr><th>规则</th><th>运行中代码里的值</th><th>出处行</th></tr>
+<tr><td>单笔风险预算</td><td>余额 × 0.5% = 今天 <strong>$47.47</strong></td><td><code>trading_bot.py</code> L319<br><span class="src">RISK_PER_TRADE_PCT = 0.005       # 单笔风险预算 = 余额 × 0.5%</span></td></tr>
+<tr><td>日内亏损熔断</td><td>余额 × 1.5% = $142.40 &middot; 规则值 = $100 &middot; <strong>实际生效 = 取小 = $100</strong></td><td><code>trading_bot.py</code> L320<br><span class="src">DAILY_LOSS_PCT = 0.015           # 日损帽 = 余额 × 1.5%</span></td></tr>
+<tr><td>最大同时持仓</td><td>2</td><td><code>trading_bot.py</code> L168<br><span class="src">MAX_POSITIONS = 2</span></td></tr>
+<tr><td>连亏 3 笔后冷却</td><td>60 分钟，禁止开仓</td><td><code>trading_bot.py</code> L297<br><span class="src">LOSS_COOLDOWN_MINUTES = 60       # 连亏3笔后冷却1小时禁止开仓</span></td></tr>
+<tr><td>不做隔夜单</td><td>本地时间 23:45 起强制平掉</td><td><code>trading_bot.py</code> L221<br><span class="src">NO_OVERNIGHT_MIN = 23 * 60 + 45          # 2026-10-08 老板四指令之一「不做隔夜单」: 23:45后禁开+强平（周末另由调度停机）</span></td></tr>
+<tr><td>大针不接</td><td>下单那根 K 线的振幅 &gt; 1.5 × ATR 就不开仓</td><td><code>trading_bot.py</code> L218<br><span class="src">SPIKE_BAR_ATR_MULT = 1.5    # 2026-10-08 老板批「改」洞2: 大针不接</span></td></tr>
+</table><p class="small">规则库里 18 条规则中有 11 条在跑；没在跑的也一并列出，而且护栏自带一个"规则审计"，会扫出"配了但从来没响过"的规则。上面那个 $50 的 bug，本来就该被这个审计抓到——最后也确实是它抓到的。 <span class="src">[来源：MT5 成交记录，账户 277705107，截至 2026-10-08；规则库：experience_store.json 的版本字段与启用开关]</span></p></div>
+<h2>5. 怎么自己核对这一页上的每一个数字</h2>
+<div class="card">
+<p>我们不需要你凭信任接受这些。下面是完整的"量具"，任何人都能照着重算一遍，也能在我们偷换标准的时候抓住我们。</p>
+<table><tr><th>项目</th><th>我们用的到底是什么</th></tr><tr><td>账户</td><td>Exness MT5 <strong>模拟/试用</strong>账户 <code>277705107</code>，服务器 <code>Exness-MT5Trial5</code>，计价货币 USD</td></tr><tr><td>数据来源</td><td><code>history_deals_get()</code>——每一行成交记录，不是汇总。该账户一共 1226 行成交。</td></tr><tr><td>品种</td><td>只有 <code>XAUUSDm</code>（黄金兑美元，微型合约）</td></tr><tr><td>哪些单子算"这套护栏的"</td><td>带 magic 号 <code>250804</code> 的成交，按 <code>position_id</code> 配对成一开一平</td></tr><tr><td>盈亏口径</td><td>每个已平仓持仓的 <code>profit + commission + swap + fee</code>。任何地方都不计浮动盈亏。</td></tr><tr><td>时间区间</td><td>2026-08-10 13:55:23 → 2026-10-08 14:36:03（UTC），共 59.03 天</td></tr><tr><td>日界</td><td>机器人自己的本地日历日（UTC+8），<strong>不是</strong> UTC 日。核对依据是它持久化的风控状态：UTC 还停在 2026-10-08 23:31 时，它里面的日期已经翻到了 2026-10-09。<strong>这会让数字变</strong>：按 UTC 日口径，最差一天读到 −$106.64、同样 5 天跌破 −$50，而不是 −$100.26。<strong>两个口径我们都公布。</strong></td></tr><tr><td>回撤</td><td>这套受护栏管理的运行，其已实现累计盈亏的峰到谷，按占入金的比例表示。不声称任何盘中口径或净值口径的回撤。</td></tr><tr><td>没有任何年化</td><td>59 天不是一个可以用来外推的业绩记录。我们也不外推。</td></tr></table>
+<p class="small">这一页每个数字背后的复现脚本和原始 JSON，随页面一起提供（<code>verify_mt5.py</code>、<code>snap_constants.py</code>、<code>mt5_verified.json</code>、<code>code_constants.json</code>）。拿同一个账户跑一遍，你应该得到分文不差的同一组数字。如果对不上，请告诉我们——那是 bug，我们想要知道。</p>
+<h3>你要的话，我们可以交出来的东西</h3>
+<ul><li><strong>完整的原始成交记录</strong>（CSV 导出，全部 1226 行）——每一张单号、时间戳、价格、手续费与隔夜利息，不做任何删改。</li><li>复现脚本，以及它们产出的 JSON，就是做这一页时用的那份。</li><li>该账户的投资者/只读权限，这样你可以直接从 MT5 拉历史，而不是相信我们的导出。</li><li>上面引用的那几行源码，出自正在运行的文件，随时可给。</li></ul>
+<p class="small"><strong>模拟账户能证明什么、不能证明什么。</strong>它能证明这套护栏的<em>机械行为</em>——帽子会响、连亏会被限制住、审计日志重启也丢不掉。它<em>不能</em>证明真实账户上的滑点、成交与执行质量，我们也不会声称它能。模拟盘的结果不是实盘结果。</p>
+</div>
+<h2>6. 这些数字从哪来，直说</h2>
+<div class="card">
+<p>这是我们自己日常在用的账户——一个真实在跑的 MT5 模拟/试用账户，不是挑出来的样本。关于它有两件事，应该放在这一页的中段，而不是放在最上面：</p>
+<ol><li><strong>这个账户的策略部分是亏的，而我们不卖策略。</strong>VigilDesk 不是一个赚钱机器，我们也不把它包装成赚钱机器。如果你直接问我们"这个账户赚钱吗"，答案是"不赚"——我们不会否认，也不会换一个数字来粉饰。这个账户上所有交易加在一起，已实现结果是净亏约 5%，全账户的峰到谷回撤是 7.50%。这里一共 579 笔已平仓交易，其中 336 笔跑在这套护栏下，另 243 笔没跑（六套旧策略加上手动单）；这个账户亏钱的时候，主要就是没护栏的那部分和手点的单子干的。</li><li><strong>这个账户真正验证的，是刹车有效。</strong>这也是这一页唯一想请你当真的东西——最差单笔、最差单日、最大回撤全都有界，而且每一个界都能从原始成交里重新推出来。亏损有界<strong>不等于</strong>赚钱，我们不会把这两件事混在一起说。</li></ol>
+<p>我们不请任何人来买这个账户的"业绩"。这里没有业绩可买。这里有的是一条边界，以及边界背后的原始数据。</p>
+<p><strong>你要的话，我们可以交出来：</strong>完整原始成交记录（CSV，每一行，不做删改）、账户与服务器标识（让你自己在 MT5 里拉历史）、这一页背后的复现脚本与 JSON，以及该账户的只读权限。口径见上面的"量具"一节。 <span class="src">[来源：MT5 成交记录，Exness-MT5Trial5 账户 277705107，截至 2026-10-08]</span></p>
+</div>
+<h2>7. 我们到底在卖什么</h2>
+<p>我们在这个账户上做的研究，得到一个不舒服但有用的结论：<strong>我们找不到可预测的方向优势。</strong>对同一份数据的三次独立分析都显示，经典技术指标的判别力大约在 0.49——跟抛硬币分不出来。在这品种上做的因子研究，也没有任何东西能通过样本外的滚动验证。</p>
+<p>所以我们不再卖我们证明不了的那个东西。<strong>亏损的边界，跟盈利不一样，它是可以复现的。</strong>你可以在上面的数字里看到它，也可以用同一份原始数据自己再推一遍。这就是整个产品：糟糕那一天底下垫着的一层地板，以及一份重启也丢不掉的审计日志。</p>
+<p><strong>这就是为什么我们的话术是这样一句：我们卖的是刹车，不是引擎。</strong>引擎是对"市场接下来往哪走"的主张，而我们没有一条能证明的主张。刹车是对"糟糕的一天最多能花你多少钱"的主张，而这一个，我们能在你面前量出来。 We sell brakes, not engines.</p>
+<div class="card is"><p style="margin:0"><strong>我们的承诺，一句话：</strong>我们永远不会在这一页上发布收益、命中率或任何赚钱声明。如果你哪天在这里看到这类东西，那是个 bug——或者是个骗局——那么我们对你说过的其他所有话，你都应该重新掂量。</p></div>
+<footer>
+<p><strong>VigilDesk</strong> —— 给交易者的风险护栏。我们卖的是刹车，不是引擎。不是策略。不提供交易指令。不承诺收益。</p>
+<p>所有数字直接取自该账户自己的成交记录。本页构建于 2026-10-10（UTC+8）。提取时账户 277705107 的持仓数为 <strong>0</strong>。本页不公布任何账户总额类数字——只有边界数字和它们背后的比例。 <span class="src">[来源：MT5 成交记录，Exness-MT5Trial5 账户 277705107，截至 2026-10-08]</span></p>
+<p class="small">数据窗口截至 2026-10-08。账户继续交易，数字会漂移；随页面提供的脚本可以随时复现当前数字。</p>
+<p class="small"><strong>风险提示：</strong>本页展示的是模拟账户数据，不代表实盘结果；交易有风险，亏损可能超出预期；本产品是风险控制工具，<strong>不承诺收益、不构成投资建议</strong>。</p>
+</footer>
+</div></body></html>
