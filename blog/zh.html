@@ -1,0 +1,265 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VigilDesk 中文博客 —— 我们自己踩过的坑（4 篇工程事故复盘）</title>
+<meta name="description" content="VigilDesk 中文内容入口：4 篇我们自己踩坑的工程复盘——被静默忽略的日损上限、重启后失效的移动止损、被正常波动扫掉的止损。我们卖的是刹车，不是引擎。">
+﻿<style>
+:root{--ink:#151b23;--mut:#5a6672;--line:#e3e8ee;--bg:#fbfcfd;--acc:#1f6feb;--ok:#2f9e5f;--bad:#d5453f;--warn:#b8860b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:40px 22px 80px}
+h1{font-size:34px;line-height:1.22;margin:0 0 10px;letter-spacing:-.5px}
+h2{font-size:23px;margin:52px 0 14px;letter-spacing:-.2px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+h3{font-size:17px;margin:30px 0 10px}
+p,li{color:#22292f}
+.lede{font-size:19px;color:var(--mut);margin:0 0 26px}
+.kicker{display:inline-block;background:#eef4ff;color:var(--acc);font-weight:700;font-size:12.5px;
+ letter-spacing:.9px;text-transform:uppercase;padding:5px 11px;border-radius:99px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:16px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.not{background:#fff6f5;border-color:#f4cfcc}
+.is{background:#f4fbf6;border-color:#cbe8d5}
+table{width:100%;border-collapse:collapse;margin:10px 0 6px;font-size:15px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--mut);font-weight:700}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.src{display:block;font-size:11.5px;color:#8b95a1;font-weight:400;letter-spacing:.1px;text-transform:none}
+.big{font-size:30px;font-weight:800;letter-spacing:-.6px;line-height:1.1}
+.bad{color:var(--bad)}.ok{color:var(--ok)}.mut{color:var(--mut)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+.kpis.k3{grid-template-columns:repeat(3,1fr)}
+.zhline{font-size:15px;color:#8b95a1;margin:-4px 0 22px;letter-spacing:.2px}
+@media(max-width:720px){.kpis{grid-template-columns:repeat(2,1fr)}.kpis.k3{grid-template-columns:1fr}}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.kpi .lab{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.6px;font-weight:700;margin-bottom:6px}
+.kpi .src{margin-top:7px}
+pre{background:#0f1720;color:#dbe4ee;padding:14px 16px;border-radius:9px;overflow-x:auto;font-size:13px;line-height:1.5}
+code{background:#eef1f5;padding:1.5px 5px;border-radius:4px;font-size:13.5px}
+pre code{background:none;padding:0;color:inherit}
+blockquote{margin:14px 0;padding:12px 16px;border-left:4px solid var(--acc);background:#f2f7ff;border-radius:0 8px 8px 0}
+.fig{margin:22px 0 8px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px 4px}
+.cap{font-size:13px;color:var(--mut);margin:4px 2px 10px;line-height:1.5}
+.warn{background:#fffaf0;border:1px solid #f0dcae;border-radius:12px;padding:20px 22px;margin:18px 0}
+.hr{height:1px;background:var(--line);margin:40px 0}
+ul{padding-left:22px}
+.small{font-size:13.5px;color:var(--mut)}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--mut)}
+</style></head><body><div class="wrap">
+<div class="kicker">中文内容入口 &middot; 自家站点</div>
+<h1>我们自己踩过的坑（中文）</h1>
+<p class="zhline">VigilDesk 中文博客 &middot; 4 篇工程事故复盘</p>
+<p class="lede">这里是我们的中文内容入口。我们把做这套风控护栏时踩过的坑一篇篇写下来——<strong>不是成功案例，是我们自己的失误清单</strong>。中文读者不必去国内平台等我们，这里就是我们自己的地方。</p>
+<div class="card"><p style="margin:0 0 8px"><strong>我们卖的是刹车，不是引擎。</strong>引擎（赚不赚钱）我们没找到能证明的答案，也不卖；刹车（亏到哪必须停、重启后还在不在）是可以量化、可以复现的。</p>
+<p class="small" style="margin:0">想先看数字证明？<a href="../proof/zh.html">证明页（中文）</a> ｜ <a href="../proof/">Proof page (English)</a></p></div>
+<div class="card"><p style="margin:0 0 8px"><strong>目录</strong></p><ol><li><a href="#art01">我们自己的日损上限，被代码静默忽略了两周</a></li><li><a href="#art02">软件重启一次，我的移动止损就悄悄失灵了</a></li><li><a href="#art03">止损放得太窄，会被正常波动扫掉</a></li><li><a href="#art04">给交易账户装个&quot;刹车&quot;：我们踩了三个坑之后，总结出三步</a></li></ol></div>
+<article id="art01"><h2>第 1 篇 · 我们自己的日损上限，被代码静默忽略了两周</h2><p>先说结论：<strong>我们给交易账户设的"每天最多亏 50 美元"这道刹车，配在文件里是对的，但在代码里被悄悄换掉了。整整两周没人发现。等我们回头看账，42 个交易日里有 5 天跌穿了这条线，最差的一天亏了 100.26 美元。</strong></p>
+<p>这篇不是成功案例分享。这是我们自己的失误清单。</p>
+<h3>一、先打个比方</h3>
+<p>你家的配电箱里装了保险丝，标着 20 安培。你一直以为超过 20 安培它就断。</p>
+<p>结果某天你打开配电箱才发现：<strong>这枚保险丝标着 20 安培，但装它的师傅顺手把它换成了 142 安培的那一枚，而且没告诉你。</strong></p>
+<p>这不是保险丝坏了。保险丝工作得好好的——<strong>它只是永远不会断，因为根本没有电流能大到让它断。</strong></p>
+<p>我们的日损上限就是这个状态。</p>
+<h3>二、事情是怎么发生的</h3>
+<p>我们在风险规则文件里写了一条规则，编号 <code>rule_003</code>，内容很直白：</p>
+<blockquote>每天亏损上限：50 美元。</blockquote>
+<p>写进去了，保存了，看起来一切正常。</p>
+<p>但程序启动时的代码是这么写的（这是 <code>trading_bot.py</code> 第 2473–2475 行的注释原文，我一个字没改）：</p>
+<blockquote><pre><code># 2026-10-02 修复：原为【无条件覆盖】经验库固定值 → rule_003 配的 max_loss=50 被静默丢弃。
+# 这正是 rule_003 hits=0 的原因：实际帽 = 余额×1.5% ≈ $142，而单日最大亏损仅 $100.26，永不触发。</code></pre></blockquote>
+<p>翻译成人话：</p>
+<ol><li>程序启动时，自己算了一个数：<strong>账户余额 × 1.5%</strong>。</li><li>按它当时的余额算出来是 <strong>约 142 美元</strong>。</li><li>然后它拿这个 142，<strong>无条件覆盖</strong>掉规则里写的 50。</li><li>于是"每天最多亏 50"变成了"每天最多亏 142"。</li></ol>
+<p><strong>没有任何报错日志。没有警告。没有弹窗。</strong> 规则文件里那行 <code>50</code> 还在，谁去看都显示 50。但运行时的真实数字是 142。</p>
+<h3>三、为什么两周都没人发现</h3>
+<p>三个原因叠在一起，把问题藏得严严实实：</p>
+<p><strong>第一，配置里写的是对的。</strong> 任何人去查配置，看到的都是 50。错的只有运行时。</p>
+<p><strong>第二，日志是干净的。</strong> 覆盖动作是"正常逻辑"，不产生任何异常记录。程序不觉得自己做错了。</p>
+<p><strong>第三，也是最要命的——当天就亏到 142 的可能性太低了。</strong> 我们这段时间里，单日最大亏损是 100.26 美元。<strong>100.26 &lt; 142，所以这道刹车一次都没响过。</strong> 我们于是产生了一种错觉："日损帽在正常工作。"</p>
+<p>它没有工作。它只是<strong>没被撞到</strong>。</p>
+<h3>四、戳穿它的那一刻</h3>
+<p>我们是怎么发现的？</p>
+<p>线索是规则命中次数。每条风控规则被触发时都会记一次数。我们翻看规则统计时发现：<strong><code>rule_003</code> 的命中次数是 0。</strong></p>
+<p>不是"很少"，是<strong>零</strong>。</p>
+<p>一条保护了 42 个交易日、每天盯着账户的规则，命中 0 次。这本身就很可疑——要么它极其精准，要么它<strong>根本没接上电</strong>。</p>
+<p>顺着这条线去读代码，才看到上面那段 2473–2475 行的注释。原来这行注释是 2026-10-02 修复时补写的——<strong>也就是说，在那之前，它连"被静默丢弃"这件事本身都没被记录下来。</strong></p>
+<h3>五、真实的损失数字</h3>
+<p>既然刹车没生效，那就只能看账了。<strong>42 个交易日里，有 5 天收盘低于 −50 美元</strong>（口径：机器人本地日，UTC+8，这是它自己判断"一天"的方式）：</p>
+<table><tr><th>日期</th><th>当日盈亏（美元）</th></tr><tr><td>08-27</td><td>−81.45</td></tr><tr><td>09-02</td><td>−62.92</td></tr><tr><td>09-10</td><td>−70.25</td></tr><tr><td>09-22</td><td><strong>−100.26</strong>（最差）</td></tr><tr><td>10-08</td><td>−77.68</td></tr></table>
+<p>需要说明一下口径：上表是<strong>账户口径</strong>的当日盈亏（不只是跑在风控下的那部分），日期按机器人自己的本地日（UTC+8）切分。</p>
+<p>再补一句实话，因为它关系到你怎么看这篇文章：<strong>我们自己的策略部分并不赚钱，所以我们也不卖策略。</strong> 这篇讲的不是"我们能赚多少"，而是"亏到哪就必须停"——<strong>我们卖的是刹车，不是引擎。</strong> 如果你直接问我们"这账户赚钱吗"，我们会如实回答，不否认也不回避；但这个账户对我们有价值的地方只有一件：它验证了<strong>亏损有边界</strong>，而不是"我们赚了钱"。</p>
+<figure class="fig"><img alt="图1：日损上限被静默覆盖 —— 配置里写 −50，程序里跑约 −142，这 5 天都跌穿了那条线" src="https://xuks124.github.io/vigildesk/blog/cn-2026-10/fig1-silent-daily-cap.png" style="max-width:100%;display:block"></figure>
+<h3>六、修法和教训</h3>
+<p>修法只有两行，思路却值得说清楚：</p>
+<blockquote>原来的逻辑：<code>上限 = 余额 × 1.5%</code>（142）——固定值 50 被丢掉<br>现在的逻辑：<code>上限 = min(余额 × 1.5%, 规则里的值)</code>——<strong>取更保守的那个</strong></blockquote>
+<p>也就是说，<strong>规则只能把刹车踩得更紧，不能把它放松。</strong> 这是我们的原则：一个安全参数，要么和配置值一致，要么比它更严，<strong>永远不允许悄悄变得更宽松</strong>。</p>
+<p>改完之后的实测（173 笔真实成交反事实模拟）：50 美元的帽子会拦下 12 笔交易、影响 3 个交易日，<strong>且只减少了仓位、没有增加任何新仓位</strong>。</p>
+<h3>七、如果你也在跑自动交易，这里有三句能直接用的</h3>
+<ol><li><strong>不要相信配置文件里写的数字，要确认程序里跑的也是那个数字。</strong> 这两个可以不一样，而且不一样的时候通常不报错。</li><li><strong>看"规则命中次数"，那是唯一能证明它接上电的证据。</strong> 一条长期命中 0 次的保护规则，多半是摆设。</li><li><strong>拿真实的成交记录去和你的上限对一遍账。</strong> 我们就是靠这一步才发现，问的是"有没有哪天的亏损超过了 50"，答案是有 5 天。</li></ol>
+<div class="hr"></div>
+<h3>关于我们</h3>
+<p>我们做的是 <strong>VigilDesk</strong>：给 MT5 交易账户装一套风控守卫——<strong>相当于给账户装刹车</strong>。它管的是"亏到多少必须停"、"这笔单最多亏多少"，<strong>不提供交易策略，不提供交易指令，也不承诺任何盈利</strong>。</p>
+<p><strong>我们卖的是刹车，不是引擎。</strong> 引擎（赚不赚钱）我们没找到可靠的答案，也不卖；刹车（亏到哪必须停）是可以量化、可以复现、可以拿原始成交记录对账的。</p>
+<p>我们唯一拿得出手的东西是诚实，包括大方承认上面这个：<strong>我们自己的风控上限，曾经配错并被静默忽略了两个星期。</strong></p>
+<h3>⚠️ 风险提示</h3>
+<ul><li>本文所有数字来自本机 MT5 服务端原始记录与代码静态检查，样本为单个真实模拟账户，<strong>样本量小、周期短（42 个交易日）</strong>，不构成任何业绩参考，也<strong>不能用于推测未来表现</strong>。</li><li>该账户<strong>整体处于亏损状态</strong>（比例口径：约 −5%；本文只给比例，不列账户金额）。本文<strong>不承诺收益、不承诺回撤改善幅度</strong>。</li><li>风控工具<strong>只能限制单次亏损的范围，无法阻止亏损发生，也无法提高盈利概率</strong>。</li><li>本文仅为工程事故复盘与技术讨论，<strong>不构成投资建议，绝不代客理财，不接受资金委托</strong>。</li><li>文中的代码片段是我们自己项目的可公开片段，仅用于说明问题。</li></ul>
+<p>*作者：小孬科技 · 总经办*</p></article><article id="art02"><h2>第 2 篇 · 软件重启一次，我的移动止损就悄悄失灵了</h2><p>这篇讲一个我觉得比"程序崩了"更可怕的 bug。</p>
+<p>崩了你会知道——有报错、有日志、进程没了。而这个 bug 是：<strong>进程活得好好的，仓位还在，日志干干净净，但那笔仓位的追踪止损功能，已经永久失效了。</strong></p>
+<p>它不会告诉你。它会安静地陪着你，直到行情回头把那笔浮盈全吃走。</p>
+<h3>一、先打个比方</h3>
+<p>你开车上高速，定了定速巡航。中途你进服务区，熄火、上厕所、回来重新发动。</p>
+<p><strong>然后定速巡航没了。</strong> 但仪表盘上没有任何提示灯——不是"系统故障"，不是"巡航关闭"。它看起来一切正常，只是<strong>你再按巡航键，车也不理你了</strong>。</p>
+<p>你会发现这件事，通常是在你已经被扣了一堆超速罚单之后。</p>
+<h3>二、什么叫"移动止损"</h3>
+<p>先把术语说清楚，一句大白话：</p>
+<blockquote><strong>移动止损 = 一只会自己往前挪的安全带。</strong> 普通止损是固定的（买 2000、止损 1950，涨到 2100 它还是 1950）；移动止损会跟着价格往上走，涨到 2100 就挪到 2050。</blockquote>
+<p>它的关键动作就一个：<strong>当盈利够多了，把止损线往有利方向挪一格。</strong> 这一格被跳过，这笔单就完全没有保护。</p>
+<h3>三、bug 是什么</h3>
+<p>我们的程序里，每笔持仓都记着一个数：<strong>开仓时止损离入场价有多远</strong>（代码里叫 <code>sl_dist</code>，就是"止损距离"）。</p>
+<p>移动止损的启动条件是：</p>
+<blockquote>当浮盈超过 15 美元，<strong>并且</strong>价格已经走到入场价的 2 倍止损距离之外，就启动一条保底线。</blockquote>
+<p>问题出在<strong>重启恢复</strong>这条路径上。</p>
+<p>程序重启后，会去 MT5 里把"还在手上的仓位"接回来继续管。但接回来的时候，<strong>它构造这个仓位对象时漏传了"止损距离"这个字段</strong>。漏传的后果是：这个字段取到了 Python 的默认值 <strong>0</strong>。</p>
+<p>而下游负责移动止损的代码是这么写的（<code>trading_bot.py</code> 第 975–976 行的注释原文）：</p>
+<blockquote><pre><code># 2026-09-10 修复:重启恢复持仓 sl_dist 未初始化(=0)会除零崩溃→sl_dist&lt;=0 时跳过移动止损</code></pre></blockquote>
+<p>看明白了吗：当时（9 月 10 日）确实发现这里会<strong>除零崩溃</strong>，于是加了个保护——<strong>算不了就跳过。</strong></p>
+<p>于是：</p>
+<ul><li><code>sl_dist = 0</code></li><li>计算"离入场价几个止损距离"时，除数为 0，算不了</li><li>保护逻辑决定：<strong>跳过移动止损</strong></li><li>结果：<strong>这笔仓位的移动止损从此永久不执行</strong></li></ul>
+<h3>四、为什么它"悄悄"失灵</h3>
+<p>这才是它恶劣的地方。先看前三条，正常人的告警只会盯第四条：</p>
+<table><tr><th>通常以为会出问题的提示</th><th>实际状态</th></tr><tr><td>进程崩溃了吗？</td><td>❌ 没崩，一直活着</td></tr><tr><td>仓位还在吗？</td><td>✅ 在，好好地在 MT5 里</td></tr><tr><td>日志有报错吗？</td><td>❌ <strong>干净得很，一行错误都没有</strong></td></tr><tr><td>有没有保护动作？</td><td>🔴 <strong>一个都没有——这才是真正出事的</strong></td></tr></table>
+<p>日志干净是因为：<strong>"跳过"是当初特意加的、被认为是正确的行为。</strong> 程序不觉得自己做错了，自然不报错。</p>
+<figure class="fig"><img alt="图2：重启后移动止损静默失灵 —— 左：应该跟着价格抬；右：实际停在原地不动" src="https://xuks124.github.io/vigildesk/blog/cn-2026-10/fig2-trailing-stop-broken.png" style="max-width:100%;display:block"></figure>
+<p>而且修复还有时效问题：<code>sl_dist</code> 取到 0 之后，<strong>没有任何代码会回头去补它</strong>。所以只要你在持有仓位的时候重启了一次，这笔仓位的移动止损<strong>到平仓为止都不会再工作</strong>——不是你重启的瞬间失效，是<strong>永远失效</strong>。</p>
+<h3>五、损失有多大</h3>
+<p>这个 bug 是 2026-10-08 修的（代码注释里写着"治本C"）。修的时候我们顺便统计了它的实际影响（<strong>186 笔持仓的移动止损统计</strong>）：</p>
+<ol><li><strong>有 7 笔已经摸到 2 倍止损距离的赢单，最后变成了亏损。</strong></li><li>更普遍的情况是：<strong>摸到 2 倍止损距离的赢单，会一路回吐到只剩 +1.03 倍</strong>——也就是说，本该锁住的利润被吐掉了大半。</li></ol>
+<p>（说明口径：这是针对"移动止损生效情况"的统计，涉及 186 笔持仓。和单笔最大盈亏不同口径，别混着看。）</p>
+<h3>六、修法</h3>
+<p>修法很朴素：<strong>恢复持仓时，把"止损距离"从台账里那一笔开仓记录读回来。</strong> 查不到才用默认值。修完后移动止损重新生效，注释也把因果链写清楚了：</p>
+<blockquote><pre><code># 2026-10-08 治本C（老板批）：重启恢复持仓原先漏传 sl_dist（dataclass 默认 0.0），
+# 导致 2R 追踪锁被 sl_dist&lt;=0 跳过、阶梯观察期 r_now 恒 0 —— 摸到 2R 的赢单回吐到
+# +1.03R、7 笔摸 2R 反亏（MFE 统计 186 笔实证）。查不到返回 default（保持旧行为）。</code></pre></blockquote>
+<h3>七、我从这件事学到的三句</h3>
+<ol><li><strong>"不报错"和"正常工作"是两件事。</strong> 这个 bug 里日志干净得挑不出毛病，功能却完全没跑。安全功能要有<strong>主动的存在证明</strong>（比如"这笔单的止损线由程序管理中"）。</li></ol>
+<ol><li><strong>凡是"容错"的写法，都要问一句：它容掉的到底是异常，还是功能？</strong> <code>sl_dist&lt;=0 就跳过</code> 当时是为了避免崩溃。但它同时<strong>把"这个功能没在工作"这件事一起吞掉了</strong>。正确写法是：跳过 + 大声告警。</li></ol>
+<ol><li><strong>重启是风控系统最脆弱的一瞬间。</strong> 内存状态会重建，而重建路径和正常运行路径<strong>往往不是同一段代码</strong>，很容易漏字段。<strong>重启后第一件事，应该是把"有没有东西没接上电"自检一遍。</strong></li></ol>
+<h3>八、给你一个 30 秒能做的自检</h3>
+<p>如果你的自动交易程序有"重启后接管持仓"的功能，今天就试一次：</p>
+<ol><li><strong>持有一笔仓位时，重启你的程序。</strong></li><li>看日志里有没有打印这笔仓位的<strong>关键字段</strong>（止损距离、开仓价、当前止损位）。</li><li><strong>如果某个字段是 0 或者空——那个功能现在就是死的。</strong></li></ol>
+<p>我们就是靠"恢复时把字段打印出来"才发现 <code>sl_dist=0.00</code> 的（这行日志现在还留在代码里）。</p>
+<div class="hr"></div>
+<h3>关于我们</h3>
+<p>我们做的是 <strong>VigilDesk</strong>：给 MT5 交易账户装一套风控守卫——<strong>相当于给账户装刹车</strong>。它管的是"亏到多少必须停"、"这笔单最多亏多少"、"程序重启后这些东西还在不在"，<strong>不提供交易策略，不提供交易指令，也不承诺任何盈利</strong>。</p>
+<p><strong>我们卖的是刹车，不是引擎。</strong> 引擎（赚不赚钱）我们没找到可靠的答案，也不卖；刹车（亏到哪必须停、重启后还在不在）是可以量化、可以复现的。</p>
+<p>诚实是我们的唯一卖点，所以上面这个"我们自己的移动止损被静默跳过"的故事，我们照实写出来。</p>
+<h3>⚠️ 风险提示</h3>
+<ul><li>本文数字来自本机项目代码静态检查（<code>trading_bot.py</code> 第 755–773、975–976、2849–2851 行）与台账统计（186 笔口径），<strong>代码为本机项目版本，非公开可复现环境</strong>。</li><li>涉及账户为<strong>单个真实模拟账户</strong>，周期短、样本小，该账户<strong>整体处于亏损状态</strong>（比例口径：约 −5%；本文只给比例，不列账户金额）。</li><li>本文<strong>不承诺收益、不承诺回撤改善幅度</strong>。风控工具<strong>只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率</strong>。</li><li>本文仅为工程事故复盘与技术讨论，<strong>不构成投资建议，绝不代客理财，不接受资金委托</strong>。</li></ul>
+<p>*作者：小孬科技 · 总经办*</p></article><article id="art03"><h2>第 3 篇 · 止损放得太窄，会被正常波动扫掉</h2><p>这篇讲一个我们花了 329 笔真实交易才看明白的事：</p>
+<p><strong>你的止损经常被扫掉，很多时候不是因为你方向看错了，而是因为你把安全带系得太靠里了。</strong></p>
+<p>行情根本不用"反向走一大波"就能碰到你的止损。<strong>它只要正常地抖一下，就够了。</strong></p>
+<h3>一、先打个比方</h3>
+<p>你在火车站排队，怕丢东西，于是在行李箱上拴了根绳子系在自己手腕上——<strong>但绳子只留了 30 厘米。</strong></p>
+<p>旁边的人只是正常地挪了一步、转了个身，绳子就扯脱了。<strong>他没抢你东西，甚至没注意你。是你的绳子太短了。</strong></p>
+<p>止损放太窄就是这么回事：<strong>它不是被你判断错方向打败的，是被市场的"日常呼吸"打败的。</strong></p>
+<h3>二、我们拿真实数据验证了这件事</h3>
+<p>我们把自己 329 笔真实成交（同一个模拟账户、同一套策略）拿出来，做了一个很简单的对比：</p>
+<p><strong>"这笔单最后赚了还是亏了" 和 "这笔单的止损放得多宽"，有没有关系？</strong></p>
+<p>先看最干净的结果——<strong>止损宽度的中位数</strong>：</p>
+<table><tr><th>组别</th><th>止损宽度中位数</th></tr><tr><td><strong>最终盈利的单子</strong></td><td><strong>5.81 美元</strong></td></tr><tr><td><strong>最终亏损的单子</strong></td><td><strong>4.93 美元</strong></td></tr></table>
+<p>盈利的单子，止损<strong>放得更宽</strong>。差 0.88 美元。</p>
+<p>这个差异有多可靠？统计上算出来是 <strong>p = 0.004</strong>。翻译成人话：</p>
+<blockquote><strong>如果止损宽度和赚钱亏钱完全没关系，那么出现这么大的差异的概率不到 0.4%。</strong><br>换句话说，这基本不可能是巧合。</blockquote>
+<p>（严谨起见：我们在 21 个特征里做了横向比较，<strong>止损宽度是唯一一个在两个不同时间段里方向都一致的特征</strong>。别的时候我们试过的那些"看起来很有用"的特征，换个时间段就翻脸了。）</p>
+<figure class="fig"><img alt="图3：329 笔实证 —— 盈利单的止损中位数 5.81 美元，亏损单 4.93 美元，p=0.004" src="https://xuks124.github.io/vigildesk/blog/cn-2026-10/fig3-stop-width-vs-pnl.png" style="max-width:100%;display:block"></figure>
+<h3>三、"扫掉"到底有多频繁</h3>
+<p>再看另一个更直白的数字：<strong>有多少笔单子在开仓后 5 分钟内就被止损扫出去了？</strong></p>
+<p><strong>112 到 114 笔</strong>（口径差异来自台账时间基准，不影响结论）——</p>
+<p>在 329 笔里，<strong>大约每 3 笔就有 1 笔，活不过 5 分钟。</strong></p>
+<p>这 112~114 笔的合计是<strong>净亏约 575 美元</strong>。 而<strong>持有超过 5 分钟的那批单子，合计是 +736 美元</strong>。</p>
+<p><strong>"5 分钟"这个界线，把赚钱的和亏钱的分得清清楚楚。</strong></p>
+<p>而决定你是死是活的，很大程度上就是那根绳子留了多长。</p>
+<h3>四、"能看出来"到什么程度</h3>
+<p>我们还试了一个更有意思的问法：</p>
+<blockquote><strong>光看"止损放得多宽"这一个数字，能不能猜出这笔单会不会在 5 分钟内被扫掉？</strong></blockquote>
+<p>如果完全靠瞎猜（比如抛硬币），得分是 <strong>0.50</strong>。我们实测的得分是 <strong>0.855</strong>。</p>
+<p><strong>0.855 是什么意思：</strong> 随便抓一笔"5 分钟内被扫"的单子和一笔"活下来了"的放一起，只看止损宽度，<strong>有 85.5% 的概率能挑对被扫掉的那一笔</strong>。<strong>这几乎是一根绳子在喊："看我看我，是我太短了。"</strong></p>
+<p>⚠️ 这里必须说清楚一句，否则容易被误读：<strong>这个 0.855 说的是"能不能猜出它会不会被扫"，不是"能不能猜出它会不会赚钱"。</strong> 我们测过，"止损宽度"用来猜<strong>盈亏</strong>，得分只有 <strong>0.591</strong>——<strong>有用，但远没有那么神。</strong> 别拿前一个数字去想象盈利。</p>
+<p><strong>顺便说，什么猜不出盈亏？</strong> 我们试过的经典技术指标，方向判断得分是 <strong>0.487 到 0.496</strong>——<strong>低于 0.50，等于瞎猜，甚至比瞎猜还差。</strong> 意思是：<strong>"买在哪、卖在哪"这件事，我们没找到任何有效的判断方法。</strong> 所以别指望"看得准"，<strong>能指望的只有"亏得少"。</strong></p>
+<h3>五、为什么会这样：我们的止损被"手动改窄"了</h3>
+<p>这才是根子上的问题。</p>
+<p>我们的系统本来就定了一条下限：<strong>止损距离不得低于波动幅度（ATR）的 1.2 倍。</strong> 也就是说，系统知道"太窄了不行"。</p>
+<p>但实际成交记录显示：</p>
+<p><strong>有 69.3% 的单子，真实止损距离低于这条下限。</strong> 中位数只有 <strong>0.87 倍 ATR</strong>，最窄的那 10% 甚至只有 <strong>0.33 倍 ATR</strong>。</p>
+<p><strong>系统自己定了下限，然后自己没守住。</strong></p>
+<p>为什么会这样？因为止损距离在链路里被别的东西改小了——比如"这笔单最多亏多少钱"的风险预算，除以手数，反推出来的止损距离，可能比 1.2 倍 ATR 还窄。某个环节让它通过了，于是"下限"变成了一句空话。</p>
+<blockquote><strong>这大概率就是"5 分钟内被秒扫"在机械层面的主因。</strong> 也是我们下一步要查的地方——我们把它写在这里，标明它还是<strong>待确认的假设</strong>，不是结论。</blockquote>
+<h3>六、我们已经上线了什么</h3>
+<p>我们上线了一条"止损宽度门"：<strong>止损宽度不达标的单子，不开。</strong> 初步的反事实模拟（同一批真实入场点）：剔除 329 笔中的 181 笔（约 55%），保留 148 笔，<strong>回撤改善约 61%，三个时间段全部有改善。</strong></p>
+<p><strong>但这个数字有它的问题，我如实写出来：</strong></p>
+<ol><li>这是<strong>反事实模拟</strong>，不是实盘结果——【初步】级别，未在实盘验证。</li><li>阈值不是精确最优解。</li><li><strong>它不能把亏损的那段时间变成盈利。</strong> 它做的是"少亏一截"，不是"开始赚钱"。</li></ol>
+<p><strong>我们不会说"上了这个就能盈利"。它做不到。</strong></p>
+<h3>七、如果你也在做交易，这里有三句可以直接用</h3>
+<ol><li><strong>先算一个数：你的止损距离，是不是小于市场正常的日常抖动？</strong> 如果连平时的正常波动都会碰到它，那它不是止损，是<strong>给市场送手续费</strong>。</li><li><strong>止损宽度要用"波动"来定，不要用"我感觉这里该撑住"来定。</strong> 前者是尺子，后者是心情。</li><li><strong>看统计，别看复盘感受。</strong> 我们一开始也以为亏单是"入场时机不好"，数据打脸：<strong>入场点离最近拐点的远近，跟盈亏的关联度只有 0.442，统计上不显著（p=0.117）</strong>——<strong>入场点不是亏损原因，止损宽度才是更可疑的那个。</strong></li></ol>
+<div class="hr"></div>
+<h3>关于我们</h3>
+<p>我们做的是 <strong>VigilDesk</strong>：给 MT5 交易账户装一套风控守卫——<strong>相当于给账户装刹车</strong>。</p>
+<p><strong>我们卖的是刹车，不是引擎。</strong> 引擎（赚不赚钱）我们没找到可靠的答案，也不卖；刹车（亏到哪必须停）是可以量化、可以复现的。</p>
+<p>上面这些数据，正是因为我们做这个东西才去算的。我们不卖策略、不卖交易指令，也<strong>不承诺任何盈利</strong>——老实说，我们连"买在哪卖在哪"都承认自己看不准（上面那个 0.487~0.496 就是证据）。</p>
+<p>我们能提供的是：<strong>让你的亏损有边界。</strong></p>
+<h3>⚠️ 风险提示</h3>
+<ul><li>本文数字来自单个真实模拟账户、329/336 笔真实成交的统计复盘，<strong>样本量小、不构成任何业绩参考，也不能用于推测未来表现</strong>。</li><li>该账户<strong>整体处于亏损状态</strong>（比例口径：约 −5%；本文只给比例，不列账户金额）。本文<strong>不承诺收益、不承诺回撤改善幅度</strong>。</li><li>§六 的"回撤改善 61%"为<strong>反事实模拟的初步结果（【初步】，未在实盘验证）</strong>，且<strong>无法把亏损时段转为盈利</strong>。</li><li>统计中的"判别力/得分"为分类能力指标（0.5 = 随机水平），<strong>它衡量的是"能否区分两类情况"，与盈利能力无关</strong>。</li><li>风控工具<strong>只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率</strong>。</li><li>本文仅为工程复盘与技术讨论，<strong>不构成投资建议，绝不代客理财，不接受资金委托</strong>。</li></ul>
+<p>*作者：小孬科技 · 总经办*</p></article><article id="art04"><h2>第 4 篇 · 给交易账户装个&quot;刹车&quot;：我们踩了三个坑之后，总结出三步</h2><p>前面几篇，我们把自己踩的坑一个个挖出来讲了一遍：</p>
+<ol><li><strong>我们自己配的日损上限，被代码静默忽略了两周。</strong>（配置里写 50，实际跑 142，没人知道）</li><li><strong>我们自己的移动止损，在软件重启后悄悄失灵了。</strong>（日志干净，功能已死）</li><li><strong>我们的止损被改得太窄，被市场的日常波动扫掉。</strong>（329 笔里约 1/3 活不过 5 分钟）</li></ol>
+<p>这篇不重复故事了。这篇只回答一个问题：</p>
+<blockquote><strong>如果我也在跑自动交易，我想给账户装一道"刹车"，我该装在哪？</strong></blockquote>
+<p>下面三步，都是<strong>今天就能动手</strong>的，而且<strong>不需要买任何东西</strong>。</p>
+<h3>第一步：先写下一个数字——"我每天最多亏多少"</h3>
+<p><strong>这是整件事里最重要、也最容易被跳过的一步。</strong></p>
+<p>因为如果你写不出这个数字，你就没有任何刹车可言。</p>
+<p><strong>怎么写：</strong> 打开你账户的入金金额。取它的 <strong>1%</strong>。 比如你入了 20,000 美元，那就是 <strong>200 美元</strong>。</p>
+<p><strong>为什么是 1%：</strong> 这只是个起点，不是标准答案。它的好处是<strong>用你自己的钱来定，而不是用心情来定</strong>。你想更保守就取 0.5%,别超过 2%。</p>
+<p><strong>写下来之后，去做一件很关键的事：</strong></p>
+<blockquote><strong>拿你最近的真实成交记录，按"天"汇总一遍，看看有没有哪一天超过了这个数字。</strong></blockquote>
+<p>我们就是做了这一步，才发现有 <strong>5 天</strong>超过了我们以为的上限——<strong>如果你不去对账，你永远不会知道自己的刹车是真在工作，还是根本没接上电。</strong></p>
+<p><strong>⚠️ 一个真实的坑（我们的教训 1）：</strong> <strong>"配置里写了" 不等于 "程序里在跑"。</strong> 我们配置里写 50，代码里实际是余额×1.5%≈142。这两个数字可以不一样，而且不一样的时候<strong>通常不报错</strong>。</p>
+<p>所以写完这个数字之后，<strong>必须在日志里把它打印出来</strong>，确认程序读到的就是你写的那个。看不到它打印，就当它没生效。</p>
+<h3>第二步：止损距离，用"波动"来量，别用"感觉"来量</h3>
+<p><strong>这是最容易做错的一步。</strong></p>
+<p>绝大多数人（包括我们早期）是这么定止损的：</p>
+<blockquote>"这里是个支撑位，跌破我就走。"</blockquote>
+<p><strong>问题在哪：</strong> 支撑位会不会跌穿，跟"跌穿需要多大的波动"没有关系。<strong>可能根本不需要很大的波动，只要正常的日常抖动就够了。</strong></p>
+<p><strong>怎么做：</strong> 用<strong>波动幅度</strong>当尺子。 简单版：算一下最近一段时间的<strong>平均日波动</strong>（比如最近 20 天，每天最高价减最低价，取平均）。 把你的止损距离，<strong>至少设成这个波动幅度的一半以上</strong>。</p>
+<p>我们的系统里定的下限是<strong>波动幅度的 1.2 倍</strong>。你可以从这个数字起步。</p>
+<p><strong>为什么这条这么重要——看我们的数据：</strong></p>
+<ul><li>最终<strong>盈利</strong>的单子，止损宽度中位数 <strong>5.81 美元</strong></li><li>最终<strong>亏损</strong>的单子，止损宽度中位数 <strong>4.93 美元</strong>（p = 0.004，几乎不可能是巧合）</li><li><strong>盈利单的止损，就是更宽。</strong></li></ul>
+<p><strong>⚠️ 一个真实的坑（我们的教训 3）：</strong> <strong>光"定了下限"没用，得验证它真的守住了。</strong> 我们系统明明定了"不低于 1.2 倍波动"—— 结果实测 <strong>69.3% 的单子实际止损低于这条下限</strong>，中位数只有 0.87 倍，最窄的只有 0.33 倍。</p>
+<p><strong>定规则和守规则是两件事。</strong> 去你的成交记录里量一遍每一笔的真实止损距离，<strong>看有多少笔破了你自己定的下限。</strong></p>
+<h3>第三步：写完代码后，重启一次，问一句"什么功能死了"</h3>
+<p><strong>这一步几乎没人做，但它救我们的方式很直接。</strong> 做法：在你<strong>持有一笔仓位</strong>时重启程序，然后检查——仓位接回来了吗？日志里<strong>有没有打印出关键字段</strong>（止损距离、开仓价、当前止损位）？<strong>有没有哪个数字是 0 或者空的？</strong> 有，管着它的那个功能现在就是死的。</p>
+<p><strong>⚠️ 一个真实的坑（我们的教训 2）：</strong> 我们重启恢复持仓时，漏传了"止损距离"这个字段，取到了默认值 <strong>0</strong>。 下游的移动止损代码遇到 0 会<strong>除零</strong>，于是当初加了个保护：<strong>"算不了就跳过。"</strong> 结果——<strong>那笔仓位的移动止损，从此永久不执行。</strong></p>
+<p>而它的隐蔽之处在这里：</p>
+<table><tr><th>你可能会去看的提示</th><th>实际状态</th></tr><tr><td>进程崩了吗？</td><td>❌ 没崩</td></tr><tr><td>仓位还在吗？</td><td>✅ 在</td></tr><tr><td>日志有报错吗？</td><td>❌ <strong>一行都没有</strong></td></tr><tr><td>保护动作有吗？</td><td>🔴 <strong>一个都没有</strong> ← 这才是真出事的</td></tr></table>
+<p><strong>所以第三句是：别问"有没有报错"，要问"该动的东西动了没有"。</strong> <strong>"没报错"和"正常工作"是两件不同的事。</strong></p>
+<figure class="fig"><img alt="图4：重启后自检 —— 三个「以为在工作、其实已经死了」的开关" src="https://xuks124.github.io/vigildesk/blog/cn-2026-10/fig4-three-silent-switches.png" style="max-width:100%;display:block"></figure>
+<h3>三步之外，还有一句我想说的</h3>
+<p>我们做这件事的过程中，最反直觉的一个发现是：</p>
+<p><strong>我们花了很多力气想"怎么进场更准"，结果数据说：进场点跟盈亏基本没关系。</strong></p>
+<ul><li>用经典技术指标判断方向，得分 <strong>0.487~0.496</strong>——<strong>低于 0.5，等于瞎猜</strong></li><li>入场点离最近拐点的远近，和盈亏的关联度只有 <strong>0.442</strong>（p=0.117，统计上不显著）</li></ul>
+<p><strong>"买在哪、卖在哪"，我们真的没找到有效的判断方法。</strong></p>
+<p>但止损宽度这一个数字，用来判断"会不会在 5 分钟内被扫掉"，得分 <strong>0.855</strong>。 （注意口径：<strong>这个 0.855 测的是"会不会被扫"，不是"会不会赚钱"</strong>；同一个数字用来测盈亏只有 0.591。）</p>
+<p><strong>我们的结论是：把精力从"猜方向"转到"管亏损"上，性价比高得多。</strong></p>
+<p>因为我们能控制的，只有<strong>亏多少</strong>。方向往哪走，不归我们管。</p>
+<div class="hr"></div>
+<h3>关于我们</h3>
+<p>我们做的是 <strong>VigilDesk</strong>：给 MT5 交易账户装一套风控守卫——<strong>相当于给账户装刹车</strong>。它管的就是上面这三件事：亏到多少必须停、单笔最多亏多少、程序重启后这些还在不在。</p>
+<p><strong>我们卖的是刹车，不是引擎。</strong> 引擎（赚不赚钱）我们没找到可靠的答案，也不卖；刹车（亏到哪必须停）是可以量化、可以复现、可以拿原始成交记录对账的。</p>
+<p><strong>我们不卖策略，不卖交易指令，也不承诺任何盈利。</strong></p>
+<p>上面写的三个坑都是我们自己踩的，包括"我们自己的风控上限曾经配错并被静默忽略了两周"这件事。<strong>我们唯一拿得出手的东西是诚实。</strong></p>
+<h3>⚠️ 风险提示</h3>
+<ul><li>本文数字来自<strong>单个真实模拟账户</strong>、329/336 笔真实成交的统计复盘与代码静态检查，<strong>样本量小、周期短，不构成任何业绩参考，也不能用于推测未来表现</strong>。</li><li>该账户<strong>整体处于亏损状态</strong>（比例口径：约 −5%；本文只给比例，不列账户金额）。本文<strong>不承诺收益、不承诺回撤改善幅度</strong>。</li><li>文中所有"得分/关联度"为分类能力的统计指标（0.5 = 随机水平），<strong>衡量的是"能否区分两类情况"，与盈利能力无关</strong>。</li><li>本文提到的三步（按入金比例设日损上限、按波动设止损宽度、重启后自检）是<strong>通用工程建议，不是投资建议</strong>；它们<strong>只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率</strong>。</li><li><strong>不构成投资建议，绝不代客理财，不接受资金委托。</strong> 任何交易决策与后果由您自行承担。</li></ul>
+<p>*作者：小孬科技 · 总经办*</p></article>
+<footer>
+<p><strong>VigilDesk</strong> —— 给交易者的风险护栏。我们卖的是刹车，不是引擎。不是策略。不提供交易指令。不承诺收益。</p>
+<p class="small"><strong>风险提示：</strong>以上各篇数字均来自单个真实模拟账户与代码静态检查，样本量小、周期短，<strong>不构成业绩参考，也不能用于推测未来</strong>；该账户整体处于亏损状态（只给比例，不列账户金额）。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。<strong>本文不构成投资建议，绝不代客理财，不接受资金委托。</strong></p>
+<p class="small">本页由公司自主发布通道上站（自家站点，非第三方平台）。</p>
+</footer></div></body></html>
