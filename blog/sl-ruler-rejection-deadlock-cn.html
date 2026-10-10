@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>风控弃单占了 44% 的日志：一次止损尺子死锁的解剖 | VigilDesk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="来自一个真实 MT5 EA 的 222,129 行日志：97,706 行是同一条「止损尺子超限弃单」，占 44%。超标幅度中位数 4.38 倍说明这不是边缘误伤而是系统性冲突；附死锁链条、三个修复与五条自查。">
+<link rel="canonical" href="https://xuks124.github.io/vigildesk/blog/sl-ruler-rejection-deadlock-cn.html">
+<meta property="og:title" content="风控弃单占了 44% 的日志：一次止损尺子死锁的解剖">
+<meta property="og:description" content="222,129 行日志里 97,706 行是同一条弃单；超标中位数 4.38 倍，近失仅 1.4%——尺子与信号发生系统性冲突。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://xuks124.github.io/vigildesk/blog/sl-ruler-rejection-deadlock-cn.html">
+<link rel="stylesheet" href="/vigildesk/style.css"><link rel="stylesheet" href="/vigildesk/docs.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "风控弃单占了 44% 的日志：一次止损尺子死锁的解剖", "description": "222,129 行日志中 97,706 行为同一句止损尺子弃单（44%），超标中位数 4.38 倍；附死锁链条、限流键修复与自查清单。", "url": "https://xuks124.github.io/vigildesk/blog/sl-ruler-rejection-deadlock-cn.html", "author": {"@type": "Organization", "name": "VigilDesk", "url": "https://xuks124.github.io/vigildesk/"}, "publisher": {"@type": "Organization", "name": "VigilDesk", "url": "https://xuks124.github.io/vigildesk/"}, "inLanguage": "zh-CN"}</script>
+</head><body>
+<header class="site-header"><nav><a href="/vigildesk/zh.html">VigilDesk</a><a href="/vigildesk/free.html">免费工具</a><a href="/vigildesk/blog/">技术笔记</a><a href="/vigildesk/faq-zh.html">常见问题</a><a href="/vigildesk/buy-cn.html">购买</a></nav></header>
+<main class="doc">
+
+<h1>风控弃单占了 44% 的日志：一次止损尺子死锁的解剖</h1>
+<p class="doc-meta">VigilDesk 团队 · 2026-10-10 · 阅读约 6 分钟</p>
+
+<p>很多人对风控的想象是「偶尔拦下一笔不该做的单」。我们把自己在跑的 MT5 EA 的日志拉出来数了一遍：总量 <strong>222,129 行</strong>，其中同一个风控规则——止损尺子（止损距离不得超过 max(3.0×ATR, 0.7×区间宽+0.4×ATR, 0.5×摆动幅×1.35)）——打印的「超限弃单」有 <strong>97,706 行，占 44%</strong>。也就是说，日志里几乎一半的内容是同一条拒绝。</p>
+<p>更值得警惕的不是刷屏，而是这条拒绝的<strong>分布形态</strong>。</p>
+
+<h2>一、超标幅度的分布：不是边缘误伤</h2>
+<p>把 93,233 条带数值的弃单解析成「实际止损距离 ÷ 尺子上限」：</p>
+<pre>超标倍数      数值
+中位数 p50    4.38x   ← 一半的弃单超标 4 倍以上
+p90           9.66x
+最大          26.82x
+平均          5.08x
+近失(&lt;1.05x)  1,331 条，仅占 1.4%</pre>
+<p>如果尺子是「差一点点被误伤」，近失应该占大头——那说明只需微调 5% 就能放行。实际相反：<strong>98.6% 的弃单不是边缘案例，尺子和信号生成器在系统性地打架</strong>。信号按形态给的止损，绝大多数远超尺子允许的上限。被拒的入场价去重后有 1,553 个——这不是某一段行情的偶发，而是策略在大多数时间里根本过不了自己家的门。</p>
+<p>这种时候，「把上限调大一点」和「保持不动」都不是答案：前者等于承认风控形同虚设，后者等于让风控替你停止交易。正确动作是先回答——<strong>双方谁的假设错了</strong>。尺子的假设是「3 倍 ATR 以外的止损都太宽」；信号的假设是「这个形态需要这么宽才有呼吸空间」。日志里的 4.38 倍中位数告诉你：至少有一方的常数是拍脑袋定的，没有用数据回测过。</p>
+
+<h2>二、死锁链条：上面压、下面顶</h2>
+<p>止损距离同时受三方约束，方向相反：</p>
+<pre>上方：止损尺子 cap  ← 压小止损距离
+中间：信号给出的 SL
+下方：券商 stops_level（最小止损距离） ← 顶大止损距离</pre>
+<p>我们的下单代码在每次重试时会把太贴现价的 SL 自动顶到 <code>stops_level</code>，再按最低盈亏比同步放大 TP——这层兜底是对的，但它带来一个副作用：<strong>ATR 收缩时，尺子的上限从上往下压，券商的最小距离从下往上顶，合法窗口可能归零</strong>。窗口归零的表现不是报错，而是循环：下单 → 拒单 → 重试 3 次 → 进入 180 秒冷却 → 下一个信号再来一遍。</p>
+<p>实测全量日志里的拒单结构：</p>
+<pre>retcode=10016 Invalid stops   15 次
+开仓失败达上限 → 冷却 180s    12 次
+retcode=10004 requote          9 次
+retcode=10044 session closed    6 次
+AI 拒单                        580 次</pre>
+<p>Invalid stops 的 15 次全部以「三连拒 + 冷却」收场——<strong>每次死锁至少烧掉 180 秒的交易窗口</strong>，而且发生在信号最密集的时段。最讽刺的是：这类失败在账户权益曲线上不留任何痕迹，它只是让该做的单没做，你以为今天「没什么机会」。</p>
+
+<h2>三、三个修复（按优先级）</h2>
+<p><strong>1. 限流键只用规则名，不用原因文本。</strong>刷屏止血我们踩过坑：最初按「规则名+原因前缀」限流，但原因里带着变动的价格（<code>弃单 BUY@4182.35</code>），前缀匹配不到同一把 key，照刷不误；改成仅按规则名限流后才真正压下去（日志里留下了 448 行带「同因抑制 N 次」的聚合记录）。教训一句话：<strong>限流 key 里不能含会变的数据</strong>。</p>
+<p><strong>2. 用数据重定尺子的常数，而不是凭感觉调。</strong>近失率 1.4% 说明现在的常数既没起到「放过边缘单」的作用，也没起到「挡住危险单」的可解释作用。把每条弃单的（ATR、区间宽、实际 SL、后续价格走势）落成结构化记录，回测「如果放行会怎样」，再决定 3.0×ATR 这个系数是 3 还是 5。</p>
+<p><strong>3. 给「窗口归零」加一条显式日志。</strong>当尺子上限 &lt; 券商 stops_level 时，直接打印一次「合法止损窗口已归零」，而不是让循环替你表达。死锁最贵的部分是它伪装成「没信号」。</p>
+
+<h2>四、自查清单</h2>
+<pre>□ 数一数：你的日志里单一规则占了多少比例？超过 20% 就该看分布
+□ 看近失率：超标/超限的边缘案例占比低于 10% = 常数没有对齐信号
+□ 限流 key 是否含价格、时间等会变字段
+□ 拒单是否形成「3 连拒 + 冷却」循环？每次循环损失多少秒
+□ 尺子上限与券商 stops_level 有没有显式的冲突检测</pre>
+<p>最后补一个反面证据：我们还装了另一道「止损宽度门」（止损距离不得低于 0.20×前 100 分钟振幅），上线至今触发 <strong>0 次</strong>——一道从不响的闸和一道占了 44% 日志的闸，都不正常：前者是装饰，后者是死锁。<strong>风控的健康状态，只能从它的触发分布里读出来。</strong></p>
+
+</main><footer class="site-footer"><p>&copy; 2026 VigilDesk</p></footer></body></html>
