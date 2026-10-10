@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>你上一次爆仓，是不是因为半夜那一笔？· VigilDesk</title>
+<meta name="description" content="我们让你设好上限之后 24 小时内改不了它 —— 所以那一笔，你根本下不出去。还没开卖，先登记意向。">
+<style>
+  :root{
+    --bg:#0b0e13; --card:#141922; --card2:#1b222d; --line:#26303d;
+    --fg:#eef2f7; --dim:#96a2b4; --accent:#ff5a4e; --accent2:#ffb020; --ok:#37c98b;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.75; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 22px}
+  header{padding:64px 0 34px; border-bottom:1px solid var(--line)}
+  .brand{display:flex; align-items:center; gap:10px; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin-bottom:30px}
+  .brand i{width:9px; height:9px; border-radius:50%; background:var(--accent); display:inline-block; box-shadow:0 0 0 4px rgba(255,90,78,.14)}
+  h1{font-size:clamp(28px,5.4vw,45px); line-height:1.22; margin:0 0 22px; letter-spacing:-.02em; font-weight:800}
+  h1 em{font-style:normal; color:var(--accent); border-bottom:3px solid rgba(255,90,78,.32)}
+  .lede{font-size:clamp(17px,2.5vw,21px); color:#d7dee9; margin:0 0 14px; font-weight:600}
+  .lede b{color:var(--accent2)}
+  .sub{color:var(--dim); font-size:15px; margin:0}
+  section{padding:44px 0; border-bottom:1px solid var(--line)}
+  h2{font-size:20px; margin:0 0 18px; letter-spacing:-.01em}
+  h2 .num{color:var(--accent); font-variant-numeric:tabular-nums; margin-right:9px}
+  .pain{background:var(--card); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:10px; padding:18px 20px; margin:0 0 14px}
+  .pain .who{color:var(--accent2); font-weight:700; font-size:14px; letter-spacing:.04em; margin-bottom:6px}
+  .pain p{margin:0; color:#e6ecf4}
+  .grid{display:grid; gap:12px; grid-template-columns:1fr}
+  @media(min-width:620px){ .grid.two{grid-template-columns:1fr 1fr} }
+  .box{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px 18px}
+  .box .t{font-weight:700; margin-bottom:6px; color:#fff}
+  .box .d{color:var(--dim); font-size:14.5px; margin:0}
+  .box.no{border-color:#3a2020; background:#170f10}
+  .box.yes{border-color:#1f3b2e; background:#0e1a15}
+  .tag{display:inline-block; font-size:12px; font-weight:700; padding:2px 8px; border-radius:99px; margin-bottom:8px}
+  .tag.no{background:rgba(255,90,78,.16); color:#ff8f86}
+  .tag.yes{background:rgba(55,201,139,.15); color:var(--ok)}
+  .steps{counter-reset:s; list-style:none; padding:0; margin:0}
+  .steps li{position:relative; padding:0 0 16px 44px; color:#dfe6ef}
+  .steps li:before{
+    counter-increment:s; content:counter(s);
+    position:absolute; left:0; top:2px; width:28px; height:28px; border-radius:8px;
+    background:var(--card2); border:1px solid var(--line); color:var(--accent2);
+    font-weight:800; font-size:14px; display:flex; align-items:center; justify-content:center;
+  }
+  .steps li b{color:#fff}
+  form{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px; margin-top:8px}
+  label{display:block; font-size:14px; font-weight:700; margin-bottom:8px}
+  .row{display:flex; gap:10px; flex-wrap:wrap}
+  input[type=email]{
+    flex:1 1 260px; min-width:0; padding:14px 15px; font-size:16px; color:var(--fg);
+    background:#0d1219; border:1px solid var(--line); border-radius:9px; outline:none;
+  }
+  input[type=email]:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(255,90,78,.13)}
+  button{
+    flex:0 0 auto; padding:14px 24px; font-size:16px; font-weight:800; cursor:pointer;
+    color:#12161d; background:var(--accent2); border:0; border-radius:9px; letter-spacing:.01em;
+  }
+  button:hover{filter:brightness(1.07)}
+  button:disabled{opacity:.55; cursor:default}
+  .fine{color:var(--dim); font-size:13px; margin:12px 0 0}
+  .msg{margin:14px 0 0; padding:12px 14px; border-radius:9px; font-size:15px; display:none}
+  .msg.on{display:block}
+  .msg.good{background:rgba(55,201,139,.12); border:1px solid rgba(55,201,139,.4); color:#9ef0c6}
+  .msg.bad{background:rgba(255,90,78,.1); border:1px solid rgba(255,90,78,.42); color:#ffb3ac}
+  .notice{background:#171208; border:1px solid #4a3a12; border-radius:10px; padding:15px 17px; margin:0 0 20px}
+  .notice .t{color:var(--accent2); font-weight:800; margin-bottom:5px}
+  .notice p{margin:0; color:#e9dcc0; font-size:15px}
+  .fallback{background:#101720; border:1px dashed var(--line); border-radius:10px; padding:15px 17px; margin-top:14px; display:none}
+  .fallback.on{display:block}
+  .fallback a{color:var(--accent2); font-weight:700; word-break:break-all}
+  a{color:var(--accent2)}
+  footer{padding:34px 0 70px; color:var(--dim); font-size:13.5px}
+  footer .risk{background:#101620; border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin-bottom:20px; color:#b9c4d2}
+  footer .risk b{color:#e8eef6}
+  .cost{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="brand"><i></i> VigilDesk · 交易者的刹车</div>
+  <h1>你上一次爆仓，是不是因为<em>半夜那一笔</em>？</h1>
+  <p class="sub" style="font-size:15px;color:var(--dim);margin:-8px 0 16px">Was it the 2 a.m. trade that blew up your account?</p>
+  <p class="lede">我们让你设好上限之后，<b>24 小时内改不了它</b> —— 所以那一笔，你根本下不出去。</p>
+  <p class="sub">不是提醒你、不是劝你、不是弹个窗让你点「确定」。是让你<strong>没有那个权限</strong>。</p>
+  <p class="sub" style="margin-top:6px;font-size:14px">We make the limit you set unchangeable for 24 hours — so at 2 a.m., you simply cannot place that trade.</p>
+</header>
+
+<section>
+  <h2><span class="num">01</span>先说清楚：为什么「自制力」救不了你</h2>
+  <div class="pain">
+    <div class="who">凌晨 2 点 · 连亏三笔 · 你正想调高上限</div>
+    <p>你知道不该调。你也知道自己会调。你缺的不是知识，不是指标，不是哪本书 —— 你缺的是<strong>让此刻的自己没有权限</strong>。</p>
+  </div>
+  <div class="grid two" style="margin-top:14px">
+    <div class="box no">
+      <span class="tag no">软件开关做不到</span>
+      <div class="t">你已经见过的那些做法</div>
+      <p class="d">设个上限、弹个提醒、加个确认框。半夜你手一滑就关掉了 —— 关掉它比下单还快。<strong>它拦得住手，拦不住你。</strong></p>
+    </div>
+    <div class="box yes">
+      <span class="tag yes">只有契约做得到</span>
+      <div class="t">我们打算做的形态</div>
+      <p class="d">把你的上限变成一份<strong>有冷却期、有抵押、有违约代价</strong>的承诺 —— 立下之后，改它要等一整天。等的过程里，手痒已经过去了。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">02</span>我们打算怎么做（承诺契约，不是又一个开关）</h2>
+  <ol class="steps">
+    <li><b>立约要冷静期。</b>设上限不是当场生效，而是先签、过一段冷静期才生效 —— 防止你在冲动里定一个自己都不认的规矩，也防止你在冲动里把它撤掉。</li>
+    <li><b>改约要等 24 小时。</b>想放宽额度，申请提交后 24 小时才生效，而且必须写下理由、留档。**这 24 小时就是给你后悔用的。**</li>
+    <li><b>反悔有代价。</b>要么需要一位担保人放行，要么按事先说好的违约代价承担 —— 让「反悔」这件事，第一次变得比「忍住」更贵。</li>
+  </ol>
+  <p class="sub" style="margin-top:6px">这三条正是它替你做、而你自己做不到的事：<strong>你没法在白天替深夜的自己设防，也没法在自己想反悔时按住自己。一份契约可以。</strong></p>
+</section>
+
+<section>
+  <h2><span class="num">03</span>还没开卖 —— 先登记意向，开卖时通知你</h2>
+  <div class="notice">
+    <div class="t">我们还没开卖，这里也收不了钱</div>
+    <p>这个页面<strong>只有一个邮箱输入框，没有任何付款入口</strong>。你留下邮箱，只是让我们知道「这件事有人要」；等真正开卖时，我们通知你。你不留也没关系，不会有第二次打扰。</p>
+  </div>
+
+  <form id="intent-form" novalidate>
+    <label for="email">你的邮箱（只收邮箱，不收别的）</label>
+    <div class="row">
+      <input type="email" id="email" name="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required>
+      <button type="submit" id="submit-btn">我想先用</button>
+    </div>
+    <p class="fine" style="margin-top:14px">
+      <label for="consent" style="display:flex;gap:9px;align-items:flex-start;font-weight:400;color:var(--dim);font-size:13.5px;margin:0">
+        <input type="checkbox" id="consent" style="margin-top:4px;flex:0 0 auto">
+        <span>我同意只把邮箱用于「开卖时通知我」这一件事；我随时可以要求删除。</span>
+      </label>
+    </p>
+    <p class="fine">只用它通知你开卖这件事。不回显、不转卖、不发广告、不做任何统计追踪。</p>
+    <div class="msg" id="msg" role="status" aria-live="polite"></div>
+    <div class="fallback" id="fallback">
+      <div style="font-weight:700;margin-bottom:6px">如果上面没反应，用邮件登记也一样（推荐，最可靠）：</div>
+      <div>点这里 <a id="mailto-link" href="#">发送登记邮件</a> —— 邮件只需一行：<code>我想先用</code></div>
+      <div style="color:var(--dim);font-size:13px;margin-top:8px">收件地址：<span id="mailto-addr"></span></div>
+    </div>
+  </form>
+</section>
+
+<footer>
+  <div class="risk">
+    <b>风险提示。</b>本站目前<strong>只有意向登记，没有开卖、没有定价、没有收款</strong>。我们做的是交易风险控制工具（俗称「刹车」），<strong>它不预测行情、不提供交易信号、不代客操作、不承诺任何收益</strong>，也<strong>不可能消除亏损的可能</strong>——它只能让一部分亏损有边界。行情本身的风险始终由你自己承担。上面写的功能（冷静期 / 24 小时冷却 / 担保人 / 违约代价）是<strong>我们打算做的产品形态，目前尚未全部实现</strong>，我们不宣称已经具备。
+  </div>
+  <div>© 2026 VigilDesk · 联系方式：<span class="cost">760808632@qq.com</span></div>
+  <div style="margin-top:8px">本页不加载任何第三方脚本、不使用任何统计或追踪代码 —— 所以我们也<strong>读不到你的访问行为</strong>，请知悉。</div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  // 公开的登记收件地址（与页脚一致）
+  var MAIL = '760808632@qq.com';
+  // 本地实测用的收集端点。线上（GitHub Pages 静态站）没有后端，此端点必然不可达，
+  // 因此线上会自动走下面的 mailto 兜底 —— 这是刻意的设计，不是 bug。
+  // 仅在本地实测时可用 ?endpoint=... 覆盖（线上不带该参数，行为不变）
+  var ENDPOINT = 'http://127.0.0.1:8791/intent';
+  try {
+    var qp = new URLSearchParams(window.location.search).get('endpoint');
+    if (qp) ENDPOINT = qp;
+  } catch (e) {}
+
+  var form = document.getElementById('intent-form');
+  var input = document.getElementById('email');
+  var consent = document.getElementById('consent');
+  var btn = document.getElementById('submit-btn');
+  var msg = document.getElementById('msg');
+  var fb = document.getElementById('fallback');
+  var link = document.getElementById('mailto-link');
+
+  document.getElementById('mailto-addr').textContent = MAIL;
+
+  function show(cls, text){ msg.className = 'msg on ' + cls; msg.textContent = text; }
+  function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+
+  function mailtoFor(email){
+    var subject = encodeURIComponent('我想先用 VigilDesk（意向登记）');
+    var body = encodeURIComponent('我想先用。\n\n我的邮箱：' + email + '\n\n（这封信是我在 vigildesk 意向登记页上点的，我没有付款，也没有别的要求。）');
+    return 'mailto:' + MAIL + '?subject=' + subject + '&body=' + body;
+  }
+
+  function openMailto(email){
+    var href = mailtoFor(email);
+    link.href = href;
+    fb.className = 'fallback on';
+    try { window.location.href = href; } catch(e){}
+    return href;
+  }
+
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var email = (input.value || '').trim();
+    if (!isEmail(email)) {
+      show('bad', '这个邮箱看起来不对，请再检查一下（例如 you@example.com）。');
+      input.focus();
+      return;
+    }
+    if (consent && !consent.checked) {
+      show('bad', '请先勾选上面那个小方框（只把邮箱用于开卖通知），我们就存这一个邮箱。');
+      consent.focus();
+      return;
+    }
+    btn.disabled = true; btn.textContent = '提交中…';
+
+    // 第 1 步：尝试本地/自有收集端点（本地实测可通；线上不通 → 走兜底）
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, page: 'intent.html', ts: new Date().toISOString() })
+    }).then(function(r){
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function(){
+      show('good', '登记好了 ✓ 开卖时我们会用这个邮箱通知你。现在没有任何付款动作，你也不用做别的。');
+      btn.textContent = '已登记';
+      fb.className = 'fallback';
+    }).catch(function(){
+      // 第 2 步：兜底 —— 用邮件登记（线上唯一可靠的通道）
+      btn.disabled = false; btn.textContent = '我想先用';
+      show('good', '已为你打开登记邮件 ✓ 把邮件发出去就算登记成功（我们只记录邮箱）。');
+      openMailto(email);
+    });
+  });
+
+  input.addEventListener('input', function(){
+    link.href = mailtoFor((input.value || '').trim() || '（你的邮箱）');
+  });
+  link.href = mailtoFor('');
+
+  // 只读测试钩子（供无头实测断言用，不改变任何行为）
+  window.__intentDebug = {
+    endpoint: ENDPOINT,
+    mail: MAIL,
+    isEmail: isEmail,
+    mailtoFor: mailtoFor,
+    state: function(){
+      return { msgClass: msg.className, msgText: msg.textContent, btn: btn.textContent,
+               fbOn: fb.className.indexOf('on') !== -1, linkHref: link.href };
+    }
+  };
+})();
+</script>
+</body>
+</html>
