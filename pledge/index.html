@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>你今天给自己定的规矩，明天还算数吗？· 承诺押金（意向）</title>
+<meta name="description" content="你自己定一条规矩，押一笔钱；破了戒，钱按你事先说好的方式赔出去。我们还没开卖，这页只是问你想不想要。钱不经过我们。">
+<style>
+  :root{
+    --bg:#0b0e13; --card:#141922; --card2:#1b222d; --line:#26303d;
+    --fg:#eef2f7; --dim:#96a2b4; --accent:#ff5a4e; --accent2:#ffb020; --ok:#37c98b;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.75; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 20px}
+  header{padding:56px 0 32px; border-bottom:1px solid var(--line)}
+  .brand{display:flex; align-items:center; gap:10px; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin-bottom:26px}
+  .brand i{width:9px; height:9px; border-radius:50%; background:var(--accent); display:inline-block; box-shadow:0 0 0 4px rgba(255,90,78,.14)}
+  h1{font-size:clamp(26px,5.6vw,43px); line-height:1.24; margin:0 0 20px; letter-spacing:-.02em; font-weight:800}
+  h1 em{font-style:normal; color:var(--accent); border-bottom:3px solid rgba(255,90,78,.32)}
+  .lede{font-size:clamp(16.5px,2.5vw,20px); color:#d7dee9; margin:0 0 12px; font-weight:600}
+  .lede b{color:var(--accent2)}
+  .sub{color:var(--dim); font-size:15px; margin:0}
+  section{padding:42px 0; border-bottom:1px solid var(--line)}
+  h2{font-size:20px; margin:0 0 18px; letter-spacing:-.01em}
+  h2 .num{color:var(--accent); font-variant-numeric:tabular-nums; margin-right:9px}
+  .quote{background:var(--card); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:10px; padding:18px 20px; margin:0 0 14px}
+  .quote .who{color:var(--accent2); font-weight:700; font-size:13.5px; letter-spacing:.03em; margin-bottom:8px}
+  .quote p{margin:0; color:#e6ecf4}
+  .quote .src{margin-top:10px; color:var(--dim); font-size:12.5px; word-break:break-all}
+  .grid{display:grid; gap:12px; grid-template-columns:1fr}
+  @media(min-width:620px){ .grid.two{grid-template-columns:1fr 1fr} }
+  .box{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px 18px}
+  .box .t{font-weight:700; margin-bottom:6px; color:#fff}
+  .box .d{color:var(--dim); font-size:14.5px; margin:0}
+  .box.no{border-color:#3a2020; background:#170f10}
+  .box.yes{border-color:#1f3b2e; background:#0e1a15}
+  .tag{display:inline-block; font-size:12px; font-weight:700; padding:2px 8px; border-radius:99px; margin-bottom:8px}
+  .tag.no{background:rgba(255,90,78,.16); color:#ff8f86}
+  .tag.yes{background:rgba(55,201,139,.15); color:var(--ok)}
+  .steps{list-style:none; padding:0; margin:0}
+  .steps li{position:relative; padding:0 0 15px 44px; color:#dfe6ef}
+  .steps li:before{
+    content:"◆"; position:absolute; left:0; top:2px; width:28px; height:28px; border-radius:8px;
+    background:var(--card2); border:1px solid var(--line); color:var(--accent2);
+    font-weight:800; font-size:11px; display:flex; align-items:center; justify-content:center;
+  }
+  .steps li b{color:#fff}
+  .bounds{counter-reset:b; list-style:none; padding:0; margin:0}
+  .bounds li{position:relative; padding:14px 18px 14px 50px; margin-bottom:12px; background:var(--card); border:1px solid var(--line); border-radius:10px; color:#e7edf5}
+  .bounds li:before{
+    counter-increment:b; content:counter(b);
+    position:absolute; left:16px; top:15px; width:24px; height:24px; border-radius:50%;
+    background:rgba(255,176,32,.14); border:1px solid #4a3a12; color:var(--accent2);
+    font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center;
+  }
+  .bounds li b{color:#fff}
+  form{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px 18px; margin-top:8px}
+  fieldset{border:0; padding:0; margin:0 0 20px}
+  fieldset:last-of-type{margin-bottom:6px}
+  legend{font-size:15px; font-weight:800; color:#fff; padding:0; margin-bottom:4px}
+  .qn{color:var(--accent); font-variant-numeric:tabular-nums; margin-right:6px}
+  .hint{color:var(--dim); font-size:13px; margin:2px 0 10px}
+  .opts{display:flex; flex-wrap:wrap; gap:8px}
+  .opt{
+    display:flex; align-items:center; gap:8px; cursor:pointer;
+    background:#0f151d; border:1px solid var(--line); border-radius:9px;
+    padding:10px 13px; font-size:14.5px; color:#dfe6ef; flex:1 1 200px; min-width:0;
+  }
+  .opt:hover{border-color:#38455a}
+  .opt input{accent-color:var(--accent2); width:17px; height:17px; flex:0 0 auto; margin:0}
+  .opt span{min-width:0}
+  .opt.small{flex:0 1 auto}
+  input[type=email],input[type=text]{
+    flex:1 1 240px; min-width:0; padding:13px 14px; font-size:16px; color:var(--fg);
+    background:#0d1219; border:1px solid var(--line); border-radius:9px; outline:none;
+  }
+  input[type=email]:focus,input[type=text]:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(255,90,78,.13)}
+  .row{display:flex; gap:10px; flex-wrap:wrap}
+  button{
+    width:100%; padding:15px 22px; font-size:16.5px; font-weight:800; cursor:pointer;
+    color:#12161d; background:var(--accent2); border:0; border-radius:9px; letter-spacing:.01em; margin-top:6px;
+  }
+  button:hover{filter:brightness(1.07)}
+  button:disabled{opacity:.6; cursor:default}
+  .fine{color:var(--dim); font-size:13px; margin:12px 0 0}
+  .msg{margin:14px 0 0; padding:12px 14px; border-radius:9px; font-size:15px; display:none}
+  .msg.on{display:block}
+  .msg.good{background:rgba(55,201,139,.12); border:1px solid rgba(55,201,139,.4); color:#9ef0c6}
+  .msg.bad{background:rgba(255,90,78,.1); border:1px solid rgba(255,90,78,.42); color:#ffb3ac}
+  .notice{background:#171208; border:1px solid #4a3a12; border-radius:10px; padding:15px 17px; margin:0 0 20px}
+  .notice .t{color:var(--accent2); font-weight:800; margin-bottom:5px}
+  .notice p{margin:0; color:#e9dcc0; font-size:15px}
+  .fallback{background:#101720; border:1px dashed var(--line); border-radius:10px; padding:15px 17px; margin-top:14px; display:none}
+  .fallback.on{display:block}
+  .fallback a{color:var(--accent2); font-weight:700; word-break:break-all}
+  .pre{background:#0d1219; border:1px solid var(--line); border-radius:8px; padding:11px 13px; margin-top:9px; white-space:pre-wrap; word-break:break-word; font-size:13px; color:#c9d5e3; font-family:ui-monospace,Consolas,"Courier New",monospace; max-height:260px; overflow:auto}
+  a{color:var(--accent2)}
+  table.cmp{width:100%; border-collapse:collapse; font-size:14.5px; margin-top:4px}
+  table.cmp th,table.cmp td{border:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top}
+  table.cmp th{background:var(--card2); color:#fff; font-size:13.5px}
+  footer{padding:34px 0 70px; color:var(--dim); font-size:13.5px}
+  footer .risk{background:#101620; border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin-bottom:20px; color:#b9c4d2}
+  footer .risk b{color:#e8eef6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="brand"><i></i> VigilDesk · 承诺押金（意向收集）</div>
+  <h1>你今天给自己定的规矩，<em>明天还算数吗</em>？</h1>
+  <p class="lede">你自己定一条规矩（<b>今天最多亏多少</b> / <b>今天不再开新仓</b>），押一笔钱。破了戒，钱按你事先说好的方式赔出去。</p>
+  <p class="sub">这页只是问你想不想要 —— <strong>我们还没开卖</strong>，也不会收你一分钱。</p>
+</header>
+
+<section>
+  <h2><span class="num">01</span>先说这页是给谁看的 —— 用你们自己的话</h2>
+
+  <div class="quote">
+    <div class="who">一个交易者 · 他自己定下的纪律</div>
+    <p>「亡 主线=法=一之所向……<strong>还是给自己定个纪律</strong>，做好计划，只做两种交易，开盘买卖或者收盘买卖。买卖完就不看了，闹心。」</p>
+    <div class="src">— 集思录 · nirvana1982 · 2025-04-28 · jisilu.cn/question/505577</div>
+  </div>
+
+  <div class="quote">
+    <div class="who">另一个交易者 · 他发现写下来才有用</div>
+    <p>「计划逐渐减少 A 股基金配置，增加美股和商品配置……<strong>落到文字上可以避免一时的冲动。</strong>」</p>
+    <div class="src">— 集思录 · 匿名 · jisilu.cn/question/505577</div>
+  </div>
+
+  <div class="quote">
+    <div class="who">第三个交易者 · 他已经自己造了一把锁</div>
+    <p>「我说一说我的方法。制定好了策略之后，买入卖出尽最大可能用券商的条件单来交易。<strong>平时交易的手机用备用机，我把它放在家里</strong>，这样我上班的时候就<strong>接触不到需要操作的手机</strong>，每天晚上下班之后，再把备用机拿出来设定新的条件单，如果没有就不碰备用机。全程交由条件单触发来交易。这样采取<strong>物理隔绝</strong>的方法是很不错的，你可以试一下。」</p>
+    <div class="src">— 集思录 · zhangsheng123 · 2026-06-17 · jisilu.cn/question/522118</div>
+  </div>
+
+  <p class="sub" style="margin-top:14px">
+    我们读了 3,889 条公开的发帖与回复（股吧 / 集思录 / 淘股吧），
+    明确写下「<strong>我知道不该做，但还是做了</strong>」的只有 <strong>20 条（0.5%）</strong>；
+    主动想要个东西管住自己的只有 <strong>9 条（0.2%）</strong>。
+    <strong>而这 9 条里，没有一条是要一个 App 提醒他 —— 全是他自己给自己造锁。</strong>
+    上面这位把交易手机放家里，就是最典型的一条。
+  </p>
+</section>
+
+<section>
+  <h2><span class="num">02</span>为什么"提醒你一下"没有用</h2>
+  <div class="grid two">
+    <div class="box no">
+      <span class="tag no">提醒 · 你随手就关掉</span>
+      <div class="t">上限、弹窗、确认框</div>
+      <p class="d">半夜你手一滑就关掉了 —— 关掉它比下单还快。<strong>它拦得住手，拦不住你。</strong>你自己也知道：明天再看，上限已经变高了。</p>
+    </div>
+    <div class="box yes">
+      <span class="tag yes">押金 · 关不掉的是钱</span>
+      <div class="t">你立的规矩，押上一笔钱</div>
+      <p class="d">提醒可以关，<strong>钱关不掉</strong>。这就是这页想问你的唯一一件事：如果破了誓约要付出真代价，你还破不破？</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">03</span>它是什么（三步，就这么简单）</h2>
+  <ol class="steps">
+    <li><b>你自己定一条规矩。</b>比如「今天最多亏 500」「今天不再开新仓」。规矩是你定的，不是我们替你定的 —— 我们不会告诉你该怎么交易。</li>
+    <li><b>你押一笔钱，押给你信得过的一方。</b>捐给约定的慈善机构，或者押给你的家人 / 朋友当<strong>担保人</strong>。</li>
+    <li><b>破了戒，按你事先说好的方式赔出去。</b>我们只做三件事：<strong>合约 + 判定 + 通知</strong>。</li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="num">04</span>三条边界（必须先说清楚，一句不省）</h2>
+  <ol class="bounds">
+    <li><b>我们还没开卖</b>，这页只是问你想不想要；</li>
+    <li><b>钱不经过我们</b>——你直接捐给约定的慈善机构，或者押给你的家人/朋友当担保人；我们只做"合约 + 判定 + 通知"；</li>
+    <li>我们只能说<b>"让破戒变贵"</b>，<b>绝不说"让你不可能破戒"</b>（说后者就是虚假宣传）。</li>
+  </ol>
+  <p class="sub">
+    也是我们对你的承诺：<strong>你的钱从第一步到最后一步都不进我们的账</strong>，
+    没有资金池、没有代收代管、没有退款流程（因为根本不存在"我们收过你钱"这件事）。
+  </p>
+</section>
+
+<section>
+  <h2><span class="num">05</span>问你三件事（就这三个，不用注册、不留手机号）</h2>
+  <div class="notice">
+    <div class="t">我们还没开卖，这页也收不了钱</div>
+    <p>这页<strong>没有任何付款入口、没有价格、没有收款按钮</strong>。你回答的三个问题，只是让我们知道「这件事到底有没有人要」。
+      邮箱可以留、也可以不留 —— <strong>不留也能提交</strong>。</p>
+  </div>
+
+  <form id="pledge-form" novalidate>
+    <fieldset>
+      <legend><span class="qn">1</span>你愿不愿意押？</legend>
+      <p class="hint">选一个。选「看情况」也行 —— 那是真实答案，比客套有用。</p>
+      <div class="opts" role="radiogroup" aria-label="你愿不愿意押">
+        <label class="opt"><input type="radio" name="willing" value="愿意押"><span>愿意押</span></label>
+        <label class="opt"><input type="radio" name="willing" value="不愿意"><span>不愿意</span></label>
+        <label class="opt"><input type="radio" name="willing" value="看情况"><span>看情况</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="qn">2</span>你愿意押给谁？</legend>
+      <p class="hint">押给谁，决定了破了戒以后钱去哪儿。</p>
+      <div class="opts" role="radiogroup" aria-label="你愿意押给谁">
+        <label class="opt"><input type="radio" name="payee" value="慈善机构"><span>慈善机构</span></label>
+        <label class="opt"><input type="radio" name="payee" value="家人/朋友当担保人"><span>家人 / 朋友当担保人</span></label>
+        <label class="opt"><input type="radio" name="payee" value="其他"><span>其他</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="qn">3</span>你愿意押多少？</legend>
+      <p class="hint">选一个区间，或者自己填一个数（只填数字，单位元）。</p>
+      <div class="opts" role="radiogroup" aria-label="你愿意押多少">
+        <label class="opt small"><input type="radio" name="amount" value="100以内"><span>100 以内</span></label>
+        <label class="opt small"><input type="radio" name="amount" value="100-500"><span>100 – 500</span></label>
+        <label class="opt small"><input type="radio" name="amount" value="500-2000"><span>500 – 2000</span></label>
+        <label class="opt small"><input type="radio" name="amount" value="2000-1万"><span>2000 – 1 万</span></label>
+        <label class="opt small"><input type="radio" name="amount" value="1万以上"><span>1 万以上</span></label>
+        <label class="opt small"><input type="radio" name="amount" value="__custom__" id="amount-custom-radio"><span>我自己填 →</span></label>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <input type="text" id="amount-custom" inputmode="numeric" autocomplete="off" placeholder="我自己填（只填数字，单位元；不填也算提交）" maxlength="12">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>邮箱（可选）</legend>
+      <p class="hint">想让我们开卖的时候通知你，就留一个；<strong>不留也能提交</strong>。</p>
+      <div class="row">
+        <input type="email" id="email" name="email" inputmode="email" autocomplete="email" placeholder="you@example.com（可以留空）">
+      </div>
+      <p class="fine">
+        <label for="consent" style="display:flex;gap:9px;align-items:flex-start;font-weight:400;color:var(--dim);font-size:13px;margin:0">
+          <input type="checkbox" id="consent" style="margin-top:4px;flex:0 0 auto">
+          <span>我留了邮箱，同意只用它做「开卖时通知我」这一件事；我随时可以要求删除。</span>
+        </label>
+      </p>
+    </fieldset>
+
+    <button type="submit" id="submit-btn">提交我的答案</button>
+
+    <p class="fine" id="sendNote">
+      提交后会打开一封<strong>已经替你填好的邮件</strong>，你按发送即可（这页没有服务器，收不到你的表）。
+      你也可以留空邮箱，我们不强求。
+    </p>
+
+    <div class="msg" id="msg" role="status" aria-live="polite"></div>
+
+    <div class="fallback" id="fallback">
+      <div style="font-weight:700;margin-bottom:6px">下面这封邮件就是你的答案，把它发出去就算提交成功：</div>
+      <div>点这里 <a id="mailto-link" href="#">发送这封邮件</a></div>
+      <div class="pre" id="mailto-preview"></div>
+      <div style="color:var(--dim);font-size:13px;margin-top:8px">收件地址：<span id="mailto-addr"></span></div>
+      <div style="color:var(--dim);font-size:13px;margin-top:6px">
+        如果点了没反应，就手动复制上面那段内容，发到这个邮箱 —— 一样算数。
+      </div>
+    </div>
+  </form>
+</section>
+
+<section>
+  <h2><span class="num">06</span>和"自律"这件事的边界（我们不越界）</h2>
+  <table class="cmp">
+    <tr><th>我们做</th><th>我们不做</th></tr>
+    <tr>
+      <td>承接<strong>你自己写的规矩</strong>，把它变成一份有代价的承诺</td>
+      <td>不替你定规矩、不给交易建议、不荐股、不提供任何信号</td>
+    </tr>
+    <tr>
+      <td>只做<strong>合约 + 判定 + 通知</strong></td>
+      <td><strong>不碰你的钱</strong>：不收、不代管、不设资金池、不承诺退款</td>
+    </tr>
+    <tr>
+      <td>让破戒<strong>变贵</strong>（有代价）</td>
+      <td>不宣称"让你不可能破戒" —— 说得到做不到的事，就是骗人</td>
+    </tr>
+    <tr>
+      <td>现在只收<strong>意向</strong></td>
+      <td>还没开卖、还没有定价、还没有任何"购买"入口</td>
+    </tr>
+  </table>
+</section>
+
+<footer>
+  <div class="risk">
+    <b>风险提示与如实说明。</b>
+    本站目前<strong>只有押注意向收集，没有开卖、没有定价、没有收款入口</strong>，也<strong>绝不在任何环节代收或代管你的资金</strong>。
+    我们说的「承诺押金」是一个<strong>打算做的产品形态，目前尚未实现</strong>；页面上写的能力是我们的方向，不是已具备的功能。
+    <br><br>
+    我们做的不是交易建议：<strong>我们不预测行情，也不提供交易信号；不荐股，也绝不代客操作；不承诺任何收益</strong>。
+    押金机制只能让「破戒」这件事变得有代价，<strong>不可能消除你在行情里亏钱的可能</strong> —— 它管的是你的行为，不是市场。行情风险始终由你自己承担。
+    <br><br>
+    这页<strong>不加载任何第三方脚本、不使用任何统计或追踪代码</strong>，所以我们<strong>读不到你的访问行为</strong>；你填的内容只在你自己的浏览器里被拼进那封邮件，只有你自己按下发送，我们才收得到。
+  </div>
+  <div>© 2026 VigilDesk · 联系方式：760808632@qq.com</div>
+  <div style="margin-top:8px">本页为意向收集，不构成任何邀约、要约或投资建议。</div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  // 公开的收件地址（与页脚一致）
+  var MAIL = '760808632@qq.com';
+  // 本地实测用的收集端点：线上（GitHub Pages 静态站）没有服务端，此端点必然不可达，
+  // 因此线上一定会走下面的 mailto 兜底 —— 这是刻意的设计，不是 bug。
+  // 仅在本地实测时可用 ?endpoint=... 覆盖；线上不带该参数，行为不变。
+  var ENDPOINT = 'http://127.0.0.1:8793/pledge';
+  try {
+    var qp = new URLSearchParams(window.location.search).get('endpoint');
+    if (qp) ENDPOINT = qp;
+  } catch (e) {}
+
+  var form    = document.getElementById('pledge-form');
+  var email   = document.getElementById('email');
+  var consent = document.getElementById('consent');
+  var custom  = document.getElementById('amount-custom');
+  var btn     = document.getElementById('submit-btn');
+  var msg     = document.getElementById('msg');
+  var fb      = document.getElementById('fallback');
+  var link    = document.getElementById('mailto-link');
+  var preview = document.getElementById('mailto-preview');
+
+  document.getElementById('mailto-addr').textContent = MAIL;
+
+  function show(cls, text){ msg.className = 'msg on ' + cls; msg.textContent = text; }
+  function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+  function radioVal(name){
+    var el = form.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : '';
+  }
+
+  // 把三个答案 + 可选邮箱整理成一条结构化记录（提交与兜底共用这一份，保证口径一致）
+  function collect(){
+    var amount = radioVal('amount');
+    var customVal = (custom.value || '').trim();
+    if (amount === '__custom__') amount = customVal ? (customVal + ' 元（我自己填的）') : '（选了自填，但没填数）';
+    if (!amount && customVal) amount = customVal + ' 元（我自己填的）';
+    var mail = (email.value || '').trim();
+    return {
+      willing: radioVal('willing'),
+      payee:   radioVal('payee'),
+      amount:  amount,
+      email:   isEmail(mail) ? mail : '',
+      emailRaw: mail,
+      ts: new Date().toISOString()
+    };
+  }
+
+  function mailSubject(d){
+    return '押注意向｜' + (d.willing || '未选') + '｜' + (d.amount || '未选');
+  }
+
+  function mailBody(d){
+    return [
+      '押注意向（来自 vigildesk 承诺押金意向页）',
+      '',
+      '1) 愿不愿意押：' + (d.willing || '（未选）'),
+      '2) 愿意押给谁：' + (d.payee   || '（未选）'),
+      '3) 愿意押多少：' + (d.amount  || '（未选）'),
+      '邮箱（可选）：' + (d.email || '（没留 / 没填）'),
+      '提交时间：' + d.ts,
+      '',
+      '说明：我还没有押任何钱，这只是一份意向。我知道这个产品还没开卖，也知道钱不会经过你们。'
+    ].join('\n');
+  }
+
+  function mailtoFor(d){
+    return 'mailto:' + MAIL
+      + '?subject=' + encodeURIComponent(mailSubject(d))
+      + '&body='    + encodeURIComponent(mailBody(d));
+  }
+
+  function refreshPreview(){
+    var d = collect();
+    link.href = mailtoFor(d);
+    preview.textContent = '收件人：' + MAIL + '\n主题：' + mailSubject(d) + '\n\n' + mailBody(d);
+  }
+
+  function openFallback(reason){
+    refreshPreview();
+    fb.className = 'fallback on';
+    try { window.location.href = link.href; } catch (e) {}
+  }
+
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var d = collect();
+
+    if (!d.willing) { show('bad', '第 1 题还没选 —— 愿不愿意押，选一个就行（选「不愿意」我们一样记下来）。'); return; }
+    if (!d.payee)   { show('bad', '第 2 题还没选 —— 你愿意押给谁？'); return; }
+    if (!d.amount)  { show('bad', '第 3 题还没选 —— 愿意押多少？选一个区间，或者点「我自己填」写一个数。'); return; }
+    if (d.emailRaw && !d.email) {
+      show('bad', '这个邮箱看起来不对，请再检查一下（例如 you@example.com）；不想留邮箱就把这一栏清空。');
+      email.focus(); return;
+    }
+    if (d.email && consent && !consent.checked) {
+      show('bad', '你留了邮箱，请把上面那个小方框勾上（只把它用于开卖通知），或者把邮箱清空再提交。');
+      consent.focus(); return;
+    }
+
+    btn.disabled = true; btn.textContent = '处理中…';
+
+    // 第 1 步：尝试自有收集端点（本地实测可通）；线上静态站必然不通 → 落到兜底
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ page: 'pledge/index.html', willing: d.willing, payee: d.payee, amount: d.amount, email: d.email, ts: d.ts })
+    }).then(function(r){
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function(){
+      btn.disabled = false; btn.textContent = '已提交 ✓';
+      show('good', '记下了 ✓ 谢谢你 —— 这三条答案会直接影响我们要不要做这个东西。没有付款，也不用做别的。');
+      fb.className = 'fallback';
+    }).catch(function(){
+      // 第 2 步：兜底 —— 打开一封替他填好的邮件（线上唯一可靠的通道）
+      btn.disabled = false; btn.textContent = '提交我的答案';
+      show('good', '已替你打开一封填好的邮件 ✓ 按「发送」就算提交成功（我们只看到你选的三个答案和可选的邮箱）。');
+      openFallback('no-backend');
+    });
+  });
+
+  // 实时刷新兜底邮件内容（用户改答案时预览跟着变）
+  form.addEventListener('change', refreshPreview);
+  form.addEventListener('input', refreshPreview);
+  refreshPreview();
+
+  // 只读测试钩子（供无头实测断言用，不改变任何行为）
+  window.__pledgeDebug = {
+    endpoint: ENDPOINT,
+    mail: MAIL,
+    isEmail: isEmail,
+    collect: collect,
+    mailSubject: mailSubject,
+    mailBody: mailBody,
+    mailtoFor: mailtoFor,
+    state: function(){
+      return { msgClass: msg.className, msgText: msg.textContent, btn: btn.textContent,
+               fbOn: fb.className.indexOf('on') !== -1, linkHref: link.href,
+               preview: preview.textContent };
+    }
+  };
+})();
+</script>
+</body>
+</html>
