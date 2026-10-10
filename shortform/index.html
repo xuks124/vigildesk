@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>单点问答 · 15 个交易风控问题，一条只回答一个</title>
+<meta name="description" content="15 条单点短内容：每条只回答交易者会去搜的那一个问题，素材全部来自我们自己的真实事故（重启后止损失灵、日损上限被静默覆盖、止损太窄被波动扫掉……）。只讲风控，不讲盈利。">
+<link rel="canonical" href="https://xuks124.github.io/vigildesk/shortform/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="单点问答 · 15 个交易风控问题，一条只回答一个">
+<meta property="og:description" content="15 条单点短内容：每条只回答交易者会去搜的那一个问题，素材全部来自我们自己的真实事故（重启后止损失灵、日损上限被静默覆盖、止损太窄被波动扫掉……）。只讲风控，不讲盈利。">
+<style>
+:root{--ink:#16212c;--dim:#5b6b7c;--line:#dde4ec;--bg:#f6f8fa;--card:#fff;--red:#b3261e;--blue:#1f5fd0}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);line-height:1.85;
+  font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC","Segoe UI",system-ui,sans-serif}
+a{color:var(--blue)}
+.wrap{max-width:820px;margin:0 auto;padding:0 18px}
+header.top{background:#fff;border-bottom:1.5px solid var(--line);position:sticky;top:0;z-index:9}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px}
+.brand{font-size:15px;font-weight:800;letter-spacing:.02em}
+.brand span{color:var(--red)}
+.lang a{font-size:13.5px;font-weight:700;text-decoration:none;padding:5px 12px;border:1.5px solid var(--line);border-radius:999px}
+.lang a.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.hero{padding:44px 0 26px}
+.kicker{font-size:12.5px;font-weight:800;letter-spacing:.14em;color:#8b98a6;text-transform:uppercase}
+.hero h1{font-size:33px;line-height:1.3;font-weight:800;letter-spacing:-.4px;margin:8px 0 14px}
+.hero p{font-size:16px;color:var(--dim);max-width:44em}
+.hero p+p{margin-top:10px}
+.index{margin:26px 0 8px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:18px 20px}
+.index h2{font-size:14px;color:#8b98a6;font-weight:800;letter-spacing:.06em;margin-bottom:12px}
+.index ol{list-style:none;display:grid;grid-template-columns:1fr;gap:2px}
+.index a{display:flex;gap:10px;padding:7px 8px;border-radius:8px;text-decoration:none;color:var(--ink);font-size:14.5px}
+.index a:hover{background:#f0f4f8}
+.index .n{color:#9aa7b4;font-weight:800;min-width:1.9em;font-variant-numeric:tabular-nums}
+article{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:28px 26px 22px;margin:22px 0}
+.qnum{font-size:12.5px;font-weight:800;letter-spacing:.1em;color:#b3261e}
+article h2{font-size:24px;line-height:1.4;font-weight:800;letter-spacing:-.2px;margin:8px 0 18px}
+article p{font-size:16.5px;margin:13px 0}
+article p:first-of-type{font-size:17.5px}
+article strong{font-weight:800}
+article ul{margin:12px 0 12px 4px;list-style:none}
+article li{font-size:16px;margin:8px 0;padding-left:18px;position:relative}
+article li:before{content:"·";position:absolute;left:4px;color:#9aa7b4;font-weight:800}
+article code{background:#f0f4f8;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:14.5px;
+  font-family:Consolas,"Courier New",monospace}
+figure{margin:20px 0}
+figure img{width:100%;height:auto;display:block;border:1.5px solid var(--line);border-radius:12px;background:#fff}
+figcaption{font-size:13px;color:#8b98a6;margin-top:8px;text-align:center}
+.risk{margin-top:20px;background:#fff8e6;border:1.5px solid #e8c86a;border-left:5px solid #d9a520;
+  border-radius:10px;padding:12px 15px;font-size:14px;color:#6b4e05;line-height:1.7}
+.pull{margin:18px 0;background:#f0f4f8;border-left:5px solid #b8c4d0;border-radius:8px;
+  padding:13px 16px;font-size:16.5px;color:#243342;line-height:1.75}
+footer{border-top:1.5px solid var(--line);margin-top:34px;padding:26px 0 60px;color:var(--dim);font-size:14px}
+footer p{margin:7px 0}
+footer .big{font-size:15.5px;font-weight:800;color:var(--ink)}
+@media(max-width:560px){
+  .hero h1{font-size:26px} article{padding:20px 16px 16px} article h2{font-size:20px}
+  article p{font-size:16px} .index ol{gap:0}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="brand">小孬科技 · <span>单点问答</span></div>
+  <div class="lang"><a href="en.html">English version</a></div>
+</div></header>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="kicker">vigildesk · one-question answers</div>
+    <h1>一条只回答一个问题</h1>
+    <p>这 15 条，每一条只解决一个疑问，标题就是你会去搜的那句话。不铺开讲体系，不写工程报告。</p>
+    <p>素材全部来自我们自己的真实事故——配错的日损上限、被静默跳过的不止损、被日常波动扫掉的窄止损。数字都标注了口径和样本量，站不住的地方我们直接写「这是待确认的假设」。</p>
+    <p>我们只讲风控，不讲盈利：这里没有收益曲线，也没有任何关于结果的承诺。</p>
+  </div>
+  <nav class="index"><h2>目录（点标题跳到那一条）</h2><ol><li><a href="#p01"><span class="n">01</span><span>重启之后，追踪止损为什么会静默失效？</span></a></li>
+<li><a href="#p02"><span class="n">02</span><span>我设了日损上限，为什么它自己失效了？</span></a></li>
+<li><a href="#p03"><span class="n">03</span><span>止损设得太窄，为什么会被正常波动扫掉？</span></a></li>
+<li><a href="#p04"><span class="n">04</span><span>为什么"反弹就补仓"是最贵的一个动作？</span></a></li>
+<li><a href="#p05"><span class="n">05</span><span>交易软件重启后，哪些设置会悄悄回到默认值？</span></a></li>
+<li><a href="#p06"><span class="n">06</span><span>同一个参数写在两个地方，到底谁说了算？</span></a></li>
+<li><a href="#p07"><span class="n">07</span><span>一条风控规则命中 0 次，是好事还是坏事？</span></a></li>
+<li><a href="#p08"><span class="n">08</span><span>为什么"没报错"不等于"风控在正常工作"？</span></a></li>
+<li><a href="#p09"><span class="n">09</span><span>止损宽度和盈亏到底有没有关系？</span></a></li>
+<li><a href="#p10"><span class="n">10</span><span>为什么我的单子活不过 5 分钟？</span></a></li>
+<li><a href="#p11"><span class="n">11</span><span>明明定了止损下限，为什么实际还是被破？</span></a></li>
+<li><a href="#p12"><span class="n">12</span><span>入场点到底重不重要？</span></a></li>
+<li><a href="#p13"><span class="n">13</span><span>每天最多亏多少钱，这个数字该怎么定？</span></a></li>
+<li><a href="#p14"><span class="n">14</span><span>风控规则上线了，为什么还有单子能绕过去？</span></a></li>
+<li><a href="#p15"><span class="n">15</span><span>统计当日亏损时，你的"一天"是从几点算的？</span></a></li></ol></nav>
+
+<article id="p01">
+  <div class="qnum">第 1 问</div>
+  <h2>重启之后，追踪止损为什么会静默失效？</h2>
+<p>先说结论：不是止损被改坏了，是<strong>重启之后它再也不会启动了</strong>——而且是永久性的。</p>
+<figure><img src="img/cn-01.png" alt="图 1：重启之后，追踪止损为什么会静默失效？" loading="lazy"><figcaption>图 1：重启之后，追踪止损为什么会静默失效？</figcaption></figure>
+<p>追踪止损（也叫移动止损）是一只自己往前挪的安全带。普通止损是固定的；追踪止损会跟着价格往有利方向走。它要做的动作只有一个：<strong>盈利够多了，就把止损线往前挪一格。</strong></p>
+<p>我们的系统里，这个动作的启动条件是"浮盈超过 15 美元，并且价格已经走到入场价的 2 倍止损距离之外"。判断"离入场价几个止损距离"，要用到一个数：<strong>开仓时止损离入场价有多远。</strong></p>
+<p>问题出在<strong>重启恢复</strong>这条路径上。程序重启后，要去券商那里把还在手上的仓位接回来继续管。券商会告诉你：单号、方向、开仓价、开仓时间、现在止损在哪——<strong>但它不会告诉你"当初开仓时止损离入场价多远"</strong>，它只知道现在止损在哪。</p>
+<p>于是这个字段没被传进去，取到了默认值 <strong>0</strong>。</p>
+<p>接下来是最关键的一步。下游代码遇到 0 会除零崩溃，所以 2026-09-10 有人（正确地）加了一句保护：<strong>距离是 0 或负数，就跳过追踪止损。</strong> 这句话保住了进程，也把答案永久钉死成"否"——因为<strong>没有任何代码会回头把这个数补上</strong>。</p>
+<p>所以：<strong>只要你是在持有仓位的时候重启过一次，这笔仓位的追踪止损，到平仓为止都不会再工作。</strong></p>
+<p>它的代价（我们自己 186 笔持仓的统计，单一方法、未经独立复核）：<strong>7 笔已经摸到 2 倍风险的赢单，最后平成了亏损</strong>；更普遍的是，摸到 2 倍风险的赢单会一路回吐到只剩 <strong>1.03 倍</strong>。</p>
+<p>日志为什么干净？因为代码只在"改变止损位"的时候才打印。一笔从没启动过追踪止损的仓位，<strong>永远不打印任何东西</strong>。</p>
+<p>这条属于我们的「单点问答」栏目：一条只回答一个问题，讲的都是我们自己踩过的坑。想看别的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+
+<article id="p02">
+  <div class="qnum">第 2 问</div>
+  <h2>我设了日损上限，为什么它自己失效了？</h2>
+<p>先说结论：因为<strong>"配置里写了"和"程序里在跑"可以是两个不同的数字，而且不一样的时候通常不报错。</strong></p>
+<figure><img src="img/cn-02.png" alt="图 2：我设了日损上限，为什么它自己失效了？" loading="lazy"><figcaption>图 2：我设了日损上限，为什么它自己失效了？</figcaption></figure>
+<p>我们在风险规则文件里写了一条：每天最多亏 50 美元。写进去了，保存了，看起来一切正常。</p>
+<p>但程序启动时是这么干的：自己算一个数——<strong>账户余额 × 1.5%</strong>；按当时的余额算出来约 <strong>142 美元</strong>；然后<strong>无条件覆盖</strong>掉规则里写的 50。</p>
+<p>于是"每天最多亏 50"变成了"每天最多亏 142"。<strong>没有任何报错日志，没有警告，没有弹窗。</strong> 规则文件里那行 <code>50</code> 还在，谁去看都显示 50。</p>
+<p>为什么很久没人发现？因为<strong>当天真的亏到 142 的概率太低了</strong>。我们那段时间单日最大亏损是 100.26 美元，<strong>100.26 &lt; 142，所以这道刹车一次都没响过</strong>。于是我们产生了一种错觉："日损帽在正常工作。"</p>
+<p>它没有工作。它只是<strong>没被撞到</strong>。</p>
+<p>怎么发现的？线索是<strong>规则命中次数</strong>。每条风控规则被触发时都会记一次数。翻统计时我们看到：这条规则的命中次数是 <strong>0</strong>。一条在 42 个交易日里天天盯着账户的规则，命中 0 次——这本身就很可疑。顺着这条线去读代码，才看到那段注释。</p>
+<p>真实的天数：42 个交易日里，有 <strong>5 天</strong>收盘低于 −50 美元（口径：机器人本地日 UTC+8）——−81.45、−62.92、−70.25、<strong>−100.26（最差）</strong>、−77.68。</p>
+<p>修法只有两行，思路值得说清楚：把"上限 = 余额 × 1.5%"改成"<strong>上限 = min(余额 × 1.5%, 规则里的值)</strong>"——<strong>取更保守的那个</strong>。原则是：一个安全参数，要么和配置一致，要么比它更严，<strong>永远不允许悄悄变宽松</strong>。</p>
+<p>这篇是「单点问答」里的一条，一条只回答一个疑问，素材全来自我们自己的真实事故。想看同类的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+
+<article id="p03">
+  <div class="qnum">第 3 问</div>
+  <h2>止损设得太窄，为什么会被正常波动扫掉？</h2>
+<p>先说结论：很多时候你不是被"反方向走了一大波"打败的，是被市场的<strong>日常呼吸</strong>打败的。</p>
+<figure><img src="img/cn-03.png" alt="图 3：止损设得太窄，为什么会被正常波动扫掉？" loading="lazy"><figcaption>图 3：止损设得太窄，为什么会被正常波动扫掉？</figcaption></figure>
+<p>打个比方：你在火车站排队，怕丢东西，把绳子系在手腕上——但绳子只留了 30 厘米。旁边的人只是正常地挪了一步、转了个身，绳子就扯脱了。<strong>他没抢你东西，甚至没注意你。是你的绳子太短。</strong></p>
+<p>我们拿自己 <strong>329 笔真实成交</strong>做了一个很朴素的对比：<strong>"这笔单最后赚了还是亏了"和"这笔单的止损放得多宽"，有没有关系？</strong></p>
+<p>结果（止损宽度中位数）：</p>
+<ul><li>最终<strong>盈利</strong>的单子：<strong>5.81 美元</strong></li><li>最终<strong>亏损</strong>的单子：<strong>4.93 美元</strong></li></ul>
+<p><strong>盈利单的止损放得更宽。</strong> 差异的统计显著性 <strong>p = 0.004</strong>——如果止损宽度和赚亏完全没关系，出现这么大差异的概率不到 0.4%。</p>
+<p>（严谨起见：我们在 21 个特征里横向比过，<strong>止损宽度是唯一一个在两个不同时间段里方向都一致的特征</strong>。）</p>
+<p>再看"被扫掉"有多频繁：<strong>开仓后 5 分钟内就被止损扫出去的有 112~114 笔</strong>（两个数字的差异来自台账时间基准，不影响结论）。<strong>329 笔里，大约每 3 笔就有 1 笔活不过 5 分钟。</strong></p>
+<p>⚠️ 有一句话必须说清楚，否则很容易被误读：我们测过，"止损宽度"用来猜<strong>会不会被扫掉</strong>，得分 <strong>0.855</strong>；用来猜<strong>盈亏</strong>，得分只有 <strong>0.591</strong>。</p>
+<p><strong>别拿前一个数字去想象盈利。</strong> 上面那组 5.81 / 4.93 说的是"亏损单的止损更窄"，<strong>不是</strong>"止损放宽就能赚钱"。</p>
+<p>「单点问答」是我们的一个栏目：一条只回答一个问题。想看别的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+
+<article id="p04">
+  <div class="qnum">第 4 问</div>
+  <h2>为什么"反弹就补仓"是最贵的一个动作？</h2>
+<p>先说结论：因为它把"一次有边界的小亏"，改写成了"一次没有边界的亏"。</p>
+<figure><img src="img/cn-04.png" alt="图 4：为什么"反弹就补仓"是最贵的一个动作？" loading="lazy"><figcaption>图 4：为什么"反弹就补仓"是最贵的一个动作？</figcaption></figure>
+<p>补仓本身不是错。错在<strong>亏损之后、因为想摊平成本而补</strong>——这时候你做的动作是：<strong>在同一方向上，把风险再叠加一次。</strong></p>
+<p>算一笔最朴素的账：你开了一笔单，止损距离 10 个点，1 手，这笔单的最大亏损就是 10 个点。价格跌了 5 个点，你补 1 手，还守着原来那个止损位——那么止损一旦被打掉，你的实际亏损变成 <strong>15 个点</strong>，不是 10 个点。<strong>你没有改变方向判断，你只是把同一笔风险放大了一倍半。</strong></p>
+<p>而市场最喜欢的行情，恰恰是那种"先反弹一下让你确认补仓成功、然后继续原方向"的走法。</p>
+<p>社区里有人把自己的经历原样写下来了。一位散户在论坛里写道（原文照录）：买在 48，"以为到底了"；跌到 35，"以为是铁底了，又补仓一倍"；24，"以为不会再新低了，再补仓一倍"；16，"以为跌到地狱了，再补仓一倍"；到 10.78 的时候，"没有钱了，不敢补了"。</p>
+<p>四次补仓，每一次的理由都成立，每一次的结果都是风险再翻一倍。到最后一格，<strong>决定他命运的已经不是判断，而是余额。</strong></p>
+<p>我们自己账上也有一笔手动单，亏损额是机器人最差单笔（−53.99 美元）的四倍多——那笔不是机器人下的。</p>
+<p>风控上的正确做法只有一句：<strong>不要只给"每一笔"设上限，要给"同一方向的总风险"设上限。</strong> 补仓之后，同方向的持仓必须重新算一次总风险，超过上限就拒绝。</p>
+<p>这条属于我们的「单点问答」栏目：一条只回答一个问题，讲的都是我们自己踩过的坑。想看别的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+
+<article id="p05">
+  <div class="qnum">第 5 问</div>
+  <h2>交易软件重启后，哪些设置会悄悄回到默认值？</h2>
+<p>先说结论：<strong>所有"只靠内存记着"的东西。</strong> 程序重建持仓对象时，<strong>每一个字段都是一次丢字段的机会。</strong></p>
+<figure><img src="img/cn-05.png" alt="图 5：交易软件重启后，哪些设置会悄悄回到默认值？" loading="lazy"><figcaption>图 5：交易软件重启后，哪些设置会悄悄回到默认值？</figcaption></figure>
+<p>我们踩的那个坑很典型。程序重启后，要把还在手上的仓位接回来继续管。接回来的时候它做了一件事：<strong>重新构造一遍这个仓位对象</strong>。问题是，券商那里只有"现在的事实"——单号、方向、开仓价、开仓时间、当前止损在哪。</p>
+<p>券商<strong>不知道</strong>"当初开仓时止损离入场价多远"，也<strong>不知道</strong>"当初这笔单准备亏多少钱"。这两个数只存在我们自己的记忆里。</p>
+<p>结果：</p>
+<ul><li><strong>"止损距离"漏传</strong> → 取到默认值 <strong>0</strong> → 追踪止损永久失效</li><li><strong>"仓位大小"同样漏传</strong> → 也取到默认值</li></ul>
+<p>一条原则值得记住：<strong>"安全默认值"不是一个中性动作，它是一个决定。</strong> 对一个要当除数的字段来说，0 不是"没有信息"，而是一句极端的断言——"这笔单没有风险"。这里<strong>没有安全的默认值，只有响亮的默认值</strong>。如果真不知道，诚实的选项只有两个：<strong>拒绝接管这笔仓位并大声说出来</strong>，或者<strong>去台账里查回来</strong>。</p>
+<p>我们最后用的是第二个：重启恢复时，拿票号去自己的成交台账里把原始止损距离查回来；查不到，才退回旧的保守行为（保持跳过）。同时把漏掉的"仓位大小"一起补上了。</p>
+<p>给你一个 30 秒能做的自检：<strong>持有一笔仓位的时候重启你的程序</strong>，然后看日志里有没有打印这笔仓位的关键字段（止损距离、开仓价、当前止损位）。</p>
+<p><strong>哪个字段是 0 或者是空的，管着它的那个功能，现在就是死的。</strong></p>
+<p>这篇是「单点问答」里的一条，一条只回答一个疑问，素材全来自我们自己的真实事故。想看同类的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+
+<article id="p06">
+  <div class="qnum">第 6 问</div>
+  <h2>同一个参数写在两个地方，到底谁说了算？</h2>
+<p>先说结论：<strong>运行时读到的那个说了算——而且它通常不告诉你它读的是哪个。</strong></p>
+<figure><img src="img/cn-06.png" alt="图 6：同一个参数写在两个地方，到底谁说了算？" loading="lazy"><figcaption>图 6：同一个参数写在两个地方，到底谁说了算？</figcaption></figure>
+<p>我们的具体情形是：风险规则文件里写着"每天最多亏 50 美元"；程序启动时自己算"余额 × 1.5%" ≈ 142 美元，然后<strong>无条件覆盖</strong>掉规则值。两个地方都"有值"，两个值不一样；配置文件里那行 <code>50</code> 还在，谁去看都显示 50。</p>
+<p>这不是"配置丢了"，也不是"读错了文件"。是<strong>代码里有一段逻辑，明确地、有意图地把配置值丢掉了</strong>。而且它不觉得这是异常——覆盖动作被当成"正常逻辑"，所以不产生任何错误记录。</p>
+<p>那怎么办？我们最后立的规矩只有一条：</p>
+<div class="pull"><strong>一个安全参数，要么与配置一致，要么比配置更严。永远不允许悄悄变宽松。</strong></div>
+<p>落到代码上就是<strong>取更保守的那个</strong>：上限 = <code>min(余额 × 1.5%, 规则里的值)</code>。这样即使以后有人调了余额比例，配置里的 50 依然是天花板——<strong>配置只能把刹车踩得更紧，不能把它放松。</strong></p>
+<p>再加一条同样重要的：<strong>启动时把生效值打印出来。</strong> 注意，不是打印配置值，是打印<strong>程序实际读到的那个数</strong>。看不到它打印，就当它没生效。</p>
+<p>值得说清楚的是：这类问题的危险不在"错"，而在"<strong>看不出来错</strong>"。配置对、日志干净、程序不报错——三个指示灯全是绿的，<strong>只有真实成交记录能证明它到底跑的是哪个数。</strong></p>
+<p>「单点问答」是我们的一个栏目：一条只回答一个问题。想看别的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+
+<article id="p07">
+  <div class="qnum">第 7 问</div>
+  <h2>一条风控规则命中 0 次，是好事还是坏事？</h2>
+<p>先说结论：<strong>先当成线索去查，别当成好消息。</strong></p>
+<figure><img src="img/cn-07.png" alt="图 7：一条风控规则命中 0 次，是好事还是坏事？" loading="lazy"><figcaption>图 7：一条风控规则命中 0 次，是好事还是坏事？</figcaption></figure>
+<p>我们的风控规则每条都有命中计数。翻统计的时候，我们看到一条规则的命中次数是 <strong>0</strong>——不是"很少"，是<strong>零</strong>。这条规则是"每天亏损上限"，它本该在 42 个交易日里天天盯着账户。</p>
+<p>一条天天盯盘的规则命中 0 次，只有两种可能：</p>
+<ul><li><strong>它极其精准</strong>（几乎不可能，因为它的触发条件就是"当天亏到上限"）；</li><li><strong>它根本没接上电。</strong></li></ul>
+<p>顺着这条线去读代码，答案是第 2 种：配置里写的上限是 50 美元，运行时的实际上限被覆盖成了约 142 美元；而我们那段时间单日最大亏损是 100.26 美元——<strong>100.26 &lt; 142，所以它一次都没响过。</strong></p>
+<p>这里的教训比 bug 本身更值钱：<strong>"没被撞到"和"没接上电"，在命中计数上长得一模一样。</strong></p>
+<p>所以正确的读法不是"命中 0 次 = 没触发过 = 正常"，而是：</p>
+<div class="pull"><strong>看到命中 0 次，就跟一个问题：它的触发条件，在过去这段时间里到底能不能被满足？</strong></div>
+<p>具体做法：先算一遍它的触发阈值，再拿真实成交记录对一遍——<strong>有没有哪一天、哪一笔，真的越过了那条线。</strong> 如果越过过，而它命中还是 0，那它就是死的。</p>
+<p>我们就是靠这一步发现：问"有没有哪天的亏损超过 50 美元"，答案是<strong>有 5 天</strong>。</p>
+<p>这条属于我们的「单点问答」栏目：一条只回答一个问题，讲的都是我们自己踩过的坑。想看别的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+
+<article id="p08">
+  <div class="qnum">第 8 问</div>
+  <h2>为什么"没报错"不等于"风控在正常工作"？</h2>
+<p>先说结论：因为<strong>日志干净，既是健康系统的默认状态，也是死系统的默认状态。</strong></p>
+<figure><img src="img/cn-08.png" alt="图 8：为什么"没报错"不等于"风控在正常工作"？" loading="lazy"><figcaption>图 8：为什么"没报错"不等于"风控在正常工作"？</figcaption></figure>
+<p>我们的追踪止损出事那次，有人问：日志里没有报错，怎么可能是坏的？</p>
+<p>问题在于，这个功能的代码只在<strong>"改变了止损位"</strong>的时候才打印一行。一笔从没启动过追踪止损的仓位，<strong>永远不打印任何东西</strong>。而它为什么启动不了，原因恰恰是一句为了"更稳健"而加的保护：距离这个数是 0 或负数，就<strong>跳过</strong>。</p>
+<p>看明白这个结构了吗——<strong>"跳过"是当初特意加的、被认为是正确的行为。程序不觉得自己做错了，自然不报错。</strong></p>
+<p>这就是最贵的一类失败模式：<strong>它和正常状态发出的信息完全一样——没有信息。</strong></p>
+<p>所以判断一个保护到底在不在工作，不能问"有没有报错"，要问：</p>
+<div class="pull"><strong>如果它今天停止运行了，我凭什么会知道？</strong></div>
+<p>如果答案是"日志看起来没问题"，那你还<strong>没有答案</strong>。</p>
+<p>我们后来给每个上限、每个熔断、每条规则都加了命中计数。理由很直接：<strong>能被静默关掉的保护，需要一个主动的存在证明。</strong> 一条保护在几十笔交易里命中 0 次，那就不是"安静"，那是<strong>一个发现</strong>。</p>
+<p>顺带说一句：当初"修"这个 bug 的方式本身也值得警惕——加保护的时候，把<strong>异常</strong>换成了<strong>安静的成功</strong>。而那个异常，是唯一在告诉别人"这个情况存在"的东西。</p>
+<p>这篇是「单点问答」里的一条，一条只回答一个疑问，素材全来自我们自己的真实事故。想看同类的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+
+<article id="p09">
+  <div class="qnum">第 9 问</div>
+  <h2>止损宽度和盈亏到底有没有关系？</h2>
+<p>先说结论：<strong>有，但有用的地方和我们一开始以为的不一样——不是"猜方向"，是"止损放多宽"。</strong></p>
+<figure><img src="img/cn-09.png" alt="图 9：止损宽度和盈亏到底有没有关系？" loading="lazy"><figcaption>图 9：止损宽度和盈亏到底有没有关系？</figcaption></figure>
+<p>我们拿自己 <strong>329 笔真实成交</strong>做了一次很朴素的对比：把成交分成"最终盈利"和"最终亏损"两组，看两组止损宽度（开仓时止损离入场价的距离）的中位数：</p>
+<ul><li>最终<strong>盈利</strong>的单子：<strong>5.81 美元</strong></li><li>最终<strong>亏损</strong>的单子：<strong>4.93 美元</strong></li></ul>
+<p><strong>盈利单的止损更宽。</strong> 统计显著性 <strong>p = 0.004</strong>：如果止损宽度和赚亏完全没关系，出现这么大差异的概率不到 0.4%。</p>
+<p>我们在 21 个特征里横向比过，<strong>止损宽度是唯一一个在两个不同时间段里方向都一致的特征</strong>——其他"看着有用"的特征，换个时间段就翻脸。</p>
+<p><strong>但口径必须说清楚，否则很容易被误读：</strong></p>
+<ul><li>用"止损宽度"去猜<strong>这笔单会不会在 5 分钟内被扫掉</strong>，得分 <strong>0.855</strong>；</li><li>用同一个数字去猜<strong>这笔单最后是赚还是亏</strong>，得分只有 <strong>0.591</strong>。</li></ul>
+<p><strong>0.591 是"有点用"，不是"很准"。</strong> 前面那个 0.855 说的是"能不能猜出它会被扫"，<strong>不是</strong>"能不能猜出它会赚钱"。</p>
+<p>顺便说我们试过的经典技术指标：用来判断方向的判别力是 <strong>0.487~0.496</strong>——<strong>低于 0.50，等于瞎猜，甚至比瞎猜还差。</strong></p>
+<p>所以这条想说的是一句很克制的话：<strong>"亏损单的止损更窄"这个差异是真的；但"把止损放宽"不构成任何结果上的保证。</strong> 它只是让你少被日常波动扫出去几次。</p>
+<p>「单点问答」是我们的一个栏目：一条只回答一个问题。想看别的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+
+<article id="p10">
+  <div class="qnum">第 10 问</div>
+  <h2>为什么我的单子活不过 5 分钟？</h2>
+<p>先说结论：<strong>大约每 3 笔就有 1 笔，是开仓后 5 分钟内被止损扫出去的。</strong></p>
+<figure><img src="img/cn-10.png" alt="图 10：为什么我的单子活不过 5 分钟？" loading="lazy"><figcaption>图 10：为什么我的单子活不过 5 分钟？</figcaption></figure>
+<p>我们统计了自己 <strong>329 笔真实成交</strong>：<strong>112~114 笔在开仓后 5 分钟内就被止损扫掉</strong>（两个数字的差异来自台账时间基准，不影响结论）。</p>
+<p>这批单子的合计是<strong>净亏约 575 美元</strong>；而<strong>持有超过 5 分钟的那批单子，合计是 +736 美元</strong>。</p>
+<p>"5 分钟"这条线，把赚钱的和亏钱的<strong>分得清清楚楚</strong>。</p>
+<p>请注意这句话的口径——<strong>这是一次事后统计，不是一条交易策略。</strong> 它说的是"在这批样本里，活过 5 分钟的单子和活不过的单子，合计数一个正一个负"，<strong>不是</strong>"所有活过 5 分钟的单子都会赚"。样本只有一个账户、329 笔，不能外推。</p>
+<p>那这些单子为什么活不过 5 分钟？数据指向一个很机械的原因：<strong>止损放得太窄。</strong> 用"止损宽度"这一个数字去猜"这笔单会不会在 5 分钟内被扫"，得分 <strong>0.855</strong>——随便抓一笔被扫的和一笔活下来的，只看止损宽度，有 <strong>85.5%</strong> 的概率能挑对那笔被扫的。</p>
+<p><strong>这几乎是一根绳子在喊："看我看我，是我太短了。"</strong></p>
+<p>所以下一次你的单子"莫名其妙"被扫，先别急着骂行情。先量一个数：<strong>你的止损距离，比市场平常的抖动大多少？</strong> 如果它小于日常波动，那它不是止损，是<strong>给市场送手续费</strong>。</p>
+<p>（提醒一句：0.855 测的是"会不会被扫"，不是"会不会赚钱"；同一个数字用来测盈亏只有 0.591。）</p>
+<p>这条属于我们的「单点问答」栏目：一条只回答一个问题，讲的都是我们自己踩过的坑。想看别的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+
+<article id="p11">
+  <div class="qnum">第 11 问</div>
+  <h2>明明定了止损下限，为什么实际还是被破？</h2>
+<p>先说结论：因为<strong>"定了规则"和"守住了规则"是两件事，而我们只做了前一件。</strong></p>
+<figure><img src="img/cn-11.png" alt="图 11：明明定了止损下限，为什么实际还是被破？" loading="lazy"><figcaption>图 11：明明定了止损下限，为什么实际还是被破？</figcaption></figure>
+<p>我们的系统里有一条明确的下限：<strong>止损距离不得低于波动幅度（ATR）的 1.2 倍</strong>。也就是说，系统自己知道"太窄了不行"。</p>
+<p>但真实成交记录显示：</p>
+<ul><li><strong>69.3% 的单子，实际止损距离低于这条下限</strong>；</li><li>中位数只有 <strong>0.87 倍 ATR</strong>；</li><li>最窄的那 10%，只有 <strong>0.33 倍 ATR</strong>。</li></ul>
+<p><strong>系统自己定了下限，然后自己没守住。</strong></p>
+<p>是怎么破的？止损距离不是直接写死的，它是被<strong>算出来</strong>的：<strong>"这笔单最多亏多少钱"的风险预算 ÷ 手数 = 允许的止损距离</strong>。这个反推出来的距离，可能比 1.2 倍 ATR 还窄——而链条上的某个环节让它通过了，于是"下限"变成一句空话。</p>
+<p>⚠️ 这里的因果关系我标清楚：<strong>这是待确认的假设，不是结论。</strong> 我们能确认的是"69.3% 破了下限"这个事实，以及"止损太窄会被日常波动扫掉"这个统计关系；"风险预算反推把下限挤破了"是对这条链路的<strong>推断</strong>，还没做单点验证。</p>
+<p>那能直接用的动作只有一个：<strong>去你的成交记录里，量出每一笔的真实止损距离，看你定的那条下限被破了多少笔。</strong></p>
+<p>不要去看"规则文件里写了什么"——那只能证明你想过这件事；<strong>只有逐笔成交记录能证明它到底守住了没有。</strong></p>
+<p>这篇是「单点问答」里的一条，一条只回答一个疑问，素材全来自我们自己的真实事故。想看同类的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+
+<article id="p12">
+  <div class="qnum">第 12 问</div>
+  <h2>入场点到底重不重要？</h2>
+<p>先说结论：在我们自己的数据里，<strong>"买在哪"基本不影响结果；"亏多少"影响结果。</strong></p>
+<figure><img src="img/cn-12.png" alt="图 12：入场点到底重不重要？" loading="lazy"><figcaption>图 12：入场点到底重不重要？</figcaption></figure>
+<p>我们花了很长时间试"怎么进场更准"，结果三次独立分析给出同一件事：<strong>用经典技术指标判断方向，判别力 0.487~0.496——低于 0.50，等于瞎猜。</strong></p>
+<p>（0.50 就是抛硬币。低于 0.50 意味着比抛硬币还差。）</p>
+<p>然后我们换了一个更贴近人的问法：<strong>入场点离最近的拐点有多远，跟这笔单最后赚亏有没有关系？</strong></p>
+<ul><li>关联度 <strong>0.442</strong>，p = 0.117，<strong>统计上不显著</strong>；</li><li>换句话说：<strong>入场点不是亏损的原因。</strong></li></ul>
+<p>顺便说，我们发现一个观察是对的：<strong>大部分入场确实发生在行情中间。</strong> 入场点离最近拐点的距离，中位数是 <strong>1.58 倍 ATR</strong>，只有 <strong>18.0%</strong> 的单子落在 0.5 倍 ATR 以内的"拐角"附近（随机水平是 16.4%）。</p>
+<p>但它<strong>不构成亏损的解释</strong>。而且我们试过一个很自然的想法——"等拐点到了再进"，结果是：<strong>拐点已破的那 68 笔合计 +327.13；拐点完好的那 135 笔合计 −229.38。</strong> 按"等拐点"过滤，<strong>会把赚钱的那批滤掉。</strong></p>
+<p>所以结论是：<strong>把精力从"猜方向"转到"管亏损"上。</strong> 方向往哪走不归我们管，<strong>亏多少是我们唯一能控制的东西。</strong></p>
+<p>「单点问答」是我们的一个栏目：一条只回答一个问题。想看别的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+
+<article id="p13">
+  <div class="qnum">第 13 问</div>
+  <h2>每天最多亏多少钱，这个数字该怎么定？</h2>
+<p>先说结论：<strong>用你自己的钱定，别用心情定。</strong></p>
+<figure><img src="img/cn-13.png" alt="图 13：每天最多亏多少钱，这个数字该怎么定？" loading="lazy"><figcaption>图 13：每天最多亏多少钱，这个数字该怎么定？</figcaption></figure>
+<p>这是整件事里最重要、也最容易被跳过的一步。因为<strong>如果你写不出这个数字，你就没有任何刹车可言。</strong></p>
+<p><strong>怎么写：</strong> 打开你的入金金额，取它的 <strong>1%</strong>。比如入了 20,000 美元，那就是 <strong>200 美元</strong>。</p>
+<p><strong>为什么是 1%：</strong> 这只是个起点，不是标准答案。它的好处是<strong>用你自己的钱来定</strong>，而不是用"我今天感觉能扛多少"。想更保守就取 0.5%，别超过 2%。</p>
+<p>写下来之后，去做一件更关键的事：</p>
+<div class="pull"><strong>拿你最近的真实成交记录，按"天"汇总一遍，看看有没有哪一天超过了这个数字。</strong></div>
+<p>我们就是做了这一步，才发现有 <strong>5 天</strong>超过了我们以为的上限（最差的一天 −100.26 美元）。<strong>如果你不去对账，你永远不会知道自己的刹车是真在工作，还是根本没接上电。</strong></p>
+<p>⚠️ 两个真坑，都是我们自己的：</p>
+<ul><li><strong>"配置里写了"不等于"程序里在跑"。</strong> 我们配置里写 50，代码里实际是余额 × 1.5% ≈ 142。这两个数字可以不一样，而且不一样的时候<strong>通常不报错</strong>。所以写完这个数字之后，<strong>必须在日志里把它打印出来</strong>，确认程序读到的就是你写的那个。</li><li><strong>"一天"是几点到几点，要先说清楚。</strong> 我们的风险日用的是本地日（UTC+8）。换一个日界，同样的成交记录会算出不同的"最差单日"——我们这批数据里，本地日口径最差 −100.26，UTC 日口径最差 −106.64。<strong>引用任何"单日"数字前，先写明是哪套日界。</strong></li></ul>
+<p>这条属于我们的「单点问答」栏目：一条只回答一个问题，讲的都是我们自己踩过的坑。想看别的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+
+<article id="p14">
+  <div class="qnum">第 14 问</div>
+  <h2>风控规则上线了，为什么还有单子能绕过去？</h2>
+<p>先说结论：因为<strong>一条风控门通常只管一条下单路径，而你的系统不止一条。</strong></p>
+<figure><img src="img/cn-14.png" alt="图 14：风控规则上线了，为什么还有单子能绕过去？" loading="lazy"><figcaption>图 14：风控规则上线了，为什么还有单子能绕过去？</figcaption></figure>
+<p>我们上线过一条"止损宽度门"：止损宽度不达标的单子，不开。规则写好了，开关也是开的。</p>
+<p>但它上线之后，<strong>bot 日志里的命中次数是 0</strong>——一笔都没拦下来。上线后那段时间只成交了 8 笔，所以"命中 0 次"本身还不能定罪。于是我们去做反事实模拟（同一批真实入场点，192 笔可比）：</p>
+<ul><li><strong>会被这条门拦掉的 107 笔（55.7%）</strong>：期望 −2.74 美元/笔，<strong>5 分钟内被止损的比例 50.5%</strong>；</li><li><strong>能通过这条门的 85 笔</strong>：期望 +1.21 美元/笔，<strong>5 分钟内被止损比例 7.1%</strong>。</li></ul>
+<p>两组的差别很大。<strong>但门一笔都没拦住。</strong></p>
+<p>真正的原因是<strong>覆盖盲区</strong>：这条门挂在常规开仓路径上，<strong>不覆盖 flip（反手）逆势单</strong>。2026-10-08 18:35 有一笔 flip 单，止损距离只有波动幅度的 <strong>0.167</strong>（门槛是 0.20）——<strong>按规则它本该被拦，但那条路径根本不经过这道门。</strong></p>
+<p>所以这里有三句很朴素的话：</p>
+<ul><li><strong>一条门只管一条路。</strong> 你的下单入口有几个？每一个入口都要问一遍"这道门在不在路上"。</li><li><strong>"上线了"不等于"起作用了"。</strong> 判据是命中计数 + 反事实模拟，不是"代码里有这行"。</li><li><strong>反事实模拟不是实盘结果。</strong> 上面那些数字是模拟出来的（【初步】，未在实盘验证），它证明的是"如果拦下来会怎样"，<strong>不是"拦下来就能赚"。</strong></li></ul>
+<p>这篇是「单点问答」里的一条，一条只回答一个疑问，素材全来自我们自己的真实事故。想看同类的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+
+<article id="p15">
+  <div class="qnum">第 15 问</div>
+  <h2>统计当日亏损时，你的"一天"是从几点算的？</h2>
+<p>先说结论：<strong>换一个日界，同一批成交记录能算出不同的"最差单日"。</strong></p>
+<figure><img src="img/cn-15.png" alt="图 15：统计当日亏损时，你的"一天"是从几点算的？" loading="lazy"><figcaption>图 15：统计当日亏损时，你的"一天"是从几点算的？</figcaption></figure>
+<p>这件事我们吃了两次亏，所以单独写一条。</p>
+<p>我们的机器人有自己的"风险日"概念：它用<strong>本地日（UTC+8）</strong>判断"今天亏了没有"。证据是，风险状态文件在 UTC 还是 10-08 23:31 的时候，已经写成了 <code>date=2026-10-09</code>。</p>
+<p>同一批真实成交：</p>
+<ul><li><strong>本地日口径</strong>：最差单日 <strong>−100.26 美元</strong>；</li><li><strong>UTC 日口径</strong>：最差单日 <strong>−106.64 美元</strong>。</li></ul>
+<p>跌破 −50 美元的天数，两套口径都是 <strong>5 天</strong>——结论方向一致，但<strong>具体数字不一样</strong>。</p>
+<p>为什么这件事重要？三个理由：</p>
+<ul><li><strong>它会改变你对自己刹车的判断。</strong> 你以为的"最差一天"，可能不是最差的那天。</li><li><strong>它会让复盘和成交记录对不上。</strong> 你按自然日汇总，程序按本地日判断，两边的"当天"能差好几个小时。</li><li><strong>它会让两个分析员得出不同数字。</strong> 我们内部就出现过：一个说最差 −100.26，一个说 −106.64——<strong>两个都对，因为日界不同，而没人写明口径。</strong></li></ul>
+<p>所以规矩只有一句：<strong>引用任何"单日"数字前，先写明是哪套日界。</strong></p>
+<p>顺带一个同类项：<strong>成交时间也有口径问题。</strong> 我们的台账里，下单触发时刻比券商实际成交早 <strong>0~85 秒（中位 51 秒）</strong>；平仓的记录时刻比实际平仓晚 <strong>99 秒到 98 分钟</strong>。</p>
+<p>所以算持有时长、入场时刻、时段的时候，<strong>一律以券商成交时间为准</strong>——用台账时间会把持有时长算长。</p>
+<p>「单点问答」是我们的一个栏目：一条只回答一个问题。想看别的，去我们自家站搜「VigilDesk 单点问答」。</p>
+<div class="risk">风险提示：本文是我们自己工程事故的复盘。数字来自单个真实模拟账户与项目代码静态检查，样本小、周期短，不构成投资建议，不能用于推测未来表现。风控工具只能限制单次亏损范围，无法阻止亏损发生，也无法提高盈利概率。</div>
+</article>
+  <footer><p class="big">关于我们</p><p>我们做的是给 MT5 交易账户装一套风控守卫：管的是「亏到多少必须停」「这笔单最多亏多少」「程序重启后这些东西还在不在」。我们卖的是刹车，不是引擎。</p>
+<p class="big">风险提示</p><p>本页所有数字来自单个真实模拟账户与我们自己项目的代码静态检查，样本量小、周期短，不构成任何业绩参考，也不能用于推测未来表现。文中「得分/判别力」为分类能力指标（0.5 = 随机水平），衡量的是能否区分两类情况，与盈利能力无关。本页仅为工程事故复盘与技术讨论，不构成投资建议，不代替任何人做交易决定，不接受资金委托。</p>
+<p class="big">出处</p><p>作者：小孬科技 · 总经办。配图为我们自制的示意图。</p></footer>
+</div>
+</body>
+</html>
