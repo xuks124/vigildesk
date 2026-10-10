@@ -7,20 +7,7 @@
 <title>VigilDesk for prop-firm traders — the daily line you cannot cross</title>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
-<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
-<script>
-  Paddle.Initialize({ token: "live_628b3886c1a50dc334fd998072c" });
-  var PRICES = {
-    starter:  "pri_01m1znn33qq6jt0fjpj09rnhj9",
-    lifetime: "pri_01m1zp2kac0vr76ak6npd2dq9r"
-  };
-  function buy(plan) {
-    var priceId = PRICES[plan];
-    if (!priceId) { return false; }
-    Paddle.Checkout.open({ items: [{ priceId: priceId, quantity: 1 }] });
-    return false;
-  }
-</script>
+
 </head>
 <body>
 
@@ -31,10 +18,8 @@
     <nav>
       <a href="index.html">Home</a>
       <a href="free.html">Free tool</a>
-      <a href="buy-cn.html">¥ CNY</a>
-      <a href="propfirm.html">Prop firms</a>
-      <a href="pricing.html">Pricing</a>
-      <a href="tutorial.html">Tutorial</a>
+            <a href="propfirm.html">Prop firms</a>
+            <a href="tutorial.html">Tutorial</a>
       <a href="security.html">Security</a>
       <a href="faq.html">FAQ (EN)</a>
       <a href="faq-zh.html">常见问题 (中文)</a>
@@ -56,7 +41,7 @@
   <p class="tagline-zh">考核账户只有一条日内回撤线。真正让账户出局的不是策略，而是上午连亏两笔之后那笔情绪单。
     VigilDesk 把这条线变成<strong>落盘的硬状态</strong>——崩溃、重启、误改都绕不过去。</p>
   <div class="cta-row">
-    <a class="btn primary big" href="VigilDesk-0.1.12-win64-portable.zip">⬇ Download for Windows — free 7-day trial</a>
+    <a class="btn primary big" href="VigilDesk-0.1.12-win64-portable.zip">⬇ Download for Windows</a>
     <a class="btn ghost" href="#prove">Prove it in 5 minutes ↓</a>
   </div>
   <p class="fineprint">Windows 10/11 · no Python needed · runs locally, nothing is uploaded · dry-run by default</p>
@@ -124,8 +109,8 @@
 
 <section id="prove">
   <h2>Prove it in 5 minutes (no purchase, no signup)</h2>
-  <p class="muted">The free tier downloads without an account, and the paid trial needs a card
-    only at the end of 7 days. Here is the fastest way to check whether the daily guard is real:</p>
+  <p class="muted">The free tier downloads without an account. Paid editions are no longer offered.
+    Here is the fastest way to check whether the daily guard is real:</p>
   <ol>
     <li><strong>Download and unzip</strong> — <a href="VigilDesk-0.1.12-win64-portable.zip">VigilDesk-0.1.12-win64-portable.zip</a> (29 MB). No Python, no installer.</li>
     <li><strong>Double-click <code>VigilDesk.exe</code></strong>. The first-run setup finds your MT5 terminal and your local AI. Nothing is charged.</li>
@@ -141,8 +126,7 @@
   <p class="muted">Everything is local: logs, decisions and reports stay in
     <code>%LOCALAPPDATA%\VigilDesk</code>. There is no telemetry and nothing is uploaded.</p>
   <div class="cta-row">
-    <a class="btn primary" href="VigilDesk-0.1.12-win64-portable.zip">⬇ Download — free 7-day trial</a>
-    <a class="btn ghost" href="pricing.html">See plans ｜ 看套餐</a>
+    <a class="btn primary" href="VigilDesk-0.1.12-win64-portable.zip">⬇ Download</a>
   </div>
 </section>
 
@@ -179,8 +163,7 @@
   <div class="wrap">
     <span>© 2026 VigilDesk</span>
     <a href="propfirm.html">Prop firms</a>
-    <a href="pricing.html">Pricing</a>
-    <a href="tutorial.html">Tutorial</a>
+        <a href="tutorial.html">Tutorial</a>
     <a href="security.html">Security</a>
     <a href="faq.html">FAQ</a>
     <a href="faq-zh.html">常见问题</a>

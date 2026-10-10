@@ -6,7 +6,10 @@
 
 **A local-first safety layer for algorithmic traders.** Kill-switch, hard risk caps, circuit breakers and an audit log that survives terminal restarts — running on your machine, with account data that never leaves it.
 
-[🌐 Website](https://xuks124.github.io/vigildesk/) · [📖 Docs & FAQ](https://xuks124.github.io/vigildesk/faq.html) · [⬇️ Download](https://xuks124.github.io/vigildesk/free.html) · [💳 Pricing](https://xuks124.github.io/vigildesk/pricing.html) · [🎬 Demo](assets/vigildesk-demo.mp4) · [🧾 Risk proof](https://xuks124.github.io/vigildesk/proof/)
+> **Status: the project has stopped moving forward.** The paid editions are no longer offered and no payments are accepted. The free MQL5 guard and the engineering notes stay online as an archive.
+> ｜ **项目已停止推进**：不再提供付费版本，也不再收取任何款项；免费工具与技术笔记保留作存档。
+
+[🌐 Website](https://xuks124.github.io/vigildesk/) · [📖 Docs & FAQ](https://xuks124.github.io/vigildesk/faq.html) · [⬇️ Free tool](https://xuks124.github.io/vigildesk/free.html) · [🎬 Demo](assets/vigildesk-demo.mp4) · [🧾 Risk proof](https://xuks124.github.io/vigildesk/proof/)
 
 ---
 

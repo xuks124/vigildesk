@@ -3,25 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="VigilDesk pricing: free Watchdog Lite forever, Starter $19/mo, Lifetime $599 one-time. Every paid plan includes a 7-day free trial — $0.00 today.">
-<title>Pricing — VigilDesk</title>
-<link rel="stylesheet" href="style.css">
+<meta name="robots" content="noindex">
+<meta name="description" content="本项目已停止推进，此页仅作存档。This project has stopped moving forward; this page is an archive only.">
+<title>定价页已撤下 · VigilDesk</title>
+<link rel="stylesheet" href="style.css?v=1">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
-<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
-<script>
-  /* Production is the default environment; never call Paddle.Environment.set(). */
-  Paddle.Initialize({ token: "live_628b3886c1a50dc334fd998072c" });
-  var PRICES = {
-    starter:  "pri_01m1znn33qq6jt0fjpj09rnhj9",
-    lifetime: "pri_01m1zp2kac0vr76ak6npd2dq9r"
-  };
-  function buy(plan) {
-    var priceId = PRICES[plan];
-    if (!priceId) { return false; }
-    Paddle.Checkout.open({ items: [{ priceId: priceId, quantity: 1 }] });
-    return false;
-  }
-</script>
+<style>
+  .stopped{margin:26px 0 0;padding:18px 20px;border-radius:10px;
+    border:1px solid #3a4353;background:#141922;color:#dfe6f0;font-size:15px;line-height:1.85;}
+  .stopped b{color:#ffb020;}
+</style>
 </head>
 <body>
 <header class="site">
@@ -29,177 +20,63 @@
     <img src="assets/logo.svg" alt="VigilDesk logo">
     <span class="brand">VigilDesk</span>
     <nav>
-      <a href="index.html">Home</a>
-      <a href="free.html">Free tool</a>
-      <a href="buy-cn.html">¥ CNY</a>
+      <a href="index.html">Home 首页</a>
+      <a href="free.html">Free tool 免费工具</a>
       <a href="propfirm.html">Prop firms</a>
-      <a href="pricing.html">Pricing</a>
-      <a href="tutorial.html">Tutorial</a>
-      <a href="security.html">Security</a>
+      <a href="tutorial.html">Tutorial 教程</a>
       <a href="faq.html">FAQ (EN)</a>
-      <a href="faq-zh.html">常见问题 (中文)</a>
+      <a href="faq-zh.html">常见问题</a>
       <a href="feedback.html">Feedback 反馈</a>
-      <a href="legal.html">Legal</a>
-    <a href="/vigildesk/blog/">Blog</a>
-  </nav>
+      <a href="legal.html">Legal 条款</a>
+      <a href="/vigildesk/blog/">Blog 技术笔记</a>
+    </nav>
   </div>
 </header>
 
 <main class="wrap">
-  <h1 class="page">Pricing ｜ 定价</h1>
+  <section class="hero">
+    <div class="hero-copy" style="max-width:820px;">
+      <p class="eyebrow">Project stopped ｜ 项目已停止推进</p>
+      <h1>Pricing has been withdrawn ｜ 定价页已撤下</h1>
 
-  <p class="tagline" style="margin:0 0 18px;">
-    Start free with Watchdog Lite (download once, run <code>VigilDesk.exe lite</code> — no licence, no account).
-    Upgrade when you want the full risk-control workstation.
-    <strong>Every paid plan includes a 7-day free trial: you are charged $0.00 today (a card is required at checkout to start the trial).</strong>
-    ｜ 免费版永久可用；付费套餐含 7 天免费试用，<strong>今天扣 $0.00</strong>（结账时需绑卡）。
-  </p>
-
-  <!-- ── clickable plan cards: click anywhere on a card to start ────────── -->
-  <section class="grid" id="plans" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">
-    <div class="card">
-      <h3 style="margin-top:0;">Lite</h3>
-      <p style="font-size:1.5rem;margin:2px 0;"><strong>$0</strong><span style="font-size:.85rem;color:#8f9cba;"> forever</span></p>
-      <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">Free tier: no licence, no account, no card</p>
-      <p>Watchdog Lite only: process guard, crash auto-restart with cooldown and
-        backoff, structured log alerts. ｜ 仅含进程守护：崩溃自动拉起、冷却与退避、结构化日志告警。</p>
-      <p style="margin:12px 0 0;">
-        <a class="btn ghost" href="https://xuks124.github.io/vigildesk/VigilDesk-0.1.12-win64-portable.zip" target="_blank" rel="noopener">Download free ｜ 免费下载</a>
-      </p>
-    </div>
-
-    <div class="card" style="cursor:pointer;" onclick="return buy('starter')" title="Click to start the 7-day free trial">
-      <h3 style="margin-top:0;">Starter</h3>
-      <p style="font-size:1.5rem;margin:2px 0;"><strong>$19</strong><span style="font-size:.85rem;color:#8f9cba;"> /month</span></p>
-      <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">7-day free trial · $0.00 today</p>
-      <p>Up to 5 MT5 terminals, built-in strategy, AI risk-control gate, per-trade loss cap, daily
-        drawdown guard, decision logs and the daily report.
-        ｜ 最多 5 个 MT5 终端、内置策略、AI 风控闸门、单笔亏损上限、日内回撤熔断、决策日志与日报。</p>
-      <p style="margin:12px 0 0;"><span class="btn primary" style="pointer-events:none;">Start Starter — $19/mo</span></p>
-      <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">Click anywhere on this card to start ｜ 点卡片任意位置即可开通</p>
-    </div>
-
-    <div class="card" style="cursor:pointer;" onclick="return buy('lifetime')" title="Click to buy once">
-      <h3 style="margin-top:0;">Lifetime</h3>
-      <p style="font-size:1.5rem;margin:2px 0;"><strong>$599</strong><span style="font-size:.85rem;color:#8f9cba;"> one-time</span></p>
-      <p style="margin:0 0 10px;font-size:13px;color:#16c79a;">Pay once · no subscription</p>
-      <p>Everything in Starter plus all future updates. ｜ Starter 全部功能 + 后续版本更新。</p>
-      <p style="margin:12px 0 0;"><span class="btn ghost" style="pointer-events:none;">Buy Lifetime — $599</span></p>
-      <p style="margin:8px 0 0;font-size:12px;color:#8f9cba;">Click anywhere on this card to buy ｜ 点卡片任意位置即可购买</p>
+      <div class="stopped">
+        <p style="margin:0;"><b>本项目已停止推进，此页仅作存档。</b></p>
+        <p style="margin:10px 0 0;">这一页原来放的是 英文定价页（Starter / Lifetime 套餐表），现在已经撤下来了。我们不打算继续这个方向，所以不再提供付费版本，也不再收取任何款项。</p>
+        <p style="margin:10px 0 0;color:#96a2b4;font-size:14px;">This project has stopped moving forward. This page is kept as an archive only. No paid editions are offered and no payments are accepted.</p>
+      </div>
     </div>
   </section>
 
-  <p style="margin:14px 0 22px;font-size:13px;color:#8f9cba;">
-    Payments are processed by Paddle, our merchant of record. Cancel any time before
-    the trial ends and you are not charged; Lifetime is a one-time purchase (no trial).
-    ｜ 支付由 Paddle（记录商户）处理；试用结束前可随时取消，不产生费用；Lifetime 一次性买断。
-    <br>
-    Checkout not opening? Open this page in your normal browser (some embedded
-    preview panes block it), or email
-    <a href="mailto:760808632@qq.com?subject=VigilDesk%20purchase">760808632@qq.com</a>
-    and we will send you a payment link. ｜ 结账窗口打不开？请用正常浏览器打开本页，或邮件索取付款链接。
-  </p>
+  <section>
+    <h2 class="page">还能用什么 ｜ What is still available</h2>
+    <div class="card">
+      <h3 style="margin-top:0;">VigilDesk Guard Free（免费工具，仍然可用）</h3>
+      <p>一个免费的 MT5 风控 EA：日内亏损上限 + 重启不清零。纯 MQL5、无 DLL、无联网、含源码，不需要注册也不需要付费。
+        这里不卖任何东西。</p>
+      <p style="color:#96a2b4;font-size:14px;">A free Expert Advisor for MetaTrader 5: a daily loss cap that survives a restart. Pure MQL5, no DLL, no network calls, source included.</p>
+      <p style="margin:14px 0 0;"><a class="btn primary" href="free.html">去看免费工具 ｜ Open the free tool</a></p>
+    </div>
 
-  <h2 class="page">Compare in detail ｜ 详细对比</h2>
-  <table class="plan">
-    <tr>
-      <th>Plan ｜ 套餐</th>
-      <th>Price ｜ 价格</th>
-      <th>What you get ｜ 包含内容</th>
-      <th>Start ｜ 开通</th>
-    </tr>
-    <tr>
-      <td><strong>Lite</strong><br><span class="muted">免费版</span></td>
-      <td><span class="price">$0</span><br><span class="muted">free forever ｜ 永久免费</span></td>
-      <td>
-        Watchdog Lite only ｜ 仅含 Watchdog Lite：<br>
-        • Process guard + crash auto-restart ｜ 进程守护 + 崩溃自动拉起<br>
-        • Restart cooldown &amp; exponential backoff ｜ 重启冷却与指数退避<br>
-        • Basic alerts (structured log + optional webhook) ｜ 基础告警（结构化日志 + 可选 webhook）<br>
-        • No license, no telemetry, no AI confirmer ｜ 无授权校验、无遥测、无 AI 确认器
-      </td>
-      <td>
-        <a class="btn ghost" href="https://github.com/xuks124/vigildesk/releases/download/v0.1.12/VigilDesk-0.1.12-win64-portable.zip" target="_blank" rel="noopener">Download free</a>
-      </td>
-    </tr>
-    <tr style="cursor:pointer;" onclick="return buy('starter')" title="Click to start the 7-day free trial">
-      <td><strong>Starter</strong><br><span class="muted">入门版</span></td>
-      <td><span class="price">$19<span class="muted">/mo</span></span><br><span class="muted">7-day free trial</span></td>
-      <td>
-        • Up to 5 terminals ｜ 最多 5 个终端<br>
-        • Built-in strategy ｜ 内置策略<br>
-        • AI risk-control gate ｜ AI 风控闸门<br>
-        • Decision logs + daily report ｜ 决策日志 + 日报
-      </td>
-      <td>
-        <button class="btn primary" type="button" style="cursor:pointer;border:none;"
-          onclick="event.stopPropagation(); return buy('starter')">Start — $19/mo ｜ 开通</button>
-      </td>
-    </tr>
-    <tr style="cursor:pointer;" onclick="return buy('lifetime')" title="Click to buy once">
-      <td><strong>Lifetime</strong><br><span class="muted">买断版（限量）</span></td>
-      <td><span class="price">$599</span><br><span class="muted">one-time ｜ 一次性</span></td>
-      <td>
-        • Everything in Starter ｜ Starter 全部功能<br>
-        • All future updates ｜ 终身更新
-      </td>
-      <td>
-        <button class="btn ghost" type="button" style="cursor:pointer;"
-          onclick="event.stopPropagation(); return buy('lifetime')">Buy — $599 ｜ 买断</button>
-      </td>
-    </tr>
-  </table>
-
-  <section class="grid" style="margin-top:22px;">
-    <div class="card">
-      <h3>Trial &amp; refund ｜ 试用与退款</h3>
-      <p>Starter includes a 7-day free trial — you won't be charged
-        during the trial, but a payment method must be added at checkout, and
-        you can cancel any time before the trial ends. Lifetime is a one-time
-        purchase (no trial). Full refund within 14 days of purchase if the
-        product doesn't work as described.
-        ｜ Starter 含 7 天全功能试用——试用期内不扣款，但开通时需绑定
-        支付方式，试用结束前可随时取消；Lifetime 为一次性买断（无试用）。
-        购买后 14 天内产品与描述不符可全额退款。</p>
-      <a href="faq.html#trial-refund">Refund policy ｜ 退款政策</a>
-    </div>
-    <div class="card">
-      <h3>Switch anytime ｜ 随时更换</h3>
-      <p>Upgrade, downgrade or cancel your subscription any time — the plan
-        stays active until the end of the paid period. ｜ 订阅可随时升级、
-        降级或取消，已付周期内功能保持可用。</p>
-      <a href="faq.html#upgrade-downgrade">Plan changes FAQ ｜ 更换套餐 FAQ</a>
-    </div>
-    <div class="card">
-      <h3>Questions? ｜ 有问题？</h3>
-      <p>Write to us from the feedback form (no GitHub account needed) or email
-        us directly — we answer every message.
-        ｜ 通过反馈表单留言（无需 GitHub 账号）或直接邮件，我们逐条回复。</p>
-      <a href="feedback.html">Send feedback ｜ 留言</a> ·
-      <a href="mailto:760808632@qq.com">760808632@qq.com</a>
-    </div>
+    <p style="margin:22px 0 0;color:#96a2b4;font-size:14px;">
+      还想看这个项目做过什么，从头读起：<a href="index.html">首页</a> · 
+      <a href="/vigildesk/blog/">技术笔记</a> · <a href="proof/">可查证的价值证明</a>
+    </p>
   </section>
 
-  <div class="disclaimer">
-    <strong>Risk disclaimer.</strong>
-    VigilDesk is a software tool, not investment advice. It does not promise
-    any profit or returns. Trading on margin carries a high level of risk;
-    you could lose more than your deposit. Past performance does not
-    guarantee future results.（中文：VigilDesk 是软件工具，不构成投资建议，
-    不承诺收益；杠杆交易风险极高，可能损失超过本金，历史表现不代表未来结果。）
-  </div>
+  <section class="disclaimer">
+    VigilDesk 是风控工具，不是投资建议，不预测行情，也不承诺任何收益。
+    ｜ A risk-control tool, not investment advice. It does not predict markets and cannot promise a result.
+  </section>
 </main>
 
 <footer class="site">
   <div class="wrap">
-    <span>© 2026 VigilDesk</span>
-    <a href="index.html">Home</a>
-    <a href="tutorial.html">Tutorial</a>
-    <a href="security.html">Security</a>
-    <a href="faq.html">FAQ</a>
-    <a href="faq-zh.html">常见问题</a>
-    <a href="feedback.html">Feedback</a>
-    <a href="legal.html">Legal</a>
+    <p>© 2026 VigilDesk ·
+      <a href="index.html">Home 首页</a> ·
+      <a href="free.html">Free tool 免费工具</a> ·
+      <a href="faq.html">FAQ</a> ·
+      <a href="legal.html">Legal 条款</a> ·
+      <a href="mailto:760808632@qq.com">760808632@qq.com</a></p>
   </div>
 </footer>
 </body>
